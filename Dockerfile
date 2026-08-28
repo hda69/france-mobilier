@@ -15,6 +15,7 @@ RUN echo "=== APP ROUTES IN CONTEXT ===" \
   && test -d src/app/compte \
   && test -d src/app/inscription \
   && test -f public/logo-france-mobilier.png \
+  && test -f data/products.ts \
   && test -d src/app/api/auth \
   && test -d src/app/api/reviews
 ENV NEXT_TELEMETRY_DISABLED=1
