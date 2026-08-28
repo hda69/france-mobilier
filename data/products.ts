@@ -12,7 +12,7 @@ export const products: Product[] = [
       "Un bureau électrique conçu pour adapter votre posture au fil de la journée. Structure stable, plateau spacieux et réglage fluide. Produit de démonstration — commercialisation à venir.",
     price: 289,
     compareAtPrice: null,
-    images: ["/products/desk.svg"],
+    images: ["/products/desk.jpg"],
     features: [
       "Réglage électrique de la hauteur",
       "Plateau compatible moniteurs doubles",
@@ -44,7 +44,7 @@ export const products: Product[] = [
       "Un meuble compact pour organiser chaussures et accessoires sans encombrer l’entrée. Format étroit, finition sobre. Produit de démonstration — commercialisation à venir.",
     price: 79,
     compareAtPrice: null,
-    images: ["/products/shoe-cabinet.svg"],
+    images: ["/products/shoe-cabinet.jpg"],
     features: ["Faible profondeur", "Plusieurs niveaux", "Porte rabattable", "Montage simple"],
     specifications: {
       Largeur: "60 cm",
@@ -71,7 +71,7 @@ export const products: Product[] = [
       "Une étagère murale pensée pour les espaces humides. Rangement clair, profil mince. Produit de démonstration — commercialisation à venir.",
     price: 49,
     compareAtPrice: null,
-    images: ["/products/bath-shelf.svg"],
+    images: ["/products/bath-shelf.jpg"],
     features: ["Fixation murale", "Résistant à l’humidité", "Design minimal", "Plusieurs tablettes"],
     specifications: {
       Largeur: "40 cm",
@@ -98,7 +98,7 @@ export const products: Product[] = [
       "Un chariot à roulettes pour ranger ustensiles, paniers et provisions. Mobile et stable. Produit de démonstration — commercialisation à venir.",
     price: 69,
     compareAtPrice: null,
-    images: ["/products/kitchen-cart.svg"],
+    images: ["/products/kitchen-cart.jpg"],
     features: ["Roulettes freinées", "Plusieurs niveaux", "Poignée intégrée", "Facile à déplacer"],
     specifications: {
       Largeur: "45 cm",
@@ -125,7 +125,7 @@ export const products: Product[] = [
       "Support double moniteur pour libérer le plateau et améliorer l’ergonomie. Articulations fluides. Produit de démonstration — commercialisation à venir.",
     price: 89,
     compareAtPrice: null,
-    images: ["/products/monitor-arm.svg"],
+    images: ["/products/monitor-arm.jpg"],
     features: [
       "Compatible 2 écrans",
       "Réglage hauteur / inclinaison",
@@ -157,7 +157,7 @@ export const products: Product[] = [
       "Un meuble fermé qui intègre la litière sans dénaturer la pièce. Entrée latérale, ventilation et rangement. Produit de démonstration — commercialisation à venir.",
     price: 119,
     compareAtPrice: null,
-    images: ["/products/litter-cabinet.svg"],
+    images: ["/products/litter-cabinet.jpg"],
     features: ["Design mobilier", "Accès chat latéral", "Porte frontale d’entretien", "Finition sobre"],
     specifications: {
       Largeur: "70 cm",
@@ -184,7 +184,7 @@ export const products: Product[] = [
       "Table d’appoint polyvalente pour ordinateur portable, petit-déjeuner ou lecture. Hauteur réglable, plateau stable. Produit de démonstration — commercialisation à venir.",
     price: 59,
     compareAtPrice: null,
-    images: ["/products/side-table.svg"],
+    images: ["/products/side-table.jpg"],
     features: ["Hauteur réglable", "Base stable", "Plateau antidérapant", "Usage multi-pièces"],
     specifications: {
       Plateau: "60 × 40 cm",
@@ -210,7 +210,7 @@ export const products: Product[] = [
       "Étagère modulable pour bibliothèque, bureau ou salon. Modules assemblables. Produit de démonstration — commercialisation à venir.",
     price: 129,
     compareAtPrice: null,
-    images: ["/products/modular-shelf.svg"],
+    images: ["/products/modular-shelf.jpg"],
     features: [
       "Modules combinables",
       "Montage sans outils complexes",
@@ -241,7 +241,7 @@ export const products: Product[] = [
       "Solution de rangement pour produits d’entretien et ustensiles sous évier. Format adaptable. Produit de démonstration — commercialisation à venir.",
     price: 39,
     compareAtPrice: null,
-    images: ["/products/under-sink.svg"],
+    images: ["/products/under-sink.jpg"],
     features: ["Coulissants", "Résistant à l’humidité", "Installation rapide", "Compartiments séparés"],
     specifications: {
       Largeur: "ajustable",
@@ -268,7 +268,7 @@ export const products: Product[] = [
       "Un organiseur de bureau pour clarifier l’espace de travail. Compartiments pratiques, silhouette discrète. Produit de démonstration — commercialisation à venir.",
     price: 29,
     compareAtPrice: null,
-    images: ["/products/desk-organizer.svg"],
+    images: ["/products/desk-organizer.jpg"],
     features: ["Plusieurs compartiments", "Empreinte compacte", "Finition mate", "Idéal télétravail"],
     specifications: {
       Largeur: "25 cm",

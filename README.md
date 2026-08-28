@@ -1,4 +1,4 @@
-# Maisonora
+# France Mobilier
 
 MVP e-commerce de **pré-lancement** (Home & Garden, France).  
 Boutique crédible pour présentation partenaires / BuckyDrop OpenAPI, puis base Google Shopping.

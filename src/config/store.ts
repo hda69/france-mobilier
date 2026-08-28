@@ -4,16 +4,16 @@
  */
 
 export const store = {
-  storeName: "Maisonora",
-  storeTagline: "Des solutions pratiques pour un intérieur mieux pensé.",
-  tagline: "Des solutions pratiques pour un intérieur mieux pensé.",
-  domain: "https://maisonora.fr",
-  supportEmail: "contact@maisonora.fr",
+  storeName: "France Mobilier",
+  storeTagline: "Mobilier et rangement pour un intérieur mieux pensé.",
+  tagline: "Mobilier et rangement pour un intérieur mieux pensé.",
+  domain: "https://francemobilier.com",
+  supportEmail: "contact@francemobilier.com",
   country: "FR",
   currency: "EUR",
   locale: "fr-FR",
   /** TODO_LEGAL_CONFIG */
-  companyName: "Maisonora",
+  companyName: "France Mobilier",
   /** TODO_LEGAL_CONFIG */
   companyLegalForm: "",
   /** TODO_LEGAL_CONFIG */
