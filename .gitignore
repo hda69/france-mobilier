@@ -41,5 +41,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-data/
+# sqlite local files (keep data/products.ts tracked)
 *.db
