@@ -9,6 +9,15 @@ import {
   listCollectionProducts,
 } from "@/lib/products/repository";
 
+const categoryLabels: Record<string, string> = {
+  maison: "Maison",
+  rangement: "Rangement",
+  bureau: "Bureau",
+  cuisine: "Cuisine",
+  "salle-de-bain": "Salle de bain",
+  animaux: "Animaux",
+};
+
 type Props = {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ q?: string; sort?: string; category?: string }>;
@@ -61,6 +70,23 @@ export default async function CollectionPage({ params, searchParams }: Props) {
             className="w-full rounded-full border border-border bg-white px-4 py-2.5 outline-none focus:border-accent"
           />
         </label>
+        {collection.categories.length > 1 && (
+          <label className="text-sm md:w-52">
+            <span className="mb-1 block text-muted">Catégorie</span>
+            <select
+              name="category"
+              defaultValue={query.category || ""}
+              className="w-full rounded-full border border-border bg-white px-4 py-2.5 outline-none focus:border-accent"
+            >
+              <option value="">Toutes</option>
+              {collection.categories.map((category) => (
+                <option key={category} value={category}>
+                  {categoryLabels[category] ?? category}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
         <label className="text-sm md:w-52">
           <span className="mb-1 block text-muted">Tri</span>
           <select

@@ -96,6 +96,14 @@ export async function ensureDatabase() {
       )`,
       `CREATE INDEX IF NOT EXISTS idx_review_product ON review(product_id, status)`,
       `CREATE INDEX IF NOT EXISTS idx_purchase_user_product ON purchase(user_id, product_id)`,
+      `CREATE TABLE IF NOT EXISTS stock_alert (
+        id TEXT PRIMARY KEY NOT NULL,
+        email TEXT NOT NULL,
+        product_id TEXT NOT NULL,
+        product_slug TEXT NOT NULL,
+        created_at INTEGER NOT NULL
+      )`,
+      `CREATE UNIQUE INDEX IF NOT EXISTS idx_stock_alert_email_product ON stock_alert(email, product_id)`,
     ],
     "write",
   );

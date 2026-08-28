@@ -3,22 +3,24 @@ import Link from "next/link";
 import { getIntegrationStatuses } from "@/lib/providers/manual/provider";
 import { listProducts } from "@/lib/products/repository";
 import { collections } from "@/config/store";
+import { countStockAlerts } from "@/lib/stock-alerts";
 
 export const metadata: Metadata = {
   title: "Admin",
   robots: { index: false, follow: false },
 };
 
-export default function AdminPage() {
+export default async function AdminPage() {
   const products = listProducts();
   const statuses = getIntegrationStatuses();
+  const alertCount = await countStockAlerts();
 
   return (
     <div className="container-page py-10 md:py-14">
       <h1 className="text-3xl font-semibold tracking-tight">Admin</h1>
       <p className="mt-2 text-sm text-muted">Vue interne — non indexée. Aucun secret affiché.</p>
 
-      <div className="mt-8 grid gap-4 md:grid-cols-2">
+      <div className="mt-8 grid gap-4 md:grid-cols-3">
         <div className="rounded-2xl border border-border bg-card p-5">
           <p className="text-sm text-muted">Produits</p>
           <p className="mt-1 text-3xl font-semibold">{products.length}</p>
@@ -26,6 +28,10 @@ export default function AdminPage() {
         <div className="rounded-2xl border border-border bg-card p-5">
           <p className="text-sm text-muted">Collections</p>
           <p className="mt-1 text-3xl font-semibold">{collections.length}</p>
+        </div>
+        <div className="rounded-2xl border border-border bg-card p-5">
+          <p className="text-sm text-muted">Alertes disponibilité</p>
+          <p className="mt-1 text-3xl font-semibold">{alertCount}</p>
         </div>
       </div>
 

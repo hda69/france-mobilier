@@ -73,3 +73,11 @@ export const review = sqliteTable("review", {
   status: text("status").notNull().default("pending"),
   createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
 });
+
+export const stockAlert = sqliteTable("stock_alert", {
+  id: text("id").primaryKey(),
+  email: text("email").notNull(),
+  productId: text("product_id").notNull(),
+  productSlug: text("product_slug").notNull(),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
+});

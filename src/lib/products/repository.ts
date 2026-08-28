@@ -34,6 +34,11 @@ export function listCollectionProducts(slug: string): Product[] {
   );
 }
 
+export function collectionSlugForCategory(category: Product["category"]) {
+  if (category === "cuisine" || category === "salle-de-bain") return "maison";
+  return category;
+}
+
 export const listCollectionProductsAlias = listCollectionProducts;
 
 export function filterAndSortProducts(
@@ -49,7 +54,9 @@ export function filterAndSortProducts(
     result = result.filter(
       (p) =>
         p.name.toLowerCase().includes(q) ||
-        p.shortDescription.toLowerCase().includes(q),
+        p.shortDescription.toLowerCase().includes(q) ||
+        p.description.toLowerCase().includes(q) ||
+        p.features.some((feature) => feature.toLowerCase().includes(q)),
     );
   }
   switch (options.sort) {

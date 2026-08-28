@@ -9,6 +9,7 @@ import { ProductReviews } from "@/components/product-reviews";
 import { store } from "@/config/store";
 import {
   availabilityLabel,
+  collectionSlugForCategory,
   findProductBySlug,
   findRelatedProducts,
   formatPrice,
@@ -47,23 +48,26 @@ export default async function ProductPage({ params }: Props) {
     description: product.description,
     image: product.images.map((src) => `${store.domain}${src}`),
     brand: { "@type": "Brand", name: store.storeName },
-    ...(product.availabilityStatus === "available"
-      ? {
-          offers: {
-            "@type": "Offer",
-            priceCurrency: "EUR",
-            price: product.price,
-            availability: "https://schema.org/InStock",
-          },
-        }
-      : {}),
+    offers: {
+      "@type": "Offer",
+      url: `${store.domain}/products/${product.slug}`,
+      priceCurrency: "EUR",
+      price: product.price,
+      availability:
+        product.availabilityStatus === "available"
+          ? "https://schema.org/InStock"
+          : product.availabilityStatus === "out_of_stock"
+            ? "https://schema.org/OutOfStock"
+            : "https://schema.org/PreOrder",
+    },
   };
 
   return (
     <div className="container-page py-10 md:py-14">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <nav className="mb-6 text-sm text-muted">
-        <Link href="/">Accueil</Link> / <Link href={`/collections/${product.category === "salle-de-bain" || product.category === "cuisine" ? "maison" : product.category}`}>Catalogue</Link> /{" "}
+        <Link href="/">Accueil</Link> /{" "}
+        <Link href={`/collections/${collectionSlugForCategory(product.category)}`}>Catalogue</Link> /{" "}
         <span className="text-foreground">{product.name}</span>
       </nav>
 
@@ -85,7 +89,7 @@ export default async function ProductPage({ params }: Props) {
           <div className="flex flex-wrap gap-3">
             <AddToCartButton product={product} />
           </div>
-          <NotifyForm productName={product.name} />
+          <NotifyForm productName={product.name} productSlug={product.slug} />
           <div className="space-y-3 border-t border-border pt-5">
             <h2 className="font-medium">Description</h2>
             <p className="text-sm leading-relaxed text-muted">{product.description}</p>
