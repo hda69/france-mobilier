@@ -1,0 +1,20 @@
+# Keep Railway / Docker build context small and current.
+# Uploading local .next or node_modules has recycled stale images.
+node_modules
+.next
+out
+build
+.git
+.gitignore
+.cursor
+*.md
+.env
+.env.*
+!.env.example
+data
+*.db
+*.pem
+.DS_Store
+coverage
+.vercel
+next-env.d.ts
