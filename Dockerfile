@@ -8,12 +8,12 @@ FROM node:20-bookworm-slim AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+RUN echo "=== APP ROUTES IN CONTEXT ===" && ls -la src/app && ls -la src/app/connexion src/app/compte src/app/inscription public/logo-france-mobilier.png
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 ENV BETTER_AUTH_SECRET=build-time-placeholder-not-for-runtime
 ENV BETTER_AUTH_URL=http://localhost:3000
-ARG CACHE_BUST=2026-08-28-logo-v2
-RUN echo "cache bust $CACHE_BUST" && npm run build
+RUN npm run build
 
 FROM node:20-bookworm-slim AS runner
 WORKDIR /app
