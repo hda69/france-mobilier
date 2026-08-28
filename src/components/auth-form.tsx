@@ -1,0 +1,108 @@
+"use client";
+
+import { FormEvent, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
+
+type Mode = "login" | "register";
+
+export function AuthForm({ mode }: { mode: Mode }) {
+  const router = useRouter();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  async function onSubmit(event: FormEvent) {
+    event.preventDefault();
+    setError(null);
+    setLoading(true);
+    try {
+      if (mode === "register") {
+        const result = await authClient.signUp.email({
+          email,
+          password,
+          name: name.trim() || email.split("@")[0],
+        });
+        if (result.error) throw new Error(result.error.message || "Inscription impossible");
+      } else {
+        const result = await authClient.signIn.email({ email, password });
+        if (result.error) throw new Error(result.error.message || "Identifiants incorrects");
+      }
+      router.push("/compte");
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Une erreur est survenue");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <form onSubmit={onSubmit} className="mx-auto max-w-md space-y-4 rounded-2xl border border-border bg-white p-6 shadow-sm">
+      <h1 className="text-2xl font-semibold tracking-tight">
+        {mode === "login" ? "Connexion" : "Créer un compte"}
+      </h1>
+      <p className="text-sm text-muted">
+        Les avis produits sont réservés aux clients avec un achat vérifié.
+      </p>
+      {mode === "register" && (
+        <label className="block text-sm">
+          <span className="mb-1 block text-muted">Nom</span>
+          <input
+            required
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full rounded-xl border border-border px-3 py-2.5 outline-none focus:border-accent"
+          />
+        </label>
+      )}
+      <label className="block text-sm">
+        <span className="mb-1 block text-muted">E-mail</span>
+        <input
+          required
+          type="email"
+          autoComplete="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full rounded-xl border border-border px-3 py-2.5 outline-none focus:border-accent"
+        />
+      </label>
+      <label className="block text-sm">
+        <span className="mb-1 block text-muted">Mot de passe</span>
+        <input
+          required
+          type="password"
+          minLength={8}
+          autoComplete={mode === "login" ? "current-password" : "new-password"}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full rounded-xl border border-border px-3 py-2.5 outline-none focus:border-accent"
+        />
+      </label>
+      {error && <p className="text-sm text-red-700">{error}</p>}
+      <button type="submit" disabled={loading} className="btn-primary w-full disabled:opacity-60">
+        {loading ? "Patientez…" : mode === "login" ? "Se connecter" : "Créer mon compte"}
+      </button>
+      <p className="text-center text-sm text-muted">
+        {mode === "login" ? (
+          <>
+            Pas encore de compte ?{" "}
+            <Link href="/inscription" className="text-accent underline-offset-2 hover:underline">
+              S’inscrire
+            </Link>
+          </>
+        ) : (
+          <>
+            Déjà inscrit ?{" "}
+            <Link href="/connexion" className="text-accent underline-offset-2 hover:underline">
+              Se connecter
+            </Link>
+          </>
+        )}
+      </p>
+    </form>
+  );
+}

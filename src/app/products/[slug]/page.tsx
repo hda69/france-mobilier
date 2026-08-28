@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { AddToCartButton } from "@/components/add-to-cart-button";
 import { NotifyForm } from "@/components/notify-form";
 import { ProductCard } from "@/components/product-card";
+import { ProductReviews } from "@/components/product-reviews";
 import { store } from "@/config/store";
 import {
   availabilityLabel,
@@ -13,6 +14,7 @@ import {
   formatPrice,
   listProducts,
 } from "@/lib/products/repository";
+import { listApprovedReviews } from "@/lib/reviews";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -36,6 +38,7 @@ export default async function ProductPage({ params }: Props) {
   const product = findProductBySlug(slug);
   if (!product) notFound();
   const related = findRelatedProducts(product);
+  const reviews = await listApprovedReviews(product.id);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -114,6 +117,8 @@ export default async function ProductPage({ params }: Props) {
           </div>
         </div>
       </div>
+
+      <ProductReviews productId={product.id} initialReviews={reviews} />
 
       {related.length > 0 && (
         <section className="mt-16">

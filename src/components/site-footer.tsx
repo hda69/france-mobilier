@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { store } from "@/config/store";
 
@@ -22,8 +23,11 @@ const footerLinks = [
     ],
   },
   {
-    title: "Légal",
+    title: "Compte",
     links: [
+      { href: "/connexion", label: "Connexion" },
+      { href: "/inscription", label: "Créer un compte" },
+      { href: "/compte", label: "Mon compte" },
       { href: "/legal", label: "Mentions légales" },
       { href: "/privacy", label: "Confidentialité" },
       { href: "/terms", label: "CGV" },
@@ -33,11 +37,17 @@ const footerLinks = [
 
 export function SiteFooter() {
   return (
-    <footer className="mt-24 border-t border-border bg-card">
+    <footer className="mt-24 border-t border-border bg-accent-soft/40">
       <div className="container-page grid gap-10 py-14 md:grid-cols-4">
         <div className="md:col-span-1">
-          <p className="text-lg font-semibold">{store.storeName}</p>
-          <p className="mt-3 text-sm leading-relaxed text-muted">{store.storeTagline}</p>
+          <Image
+            src={store.logoPath}
+            alt={store.storeName}
+            width={180}
+            height={80}
+            className="h-16 w-auto object-contain"
+          />
+          <p className="mt-4 text-sm leading-relaxed text-muted">{store.storeTagline}</p>
           <p className="mt-4 text-sm text-muted">{store.supportEmail}</p>
         </div>
         {footerLinks.map((group) => (
@@ -46,7 +56,7 @@ export function SiteFooter() {
             <ul className="mt-3 space-y-2 text-sm text-muted">
               {group.links.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="hover:text-foreground">
+                  <Link href={link.href} className="hover:text-accent">
                     {link.label}
                   </Link>
                 </li>
@@ -57,7 +67,9 @@ export function SiteFooter() {
       </div>
       <div className="border-t border-border">
         <div className="container-page flex flex-col gap-2 py-5 text-xs text-muted md:flex-row md:justify-between">
-          <p>© {new Date().getFullYear()} {store.storeName}. Pré-lancement.</p>
+          <p>
+            © {new Date().getFullYear()} {store.storeName}. Pré-lancement.
+          </p>
           <p>Paiement et fulfillment : bientôt disponibles.</p>
         </div>
       </div>

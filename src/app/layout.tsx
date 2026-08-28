@@ -29,6 +29,10 @@ export const metadata: Metadata = {
     locale: "fr_FR",
     type: "website",
     url: store.domain,
+    images: [{ url: store.logoPath }],
+  },
+  icons: {
+    icon: store.logoPath,
   },
   robots: {
     index: true,
@@ -43,6 +47,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     name: store.storeName,
     url: store.domain,
     email: store.supportEmail,
+    logo: `${store.domain}${store.logoPath}`,
     address: {
       "@type": "PostalAddress",
       addressCountry: store.country,

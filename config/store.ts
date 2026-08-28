@@ -6,13 +6,13 @@
 export const store = {
   storeName: "France Mobilier",
   storeTagline: "Mobilier et rangement pour un intérieur mieux pensé.",
-  /** @deprecated alias */
   tagline: "Mobilier et rangement pour un intérieur mieux pensé.",
   domain: "https://francemobilier.com",
   supportEmail: "contact@francemobilier.com",
   country: "FR",
   currency: "EUR",
   locale: "fr-FR",
+  logoPath: "/logo-france-mobilier.png",
   /** TODO_LEGAL_CONFIG */
   companyName: "France Mobilier",
   /** TODO_LEGAL_CONFIG */
