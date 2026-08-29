@@ -38,9 +38,6 @@ export default function HomePage() {
               {store.storeName} est éditée à {store.companyCity}. Livraison en France
               métropolitaine, rétractation 14 jours, paiement par carte.
             </p>
-            <p className="mt-4 text-xs text-muted">
-              {store.companyName} · {store.companyLegalForm.toLowerCase()} · SIREN {store.companySiren}
-            </p>
           </div>
         </div>
       </section>
@@ -156,8 +153,7 @@ export default function HomePage() {
             <div>
               <p className="font-medium">Qui est derrière la boutique ?</p>
               <p className="mt-1 text-muted">
-                {store.companyName}, {store.companyLegalForm.toLowerCase()}, enseigne{" "}
-                {store.companyTradeName}. {store.companyCity}. {store.supportEmail}.
+                {store.companyName}, à {store.companyCity}. {store.supportEmail}.
               </p>
             </div>
           </div>

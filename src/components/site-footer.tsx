@@ -50,7 +50,7 @@ export function SiteFooter() {
           <p className="mt-4 text-sm leading-relaxed text-muted">{store.storeTagline}</p>
           <p className="mt-4 text-sm text-muted">{store.supportEmail}</p>
           <p className="mt-2 text-xs text-muted">
-            {store.companyName} · {store.companyCity} · SIREN {store.companySiren}
+            {store.companyName} · {store.companyCity}
           </p>
         </div>
         {footerLinks.map((group) => (

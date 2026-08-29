@@ -10,8 +10,7 @@ export default function TermsPage() {
       <div className="mt-6 space-y-4 text-sm leading-relaxed text-muted">
         <p>
           Les présentes conditions s’appliquent aux ventes conclues sur {store.storeName} (
-          {store.domain.replace("https://", "")}), édité par {store.companyName},{" "}
-          {store.companyLegalForm.toLowerCase()}.
+          {store.domain.replace("https://", "")}), édité par {store.companyName}.
         </p>
         <p>
           Les prix sont indiqués en euros TTC. La commande est ferme après confirmation du

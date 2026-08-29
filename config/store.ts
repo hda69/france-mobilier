@@ -12,8 +12,8 @@ export const store = {
   currency: "EUR",
   locale: "fr-FR",
   logoPath: "/logo-france-mobilier.png",
-  /** Éditeur (INSEE SIREN 882131071 / SIRET 88213107100038). */
-  companyName: "Hugo RUSU",
+  /** Raison sociale affichée : DPSP. */
+  companyName: "DPSP",
   companyLegalForm: "Entrepreneur individuel",
   companyTradeName: "DPSP",
   /** Rue non diffusible INSEE (statut P) — ville confirmée : Lyon 4e. */

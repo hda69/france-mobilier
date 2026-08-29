@@ -4,7 +4,7 @@ import { store } from "@/config/store";
 const items = [
   {
     title: "Boutique française",
-    text: `${store.companyCity} · SIREN ${store.companySiren}`,
+    text: `Éditée à ${store.companyCity}`,
   },
   {
     title: "Prix TTC",

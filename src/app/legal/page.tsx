@@ -16,8 +16,7 @@ export default function LegalPage() {
       <div className="mt-6 space-y-4 text-sm leading-relaxed text-muted">
         <p>
           Le site {store.storeName} ({store.domain.replace("https://", "")}) est édité par{" "}
-          {store.companyName}, {store.companyLegalForm.toLowerCase()}
-          {store.companyTradeName ? `, enseigne ${store.companyTradeName}` : ""}.
+          {store.companyName}.
         </p>
         <p>Directeur de la publication : {store.companyName}.</p>
         {siege ? <p>Siège : {siege}.</p> : null}
