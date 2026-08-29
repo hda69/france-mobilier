@@ -10,7 +10,7 @@ export default function CartPage() {
 
   return (
     <div className="container-page py-10 md:py-14">
-      <h1 className="display text-4xl text-navy">Panier</h1>
+      <h1 className="display text-3xl text-navy md:text-4xl">Panier</h1>
       <p className="mt-2 text-muted">
         {!ready
           ? " "
@@ -37,30 +37,31 @@ export default function CartPage() {
             {items.map((item) => (
               <li
                 key={item.productId}
-                className="flex gap-4 rounded-2xl border border-border bg-card p-4"
+                className="flex gap-3 rounded-2xl border border-border bg-card p-3 sm:gap-4 sm:p-4"
               >
-                <div className="relative h-24 w-20 overflow-hidden rounded-xl bg-[#f3efe8]">
+                <div className="relative h-24 w-20 shrink-0 overflow-hidden rounded-xl bg-[#f3efe8]">
                   <Image src={item.image} alt={item.name} fill className="object-cover" sizes="80px" />
                 </div>
-                <div className="flex-1 space-y-2">
-                  <Link href={`/products/${item.slug}`} className="font-medium hover:underline">
+                <div className="min-w-0 flex-1 space-y-2">
+                  <Link href={`/products/${item.slug}`} className="block font-medium break-words hover:underline">
                     {item.name}
                   </Link>
                   <p className="text-sm text-muted">{formatPrice(item.price)}</p>
-                  <div className="flex items-center gap-3">
-                    <label className="text-sm text-muted">
-                      Qté{" "}
+                  <div className="flex flex-wrap items-center gap-3">
+                    <label className="flex items-center gap-2 text-sm text-muted">
+                      Qté
                       <input
                         type="number"
                         min={1}
+                        inputMode="numeric"
                         value={item.quantity}
                         onChange={(e) => setQuantity(item.productId, Number(e.target.value))}
-                        className="ml-2 w-16 rounded-lg border border-border px-2 py-1"
+                        className="input w-16 min-h-11 px-2 py-2 text-center"
                       />
                     </label>
                     <button
                       type="button"
-                      className="text-sm text-muted underline"
+                      className="min-h-11 px-1 text-sm text-muted underline"
                       onClick={() => removeItem(item.productId)}
                     >
                       Retirer

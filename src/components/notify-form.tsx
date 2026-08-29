@@ -47,9 +47,9 @@ export function NotifyForm({
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="votre@email.fr"
-            className="w-full rounded-full border border-border bg-white px-4 py-2.5 text-sm outline-none focus:border-accent"
+            className="input"
           />
-          <button type="submit" className="btn btn-primary whitespace-nowrap" disabled={status === "loading"}>
+          <button type="submit" className="btn btn-primary w-full whitespace-nowrap sm:w-auto" disabled={status === "loading"}>
             {status === "loading" ? "Envoi…" : "M’avertir"}
           </button>
         </div>

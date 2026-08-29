@@ -131,7 +131,7 @@ export function ProductReviews({
               <select
                 value={rating}
                 onChange={(e) => setRating(Number(e.target.value))}
-                className="rounded-xl border border-border px-3 py-2 outline-none focus:border-accent"
+                className="input max-w-32"
               >
                 {[5, 4, 3, 2, 1].map((n) => (
                   <option key={n} value={n}>
@@ -145,7 +145,7 @@ export function ProductReviews({
               <input
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full rounded-xl border border-border px-3 py-2.5 outline-none focus:border-accent"
+                className="input"
               />
             </label>
             <label className="block text-sm">
@@ -156,12 +156,12 @@ export function ProductReviews({
                 rows={4}
                 value={body}
                 onChange={(e) => setBody(e.target.value)}
-                className="w-full rounded-xl border border-border px-3 py-2.5 outline-none focus:border-accent"
+                className="input"
               />
             </label>
             {error && <p className="text-sm text-red-700">{error}</p>}
             {message && <p className="text-sm text-accent">{message}</p>}
-            <button type="submit" disabled={loading} className="btn-primary disabled:opacity-60">
+            <button type="submit" disabled={loading} className="btn btn-primary w-full sm:w-auto">
               {loading ? "Envoi…" : "Publier mon avis"}
             </button>
           </form>

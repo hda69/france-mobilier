@@ -57,7 +57,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
       </nav>
       <div className="mb-10 max-w-2xl">
         <p className="eyebrow">Collection</p>
-        <h1 className="display mt-3 text-4xl text-navy">{collection.name}</h1>
+        <h1 className="display mt-3 text-3xl text-navy md:text-4xl">{collection.name}</h1>
         <p className="mt-4 text-lg text-muted">{collection.description}</p>
       </div>
 
@@ -68,7 +68,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
             name="q"
             defaultValue={query.q || ""}
             placeholder="Bureau, rangement…"
-            className="w-full rounded-full border border-border bg-white px-4 py-2.5 outline-none focus:border-accent"
+            className="input"
           />
         </label>
         {collection.categories.length > 1 && (
@@ -77,7 +77,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
             <select
               name="category"
               defaultValue={query.category || ""}
-              className="w-full rounded-full border border-border bg-white px-4 py-2.5 outline-none focus:border-accent"
+              className="input"
             >
               <option value="">Toutes</option>
               {collection.categories.map((category) => (
@@ -93,7 +93,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
           <select
             name="sort"
             defaultValue={query.sort || ""}
-            className="w-full rounded-full border border-border bg-white px-4 py-2.5 outline-none focus:border-accent"
+            className="input"
           >
             <option value="">Pertinence</option>
             <option value="price-asc">Prix croissant</option>
@@ -101,7 +101,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
             <option value="name">Nom</option>
           </select>
         </label>
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-primary w-full md:w-auto">
           Filtrer
         </button>
       </form>

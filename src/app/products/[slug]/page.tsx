@@ -97,7 +97,7 @@ export default async function ProductPage({ params }: Props) {
   };
 
   return (
-    <div className="bg-cream/40 pb-20 md:pb-0">
+    <div className="bg-cream/40 pb-[calc(5.75rem+env(safe-area-inset-bottom))] md:pb-0">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <div className="container-page py-8 md:py-12">
@@ -136,7 +136,7 @@ export default async function ProductPage({ params }: Props) {
             {product.availabilityStatus !== "available" ? (
               <p className="badge">{availabilityLabel(product.availabilityStatus)}</p>
             ) : null}
-            <h1 className="display text-3xl text-navy md:text-4xl">{product.name}</h1>
+            <h1 className="display text-[1.75rem] text-navy md:text-4xl">{product.name}</h1>
             <p className="text-2xl font-medium text-navy">{formatPrice(product.price)}</p>
             <p className="text-sm text-muted">Prix TTC. Total confirmé au paiement.</p>
             <p className="leading-relaxed text-muted">{product.shortDescription}</p>
@@ -204,8 +204,8 @@ export default async function ProductPage({ params }: Props) {
         {specEntries.length > 0 ? (
           <section className="mt-16">
             <h2 className="display text-3xl text-navy">Caractéristiques</h2>
-            <div className="mt-6 overflow-hidden rounded-[var(--radius)] bg-white">
-              <table className="w-full text-left text-sm">
+            <div className="mt-6 overflow-x-auto rounded-[var(--radius)] bg-white">
+              <table className="w-full min-w-[280px] text-left text-sm">
                 <tbody>
                   {specEntries.map(([key, value]) => (
                     <tr key={key} className="border-b border-border last:border-0">

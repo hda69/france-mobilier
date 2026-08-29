@@ -22,7 +22,7 @@ export default function AboutPage() {
       </div>
       <div>
         <p className="eyebrow">La marque</p>
-        <h1 className="display mt-3 text-4xl text-navy">Un intérieur plus simple à vivre</h1>
+        <h1 className="display mt-3 text-3xl text-navy md:text-4xl">Un intérieur plus simple à vivre</h1>
         <div className="mt-6 space-y-4 leading-relaxed text-muted">
           <p>
             {store.storeName} sélectionne des meubles et accessoires pensés pour les logements

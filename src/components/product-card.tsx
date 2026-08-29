@@ -20,7 +20,7 @@ export function ProductCard({ product }: { product: Product }) {
           ) : null}
         </div>
         <div className="space-y-1.5 pt-4">
-          <h3 className="text-base font-medium leading-snug text-navy">{product.name}</h3>
+          <h3 className="text-base font-medium leading-snug break-words text-navy">{product.name}</h3>
           <p className="text-sm text-muted">{formatPrice(product.price)}</p>
         </div>
       </Link>

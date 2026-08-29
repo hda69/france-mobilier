@@ -34,7 +34,7 @@ export default function ContactPage() {
 
   return (
     <div className="container-page py-10 md:py-14">
-      <h1 className="text-3xl font-semibold tracking-tight">Contact</h1>
+      <h1 className="display text-3xl text-navy md:text-4xl">Contact</h1>
       <p className="mt-3 max-w-2xl text-muted">
         Une question sur une commande, un produit ou la livraison ? Écrivez-nous.
       </p>
@@ -42,7 +42,7 @@ export default function ContactPage() {
         <form onSubmit={onSubmit} className="space-y-4 rounded-2xl border border-border bg-card p-6">
           <label className="block text-sm">
             Nom
-            <input name="name" required className="mt-1 w-full rounded-xl border border-border px-3 py-2" />
+            <input name="name" required autoComplete="name" className="input mt-1" />
           </label>
           <label className="block text-sm">
             Email
@@ -50,7 +50,8 @@ export default function ContactPage() {
               name="email"
               type="email"
               required
-              className="mt-1 w-full rounded-xl border border-border px-3 py-2"
+              autoComplete="email"
+              className="input mt-1"
             />
           </label>
           <label className="block text-sm">
@@ -60,10 +61,10 @@ export default function ContactPage() {
               required
               minLength={10}
               rows={5}
-              className="mt-1 w-full rounded-xl border border-border px-3 py-2"
+              className="input mt-1"
             />
           </label>
-          <button type="submit" className="btn btn-primary" disabled={status === "loading"}>
+          <button type="submit" className="btn btn-primary w-full sm:w-auto" disabled={status === "loading"}>
             {status === "loading" ? "Envoi…" : "Envoyer"}
           </button>
           {status === "ok" && (

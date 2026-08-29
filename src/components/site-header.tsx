@@ -38,15 +38,15 @@ export function SiteHeader() {
 
   return (
     <>
-      <div className="h-[6.75rem] md:h-[7.25rem]" aria-hidden />
-      <header className="fixed inset-x-0 top-0 z-40 bg-white/95 backdrop-blur-md">
-        <p className="border-b border-border bg-navy text-center text-[11px] tracking-[0.06em] text-white/90 md:text-xs">
-          <span className="container-page flex min-h-8 flex-wrap items-center justify-center gap-x-4 gap-y-1 py-1.5">
+      <div className="h-[calc(6.125rem+env(safe-area-inset-top))] md:h-[calc(7.25rem+env(safe-area-inset-top))]" aria-hidden />
+      <header className="fixed inset-x-0 top-0 z-40 bg-white/95 pt-[env(safe-area-inset-top)] backdrop-blur-md">
+        <p className="border-b border-border bg-navy text-center text-[11px] tracking-[0.04em] text-white/90 md:text-xs">
+          <span className="container-page flex h-8 items-center justify-center gap-x-3 overflow-hidden whitespace-nowrap">
             <span>Livraison en France</span>
+            <span className="text-white/40">•</span>
+            <span>Retours 14 jours</span>
             <span className="hidden text-white/40 sm:inline">•</span>
-            <span>Retours sous 14 jours</span>
-            <span className="hidden text-white/40 md:inline">•</span>
-            <span className="hidden md:inline">Service client</span>
+            <span className="hidden sm:inline">Service client</span>
           </span>
         </p>
         <div
@@ -96,14 +96,14 @@ export function SiteHeader() {
             <div className="flex items-center gap-1">
               <Link
                 href={session?.user ? "/compte" : "/connexion"}
-                className="hidden h-10 w-10 items-center justify-center text-navy hover:opacity-70 sm:inline-flex"
+                className="hidden h-11 w-11 items-center justify-center text-navy hover:opacity-70 sm:inline-flex"
                 aria-label={session?.user ? "Compte" : "Connexion"}
               >
                 <IconUser />
               </Link>
               <Link
                 href="/cart"
-                className="relative inline-flex h-10 w-10 items-center justify-center text-navy hover:opacity-70"
+                className="relative inline-flex h-11 w-11 items-center justify-center text-navy hover:opacity-70"
                 aria-label={itemCount > 0 ? `Panier, ${itemCount} articles` : "Panier"}
               >
                 <IconBag />
@@ -115,7 +115,7 @@ export function SiteHeader() {
               </Link>
               <button
                 type="button"
-                className="inline-flex h-10 w-10 items-center justify-center text-navy lg:hidden"
+                className="inline-flex h-11 w-11 items-center justify-center text-navy lg:hidden"
                 aria-expanded={open}
                 aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
                 onClick={() => setOpen((value) => !value)}
@@ -148,7 +148,7 @@ export function SiteHeader() {
                     <Link
                       key={item.href}
                       href={item.href}
-                      className="rounded-lg px-3 py-2.5 hover:bg-cream"
+                      className="rounded-lg px-3 py-3 hover:bg-cream"
                       onClick={() => setOpen(false)}
                     >
                       {item.label}
@@ -156,7 +156,7 @@ export function SiteHeader() {
                   ))}
                   <Link
                     href={session?.user ? "/compte" : "/connexion"}
-                    className="rounded-lg px-3 py-2.5 hover:bg-cream sm:hidden"
+                    className="rounded-lg px-3 py-3 hover:bg-cream sm:hidden"
                     onClick={() => setOpen(false)}
                   >
                     {session?.user ? "Compte" : "Connexion"}

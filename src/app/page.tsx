@@ -35,7 +35,7 @@ const categoryVisuals = [
 const guarantees = [
   {
     title: "Éditée à Lyon",
-    text: `${store.storeName} est une boutique éditée à ${store.companyCity}.`,
+    text: `Boutique éditée à ${store.companyCity}.`,
     icon: IconPin,
   },
   {
@@ -62,7 +62,7 @@ export default function HomePage() {
 
   return (
     <div>
-      <section className="relative min-h-[78vh] overflow-hidden bg-navy text-white md:min-h-[84vh]">
+      <section className="relative min-h-[70svh] overflow-hidden bg-navy text-white md:min-h-[84vh]">
         <Image
           src="/lifestyle/hero.jpg"
           alt="Intérieur contemporain avec mobilier clair et lumineux"
@@ -71,24 +71,24 @@ export default function HomePage() {
           className="object-cover"
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-navy/80 via-navy/45 to-navy/15" />
-        <div className="container-page relative flex min-h-[78vh] items-end py-16 md:min-h-[84vh] md:items-center md:py-24">
-          <div className="max-w-xl">
+        <div className="absolute inset-0 bg-gradient-to-t from-navy/85 via-navy/40 to-navy/20 md:bg-gradient-to-r md:from-navy/80 md:via-navy/45 md:to-navy/15" />
+        <div className="container-page relative flex min-h-[70svh] items-end py-12 md:min-h-[84vh] md:items-center md:py-24">
+          <div className="max-w-xl pb-2">
             <p className="eyebrow text-white">
               <span className="text-white">Mobilier & rangement</span>
             </p>
-            <h1 className="display mt-4 text-4xl text-white md:text-6xl">
+            <h1 className="display mt-4 text-[1.85rem] text-white sm:text-4xl md:text-6xl">
               Le mobilier qui simplifie votre intérieur.
             </h1>
-            <p className="mt-5 max-w-md text-base leading-relaxed text-white/85 md:text-lg">
+            <p className="mt-4 max-w-md text-[0.95rem] leading-relaxed text-white/85 md:mt-5 md:text-lg">
               Des meubles et solutions de rangement sélectionnés pour gagner en confort, en espace
               et en simplicité au quotidien.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/collections/maison" className="btn btn-inverse">
+            <div className="mt-6 flex w-full flex-col gap-3 sm:mt-8 sm:w-auto sm:flex-row sm:flex-wrap">
+              <Link href="/collections/maison" className="btn btn-inverse w-full sm:w-auto">
                 Découvrir nos meubles
               </Link>
-              <Link href="/nouveautes" className="btn border border-white/70 text-white hover:bg-white hover:text-navy">
+              <Link href="/nouveautes" className="btn w-full border border-white/70 text-white hover:bg-white hover:text-navy sm:w-auto">
                 Voir les nouveautés
               </Link>
             </div>
@@ -97,13 +97,13 @@ export default function HomePage() {
       </section>
 
       <section className="border-b border-border bg-white">
-        <div className="container-page grid grid-cols-2 gap-6 py-8 md:grid-cols-4 md:gap-8 md:py-10">
+        <div className="container-page grid grid-cols-2 gap-x-4 gap-y-5 py-7 md:grid-cols-4 md:gap-8 md:py-10">
           {guarantees.map((item) => (
-            <div key={item.title} className="flex gap-3">
-              <item.icon className="mt-0.5 h-5 w-5 text-navy" />
+            <div key={item.title} className="flex gap-2.5">
+              <item.icon className="mt-0.5 h-5 w-5 shrink-0 text-navy" />
               <div>
                 <p className="text-sm font-semibold text-navy">{item.title}</p>
-                <p className="mt-1 text-sm leading-relaxed text-muted">{item.text}</p>
+                <p className="mt-1 text-xs leading-relaxed text-muted md:text-sm">{item.text}</p>
               </div>
             </div>
           ))}
@@ -113,14 +113,14 @@ export default function HomePage() {
       <section className="section">
         <div className="container-page">
           <p className="eyebrow">Collections</p>
-          <h2 className="display mt-3 text-3xl text-navy md:text-4xl">Trouver le bon meuble</h2>
+          <h2 className="display mt-3 text-[1.75rem] text-navy md:text-4xl">Trouver le bon meuble</h2>
           <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2">
             {categoryVisuals.map((item, index) => (
               <Link
                 key={item.slug}
                 href={`/collections/${item.slug}`}
                 className={`group relative overflow-hidden rounded-[var(--radius)] ${
-                  index === 0 ? "min-h-72 lg:col-span-2 lg:row-span-2 lg:min-h-[34rem]" : "min-h-56"
+                  index === 0 ? "min-h-56 sm:min-h-72 lg:col-span-2 lg:row-span-2 lg:min-h-[34rem]" : "min-h-48 sm:min-h-56"
                 }`}
               >
                 <Image
@@ -151,7 +151,7 @@ export default function HomePage() {
                 Des meubles pratiques sélectionnés pour améliorer votre quotidien.
               </p>
             </div>
-            <Link href="/nouveautes" className="btn btn-secondary">
+            <Link href="/nouveautes" className="btn btn-secondary w-full sm:w-auto">
               Voir toutes les nouveautés
             </Link>
           </div>
@@ -198,7 +198,7 @@ export default function HomePage() {
               Notre boutique est éditée à {store.companyCity} et s’adresse aux particuliers
               recherchant des produits pratiques, modernes et accessibles.
             </p>
-            <Link href="/about" className="btn btn-primary mt-8">
+            <Link href="/about" className="btn btn-primary mt-8 w-full sm:w-auto">
               Découvrir {store.storeName}
             </Link>
           </div>
@@ -225,7 +225,7 @@ export default function HomePage() {
               Chaque mètre carré compte. Découvrez des meubles sélectionnés pour les appartements,
               studios, bureaux et pièces où l’espace doit être optimisé.
             </p>
-            <Link href="/collections/rangement" className="btn btn-primary mt-8">
+            <Link href="/collections/rangement" className="btn btn-primary mt-8 w-full sm:w-auto">
               Voir les solutions gain de place
             </Link>
           </div>

@@ -29,7 +29,7 @@ export default function FaqPage() {
   return (
     <div className="container-page max-w-3xl py-12 md:py-16">
       <p className="eyebrow">Aide</p>
-      <h1 className="display mt-3 text-4xl text-navy">Questions fréquentes</h1>
+      <h1 className="display mt-3 text-3xl text-navy md:text-4xl">Questions fréquentes</h1>
       <div className="mt-10 space-y-6">
         {items.map((item) => (
           <div key={item.q}>

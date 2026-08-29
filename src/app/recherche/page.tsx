@@ -29,7 +29,7 @@ export default async function SearchPage({ searchParams }: Props) {
       <nav className="mb-6 text-sm text-muted">
         <Link href="/">Accueil</Link> / <span className="text-foreground">Recherche</span>
       </nav>
-      <h1 className="display text-4xl text-navy">Recherche</h1>
+      <h1 className="display text-3xl text-navy md:text-4xl">Recherche</h1>
       <form className="mt-6 flex flex-col gap-3 rounded-2xl border border-border bg-card p-4 md:flex-row md:items-end">
         <label className="flex-1 text-sm">
           <span className="mb-1 block text-muted">Produit</span>
@@ -37,10 +37,10 @@ export default async function SearchPage({ searchParams }: Props) {
             name="q"
             defaultValue={q}
             placeholder="Bureau, rangement, étagère…"
-            className="w-full rounded-full border border-border bg-white px-4 py-2.5 outline-none focus:border-accent"
+            className="input"
           />
         </label>
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-primary w-full md:w-auto">
           Rechercher
         </button>
       </form>

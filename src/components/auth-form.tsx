@@ -55,7 +55,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full rounded-xl border border-border px-3 py-2.5 outline-none focus:border-accent"
+            className="input"
           />
         </label>
       )}
@@ -67,7 +67,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
           autoComplete="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full rounded-xl border border-border px-3 py-2.5 outline-none focus:border-accent"
+          className="input"
         />
       </label>
       <label className="block text-sm">
@@ -79,11 +79,11 @@ export function AuthForm({ mode }: { mode: Mode }) {
           autoComplete={mode === "login" ? "current-password" : "new-password"}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full rounded-xl border border-border px-3 py-2.5 outline-none focus:border-accent"
+          className="input"
         />
       </label>
       {error && <p className="text-sm text-red-700">{error}</p>}
-      <button type="submit" disabled={loading} className="btn-primary w-full disabled:opacity-60">
+      <button type="submit" disabled={loading} className="btn btn-primary w-full">
         {loading ? "Patientez…" : mode === "login" ? "Se connecter" : "Créer mon compte"}
       </button>
       <p className="text-center text-sm text-muted">

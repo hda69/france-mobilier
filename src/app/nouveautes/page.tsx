@@ -13,7 +13,7 @@ export default function NewArrivalsPage() {
   return (
     <div className="container-page py-10 md:py-14">
       <p className="eyebrow">Catalogue</p>
-      <h1 className="display mt-3 text-4xl text-navy">Nouveautés</h1>
+      <h1 className="display mt-3 text-3xl text-navy md:text-4xl">Nouveautés</h1>
       <p className="mt-3 text-muted">
         Les derniers ajouts au catalogue. Prix TTC, livraison en France métropolitaine.
       </p>
@@ -22,7 +22,7 @@ export default function NewArrivalsPage() {
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
-      <Link href="/collections/maison" className="btn btn-secondary mt-10 inline-flex">
+      <Link href="/collections/maison" className="btn btn-secondary mt-10 inline-flex w-full sm:w-auto">
         Voir toutes les collections
       </Link>
     </div>

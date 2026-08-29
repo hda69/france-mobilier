@@ -35,8 +35,8 @@ const groups = [
 
 export function SiteFooter() {
   return (
-    <footer className="mt-10 bg-navy text-white">
-      <div className="container-page grid gap-10 py-14 md:grid-cols-4">
+    <footer className="mt-10 bg-navy text-white pb-[env(safe-area-inset-bottom)]">
+      <div className="container-page grid gap-8 py-10 md:grid-cols-4 md:gap-10 md:py-14">
         <div>
           <div className="inline-flex rounded-md bg-white px-2 py-1.5">
             <Image
@@ -56,10 +56,10 @@ export function SiteFooter() {
         {groups.map((group) => (
           <div key={group.title}>
             <p className="text-sm font-semibold">{group.title}</p>
-            <ul className="mt-4 space-y-2.5 text-sm text-white/75">
+            <ul className="mt-3 text-sm text-white/75">
               {group.links.map((link) => (
                 <li key={`${group.title}-${link.href}-${link.label}`}>
-                  <Link href={link.href} className="hover:text-white">
+                  <Link href={link.href} className="inline-flex min-h-11 items-center hover:text-white">
                     {link.label}
                   </Link>
                 </li>
