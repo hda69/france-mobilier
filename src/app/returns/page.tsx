@@ -15,6 +15,9 @@ export default function ReturnsPage() {
         </p>
         <p>Contact : {store.supportEmail}</p>
       </div>
+      <a href={`mailto:${store.supportEmail}`} className="btn btn-secondary mt-8 inline-flex">
+        Une question ? Écrivez-nous
+      </a>
     </div>
   );
 }

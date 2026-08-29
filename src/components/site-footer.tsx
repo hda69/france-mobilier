@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { NotifyForm } from "@/components/notify-form";
 import { store } from "@/config/store";
 
 const footerLinks = [
@@ -49,6 +50,9 @@ export function SiteFooter() {
           />
           <p className="mt-4 text-sm leading-relaxed text-muted">{store.storeTagline}</p>
           <p className="mt-4 text-sm text-muted">{store.supportEmail}</p>
+          <p className="mt-2 text-xs text-muted">
+            {store.companyName} · {store.companyCity} · SIREN {store.companySiren}
+          </p>
         </div>
         {footerLinks.map((group) => (
           <div key={group.title}>
@@ -65,12 +69,25 @@ export function SiteFooter() {
           </div>
         ))}
       </div>
+      <div className="container-page pb-10">
+        <div className="rounded-2xl border border-border bg-card p-6 md:p-8">
+          <div className="grid gap-6 md:grid-cols-[1fr_1.1fr] md:items-center">
+            <div>
+              <p className="font-medium">Ouverture des commandes : soyez prévenu</p>
+              <p className="mt-2 text-sm text-muted">
+                Un seul e-mail le jour du lancement. Vous pouvez aussi nous écrire à tout moment.
+              </p>
+            </div>
+            <NotifyForm variant="launch" />
+          </div>
+        </div>
+      </div>
       <div className="border-t border-border">
         <div className="container-page flex flex-col gap-2 py-5 text-xs text-muted md:flex-row md:justify-between">
           <p>
-            © {new Date().getFullYear()} {store.storeName}. Pré-lancement.
+            © {new Date().getFullYear()} {store.storeName}. Boutique française en pré-lancement.
           </p>
-          <p>Paiement et fulfillment : bientôt disponibles.</p>
+          <p>Aucun paiement collecté tant que le checkout n’est pas ouvert.</p>
         </div>
       </div>
     </footer>

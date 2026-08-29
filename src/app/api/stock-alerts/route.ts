@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { LAUNCH_ALERT_PRODUCT_ID, LAUNCH_ALERT_SLUG } from "@/lib/launch-alert";
 import { findProductBySlug } from "@/lib/products/repository";
 import { subscribeStockAlert } from "@/lib/stock-alerts";
 
@@ -40,15 +41,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Validation failed" }, { status: 400 });
   }
 
-  const product = findProductBySlug(parsed.data.productSlug);
-  if (!product) {
+  const isLaunch = parsed.data.productSlug === LAUNCH_ALERT_SLUG;
+  const product = isLaunch ? null : findProductBySlug(parsed.data.productSlug);
+  if (!isLaunch && !product) {
     return NextResponse.json({ error: "Produit introuvable" }, { status: 404 });
   }
 
   await subscribeStockAlert({
     email: parsed.data.email,
-    productId: product.id,
-    productSlug: product.slug,
+    productId: product?.id ?? LAUNCH_ALERT_PRODUCT_ID,
+    productSlug: product?.slug ?? LAUNCH_ALERT_SLUG,
   });
 
   return NextResponse.json({ ok: true });

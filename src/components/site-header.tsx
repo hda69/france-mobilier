@@ -84,6 +84,9 @@ export function SiteHeader() {
           />
         </form>
         <div className="flex items-center gap-3 text-sm">
+          <Link href="/#alerte" className="hidden text-muted hover:text-foreground md:inline">
+            Prévenez-moi
+          </Link>
           <Link
             href={session?.user ? "/compte" : "/connexion"}
             className="hidden text-muted hover:text-foreground sm:inline"
@@ -138,6 +141,13 @@ export function SiteHeader() {
                   {item.label}
                 </Link>
               ))}
+              <Link
+                href="/#alerte"
+                className="rounded-xl px-3 py-2 hover:bg-accent-soft"
+                onClick={() => setOpen(false)}
+              >
+                Prévenez-moi
+              </Link>
               <Link
                 href={session?.user ? "/compte" : "/connexion"}
                 className="rounded-xl px-3 py-2 hover:bg-accent-soft sm:hidden"

@@ -1,6 +1,6 @@
 import type { Product } from "@/lib/types/commerce";
 
-/** Demo catalog — all items are coming_soon (not for live sale). */
+/** Catalog — all items are coming_soon until checkout opens. */
 export const products: Product[] = [
   {
     id: "p-001",
@@ -9,7 +9,7 @@ export const products: Product[] = [
     category: "bureau",
     shortDescription: "Bureau réglable en hauteur pour alterner position assise et debout.",
     description:
-      "Un bureau électrique conçu pour adapter votre posture au fil de la journée. Structure stable, plateau spacieux et réglage fluide. Produit de démonstration — commercialisation à venir.",
+      "Un bureau électrique conçu pour adapter votre posture au fil de la journée. Structure stable, plateau spacieux et réglage fluide. Bientôt commandable : le prix affiché est indicatif.",
     price: 289,
     compareAtPrice: null,
     images: ["/products/desk.jpg"],
@@ -41,7 +41,7 @@ export const products: Product[] = [
     category: "rangement",
     shortDescription: "Rangement vertical discret pour entrée ou couloir étroit.",
     description:
-      "Un meuble compact pour organiser chaussures et accessoires sans encombrer l’entrée. Format étroit, finition sobre. Produit de démonstration — commercialisation à venir.",
+      "Un meuble compact pour organiser chaussures et accessoires sans encombrer l’entrée. Format étroit, finition sobre. Bientôt commandable : le prix affiché est indicatif.",
     price: 79,
     compareAtPrice: null,
     images: ["/products/shoe-cabinet.jpg"],
@@ -68,7 +68,7 @@ export const products: Product[] = [
     category: "salle-de-bain",
     shortDescription: "Étagère murale pour organiser produits et serviettes.",
     description:
-      "Une étagère murale pensée pour les espaces humides. Rangement clair, profil mince. Produit de démonstration — commercialisation à venir.",
+      "Une étagère murale pensée pour les espaces humides. Rangement clair, profil mince. Bientôt commandable : le prix affiché est indicatif.",
     price: 49,
     compareAtPrice: null,
     images: ["/products/bath-shelf.jpg"],
@@ -95,7 +95,7 @@ export const products: Product[] = [
     category: "cuisine",
     shortDescription: "Chariot mobile pour gagner de l’espace en cuisine.",
     description:
-      "Un chariot à roulettes pour ranger ustensiles, paniers et provisions. Mobile et stable. Produit de démonstration — commercialisation à venir.",
+      "Un chariot à roulettes pour ranger ustensiles, paniers et provisions. Mobile et stable. Bientôt commandable : le prix affiché est indicatif.",
     price: 69,
     compareAtPrice: null,
     images: ["/products/kitchen-cart.jpg"],
@@ -122,7 +122,7 @@ export const products: Product[] = [
     category: "bureau",
     shortDescription: "Bras articulé pour deux moniteurs, gain d’espace bureau.",
     description:
-      "Support double moniteur pour libérer le plateau et améliorer l’ergonomie. Articulations fluides. Produit de démonstration — commercialisation à venir.",
+      "Support double moniteur pour libérer le plateau et améliorer l’ergonomie. Articulations fluides. Bientôt commandable : le prix affiché est indicatif.",
     price: 89,
     compareAtPrice: null,
     images: ["/products/monitor-arm.jpg"],
@@ -154,7 +154,7 @@ export const products: Product[] = [
     category: "animaux",
     shortDescription: "Meuble discret pour dissimuler la litière tout en restant accessible.",
     description:
-      "Un meuble fermé qui intègre la litière sans dénaturer la pièce. Entrée latérale, ventilation et rangement. Produit de démonstration — commercialisation à venir.",
+      "Un meuble fermé qui intègre la litière sans dénaturer la pièce. Entrée latérale, ventilation et rangement. Bientôt commandable : le prix affiché est indicatif.",
     price: 119,
     compareAtPrice: null,
     images: ["/products/litter-cabinet.jpg"],
@@ -181,7 +181,7 @@ export const products: Product[] = [
     category: "maison",
     shortDescription: "Table mobile à hauteur réglable pour salon ou chambre.",
     description:
-      "Table d’appoint polyvalente pour ordinateur portable, petit-déjeuner ou lecture. Hauteur réglable, plateau stable. Produit de démonstration — commercialisation à venir.",
+      "Table d’appoint polyvalente pour ordinateur portable, petit-déjeuner ou lecture. Hauteur réglable, plateau stable. Bientôt commandable : le prix affiché est indicatif.",
     price: 59,
     compareAtPrice: null,
     images: ["/products/side-table.jpg"],
@@ -207,7 +207,7 @@ export const products: Product[] = [
     category: "rangement",
     shortDescription: "Système d’étagères à composer selon l’espace disponible.",
     description:
-      "Étagère modulable pour bibliothèque, bureau ou salon. Modules assemblables. Produit de démonstration — commercialisation à venir.",
+      "Étagère modulable pour bibliothèque, bureau ou salon. Modules assemblables. Bientôt commandable : le prix affiché est indicatif.",
     price: 129,
     compareAtPrice: null,
     images: ["/products/modular-shelf.jpg"],
@@ -238,7 +238,7 @@ export const products: Product[] = [
     category: "cuisine",
     shortDescription: "Organiseur coulissant pour exploiter l’espace sous évier.",
     description:
-      "Solution de rangement pour produits d’entretien et ustensiles sous évier. Format adaptable. Produit de démonstration — commercialisation à venir.",
+      "Solution de rangement pour produits d’entretien et ustensiles sous évier. Format adaptable. Bientôt commandable : le prix affiché est indicatif.",
     price: 39,
     compareAtPrice: null,
     images: ["/products/under-sink.jpg"],
@@ -265,7 +265,7 @@ export const products: Product[] = [
     category: "bureau",
     shortDescription: "Organiseur compact pour stylos, notes et petits accessoires.",
     description:
-      "Un organiseur de bureau pour clarifier l’espace de travail. Compartiments pratiques, silhouette discrète. Produit de démonstration — commercialisation à venir.",
+      "Un organiseur de bureau pour clarifier l’espace de travail. Compartiments pratiques, silhouette discrète. Bientôt commandable : le prix affiché est indicatif.",
     price: 29,
     compareAtPrice: null,
     images: ["/products/desk-organizer.jpg"],

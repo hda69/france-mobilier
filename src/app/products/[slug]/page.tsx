@@ -13,6 +13,7 @@ import {
   findProductBySlug,
   findRelatedProducts,
   formatPrice,
+  getCollection,
   listProducts,
 } from "@/lib/products/repository";
 import { listApprovedReviews } from "@/lib/reviews";
@@ -40,12 +41,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+const trustPoints = [
+  { title: "Prix TTC indicatif", text: "Confirmé avant tout paiement." },
+  { title: "France métropolitaine", text: "Livraison et suivi au lancement." },
+  { title: "Rétractation 14 jours", text: "Prévue dès les premières commandes." },
+  { title: "Contact", text: store.supportEmail },
+];
+
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
   const product = findProductBySlug(slug);
   if (!product) notFound();
   const related = findRelatedProducts(product);
   const reviews = await listApprovedReviews(product.id);
+  const collectionSlug = collectionSlugForCategory(product.category);
+  const collection = getCollection(collectionSlug);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -73,13 +83,20 @@ export default async function ProductPage({ params }: Props) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <nav className="mb-6 text-sm text-muted">
         <Link href="/">Accueil</Link> /{" "}
-        <Link href={`/collections/${collectionSlugForCategory(product.category)}`}>Catalogue</Link> /{" "}
+        <Link href={`/collections/${collectionSlug}`}>{collection?.name ?? "Catalogue"}</Link> /{" "}
         <span className="text-foreground">{product.name}</span>
       </nav>
 
       <div className="grid gap-10 md:grid-cols-2">
         <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-border bg-[#f3efe8]">
-          <Image src={product.images[0]} alt={product.name} fill className="object-cover" priority sizes="(max-width:768px) 100vw, 50vw" />
+          <Image
+            src={product.images[0]}
+            alt={product.name}
+            fill
+            className="object-cover"
+            priority
+            sizes="(max-width:768px) 100vw, 50vw"
+          />
         </div>
         <div className="space-y-5">
           <p className="badge">{availabilityLabel(product.availabilityStatus)}</p>
@@ -87,21 +104,29 @@ export default async function ProductPage({ params }: Props) {
           <p className="text-muted leading-relaxed">{product.shortDescription}</p>
           <p className="text-2xl font-medium">
             {formatPrice(product.price)}{" "}
-            <span className="text-sm font-normal text-muted">prix indicatif</span>
+            <span className="text-sm font-normal text-muted">prix TTC indicatif</span>
           </p>
-          <p className="text-sm text-muted">
-            Les délais de livraison définitifs seront indiqués sur chaque fiche produit lors du lancement.
-          </p>
-          <div className="flex flex-wrap gap-3">
+          <NotifyForm productName={product.name} productSlug={product.slug} anchor />
+          <div className="flex flex-wrap items-center gap-3">
             <AddToCartButton product={product} />
+            <Link href="/cart" className="text-sm text-muted underline-offset-4 hover:underline">
+              Voir ma sélection
+            </Link>
           </div>
-          <NotifyForm productName={product.name} productSlug={product.slug} />
+          <ul className="grid gap-2 sm:grid-cols-2">
+            {trustPoints.map((item) => (
+              <li key={item.title} className="rounded-xl border border-border bg-card px-3 py-2.5">
+                <p className="text-sm font-medium">{item.title}</p>
+                <p className="text-xs text-muted">{item.text}</p>
+              </li>
+            ))}
+          </ul>
           <div className="space-y-3 border-t border-border pt-5">
             <h2 className="font-medium">Description</h2>
             <p className="text-sm leading-relaxed text-muted">{product.description}</p>
           </div>
           <div className="space-y-3">
-            <h2 className="font-medium">Caractéristiques</h2>
+            <h2 className="font-medium">Pourquoi c’est utile</h2>
             <ul className="list-disc space-y-1 pl-5 text-sm text-muted">
               {product.features.map((feature) => (
                 <li key={feature}>{feature}</li>
@@ -119,12 +144,6 @@ export default async function ProductPage({ params }: Props) {
               ))}
             </dl>
           </div>
-          <div className="space-y-2 text-sm text-muted">
-            <p>
-              <strong className="text-foreground">Retours :</strong> politique française prévue au
-              lancement. L’adresse de retour sera indiquée avant l’ouverture commerciale.
-            </p>
-          </div>
         </div>
       </div>
 
@@ -132,7 +151,7 @@ export default async function ProductPage({ params }: Props) {
 
       {related.length > 0 && (
         <section className="mt-16">
-          <h2 className="mb-6 text-2xl font-semibold">Produits similaires</h2>
+          <h2 className="mb-6 text-2xl font-semibold">Dans le même esprit</h2>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {related.map((item) => (
               <ProductCard key={item.id} product={item} />

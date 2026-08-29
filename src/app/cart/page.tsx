@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { NotifyForm } from "@/components/notify-form";
 import { useCart } from "@/components/cart-provider";
 import { formatPrice } from "@/lib/products/repository";
 
@@ -11,17 +12,22 @@ export default function CartPage() {
 
   return (
     <div className="container-page py-10 md:py-14">
-      <h1 className="text-3xl font-semibold tracking-tight">Panier</h1>
+      <h1 className="text-3xl font-semibold tracking-tight">Votre sélection</h1>
       <p className="mt-2 text-muted">
-        Panier technique de démonstration. {itemCount} article{itemCount > 1 ? "s" : ""}.
+        {itemCount === 0
+          ? "Gardez les produits qui vous intéressent, puis laissez votre e-mail pour le lancement."
+          : `${itemCount} article${itemCount > 1 ? "s" : ""} de côté — le paiement n’est pas encore ouvert.`}
       </p>
 
       {items.length === 0 ? (
-        <div className="mt-10 rounded-2xl border border-border bg-card p-8">
-          <p className="text-muted">Votre panier est vide.</p>
-          <Link href="/collections/maison" className="btn btn-primary mt-6 inline-flex">
-            Voir la sélection
-          </Link>
+        <div className="mt-10 grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
+          <div className="rounded-2xl border border-border bg-card p-8">
+            <p className="text-muted">Votre sélection est vide.</p>
+            <Link href="/collections/maison" className="btn btn-primary mt-6 inline-flex">
+              Parcourir la sélection
+            </Link>
+          </div>
+          <NotifyForm variant="launch" anchor />
         </div>
       ) : (
         <div className="mt-8 grid gap-8 lg:grid-cols-[1.4fr_0.8fr]">
@@ -38,7 +44,7 @@ export default function CartPage() {
                   <Link href={`/products/${item.slug}`} className="font-medium hover:underline">
                     {item.name}
                   </Link>
-                  <p className="text-sm text-muted">{formatPrice(item.price)}</p>
+                  <p className="text-sm text-muted">{formatPrice(item.price)} indicatif</p>
                   <div className="flex items-center gap-3">
                     <label className="text-sm text-muted">
                       Qté{" "}
@@ -62,23 +68,25 @@ export default function CartPage() {
               </li>
             ))}
           </ul>
-          <aside className="h-fit rounded-2xl border border-border bg-card p-6">
-            <p className="text-sm text-muted">Sous-total</p>
-            <p className="mt-1 text-2xl font-semibold">{formatPrice(subtotal)}</p>
-            <p className="mt-4 text-sm leading-relaxed text-muted">
-              Notre boutique est actuellement en phase de pré-lancement. Le paiement n’est pas encore
-              activé.
-            </p>
-            {publicCheckout ? (
-              <Link href="/checkout" className="btn btn-primary mt-6 w-full">
-                Continuer
-              </Link>
-            ) : (
-              <button type="button" className="btn btn-secondary mt-6 w-full" disabled>
-                Checkout bientôt disponible
-              </button>
-            )}
-            <p className="mt-3 text-xs text-muted">Stripe / fulfillment : non configurés.</p>
+          <aside className="space-y-4">
+            <div className="rounded-2xl border border-border bg-card p-6">
+              <p className="text-sm text-muted">Sous-total indicatif</p>
+              <p className="mt-1 text-2xl font-semibold">{formatPrice(subtotal)}</p>
+              <p className="mt-4 text-sm leading-relaxed text-muted">
+                Aucun paiement n’est collecté pour le moment. Laissez votre e-mail : on vous
+                prévient dès que ces produits pourront être commandés.
+              </p>
+              {publicCheckout ? (
+                <Link href="/checkout" className="btn btn-primary mt-6 w-full">
+                  Continuer
+                </Link>
+              ) : (
+                <a href="#alerte" className="btn btn-primary mt-6 w-full">
+                  Être prévenu à l’ouverture
+                </a>
+              )}
+            </div>
+            <NotifyForm variant="launch" anchor />
           </aside>
         </div>
       )}
