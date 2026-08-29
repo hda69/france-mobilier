@@ -29,7 +29,7 @@ export default async function SearchPage({ searchParams }: Props) {
       <nav className="mb-6 text-sm text-muted">
         <Link href="/">Accueil</Link> / <span className="text-foreground">Recherche</span>
       </nav>
-      <h1 className="text-3xl font-semibold tracking-tight">Recherche</h1>
+      <h1 className="display text-4xl text-navy">Recherche</h1>
       <form className="mt-6 flex flex-col gap-3 rounded-2xl border border-border bg-card p-4 md:flex-row md:items-end">
         <label className="flex-1 text-sm">
           <span className="mb-1 block text-muted">Produit</span>

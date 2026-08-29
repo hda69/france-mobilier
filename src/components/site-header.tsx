@@ -6,9 +6,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { navigation, store } from "@/config/store";
 import { useCart } from "@/components/cart-provider";
+import { IconBag, IconSearch, IconUser } from "@/components/icons";
 import { authClient } from "@/lib/auth-client";
 
-/** Shrink only after this offset; expand only below the lower bound (hysteresis). */
 const SHRINK_AFTER = 80;
 const EXPAND_BEFORE = 16;
 
@@ -38,118 +38,135 @@ export function SiteHeader() {
 
   return (
     <>
-      <div className="h-20 md:h-[9.5rem] lg:h-[12.5rem]" aria-hidden />
-      <header
-        className={`fixed top-0 inset-x-0 z-40 border-b border-border/80 bg-background/95 backdrop-blur transition-shadow duration-300 ${
-          compact ? "shadow-sm" : ""
-        }`}
-      >
-      <div
-        className={`container-page flex items-center justify-between gap-4 transition-[min-height,padding] duration-300 ${
-          compact
-            ? "min-h-14 py-1.5 md:min-h-16 md:py-2"
-            : "min-h-16 py-2 md:min-h-36 md:py-3 lg:min-h-48"
-        }`}
-      >
-        <Link href="/" className="flex items-center gap-2 shrink-0" onClick={() => setOpen(false)}>
-          <Image
-            src={store.logoPath}
-            alt={store.storeName}
-            width={400}
-            height={296}
-            className={`w-auto object-contain transition-[height] duration-300 ${
-              compact ? "h-11 md:h-12 lg:h-14" : "h-16 md:h-32 lg:h-44"
+      <div className="h-[6.75rem] md:h-[7.25rem]" aria-hidden />
+      <header className="fixed inset-x-0 top-0 z-40 bg-white/95 backdrop-blur-md">
+        <p className="border-b border-border bg-navy text-center text-[11px] tracking-[0.06em] text-white/90 md:text-xs">
+          <span className="container-page flex min-h-8 flex-wrap items-center justify-center gap-x-4 gap-y-1 py-1.5">
+            <span>Livraison en France</span>
+            <span className="hidden text-white/40 sm:inline">•</span>
+            <span>Retours sous 14 jours</span>
+            <span className="hidden text-white/40 md:inline">•</span>
+            <span className="hidden md:inline">Service client</span>
+          </span>
+        </p>
+        <div
+          className={`border-b border-border/80 transition-shadow duration-300 ${
+            compact ? "shadow-[var(--shadow)]" : ""
+          }`}
+        >
+          <div
+            className={`container-page flex items-center justify-between gap-4 ${
+              compact ? "min-h-14 py-2" : "min-h-16 py-2.5 md:min-h-[4.25rem]"
             }`}
-            priority
-          />
-          <span className="sr-only">{store.storeName}</span>
-        </Link>
-        <nav className="hidden items-center gap-5 text-sm text-muted lg:flex">
-          {navigation.map((item) => (
-            <Link key={item.href} href={item.href} className="hover:text-foreground">
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-        <form onSubmit={onSearch} className="hidden flex-1 max-w-xs md:block">
-          <label className="sr-only" htmlFor="header-search">
-            Rechercher
-          </label>
-          <input
-            id="header-search"
-            name="q"
-            type="search"
-            placeholder="Rechercher un produit…"
-            className="w-full rounded-full border border-border bg-white px-4 py-2 text-sm outline-none focus:border-accent"
-          />
-        </form>
-        <div className="flex items-center gap-3 text-sm">
-          <Link
-            href={session?.user ? "/compte" : "/connexion"}
-            className="hidden text-muted hover:text-foreground sm:inline"
           >
-            {session?.user ? "Compte" : "Connexion"}
-          </Link>
-          <Link
-            href="/cart"
-            className="rounded-full border border-border px-3 py-1.5 hover:bg-accent-soft"
-          >
-            Panier{itemCount > 0 ? ` (${itemCount})` : ""}
-          </Link>
-          <button
-            type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border lg:hidden"
-            aria-expanded={open}
-            aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
-            onClick={() => setOpen((value) => !value)}
-          >
-            <span className="sr-only">Menu</span>
-            <span aria-hidden className="flex flex-col gap-1.5">
-              <span className={`h-0.5 w-4 bg-foreground transition ${open ? "translate-y-2 rotate-45" : ""}`} />
-              <span className={`h-0.5 w-4 bg-foreground transition ${open ? "opacity-0" : ""}`} />
-              <span className={`h-0.5 w-4 bg-foreground transition ${open ? "-translate-y-2 -rotate-45" : ""}`} />
-            </span>
-          </button>
-        </div>
-      </div>
-      {open && (
-        <div className="border-t border-border bg-background lg:hidden">
-          <div className="container-page space-y-4 py-4">
-            <form onSubmit={onSearch}>
-              <label className="sr-only" htmlFor="mobile-search">
-                Rechercher
-              </label>
-              <input
-                id="mobile-search"
-                name="q"
-                type="search"
-                placeholder="Rechercher un produit…"
-                className="w-full rounded-full border border-border bg-white px-4 py-2.5 text-sm outline-none focus:border-accent"
+            <Link href="/" className="shrink-0" onClick={() => setOpen(false)}>
+              <Image
+                src={store.logoPath}
+                alt={store.storeName}
+                width={220}
+                height={163}
+                className={`w-auto object-contain transition-[height] duration-300 ${
+                  compact ? "h-9 md:h-10" : "h-11 md:h-12"
+                }`}
+                priority
               />
-            </form>
-            <nav className="grid gap-1 text-sm">
+            </Link>
+            <nav className="hidden items-center gap-7 text-[15px] text-navy lg:flex">
               {navigation.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="rounded-xl px-3 py-2 hover:bg-accent-soft"
-                  onClick={() => setOpen(false)}
-                >
+                <Link key={item.href} href={item.href} className="relative py-1 hover:opacity-70">
                   {item.label}
                 </Link>
               ))}
+            </nav>
+            <form onSubmit={onSearch} className="hidden max-w-xs flex-1 md:block">
+              <label className="sr-only" htmlFor="header-search">
+                Rechercher
+              </label>
+              <div className="relative">
+                <IconSearch className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+                <input
+                  id="header-search"
+                  name="q"
+                  type="search"
+                  placeholder="Rechercher un produit…"
+                  className="input pl-9"
+                />
+              </div>
+            </form>
+            <div className="flex items-center gap-1">
               <Link
                 href={session?.user ? "/compte" : "/connexion"}
-                className="rounded-xl px-3 py-2 hover:bg-accent-soft sm:hidden"
-                onClick={() => setOpen(false)}
+                className="hidden h-10 w-10 items-center justify-center text-navy hover:opacity-70 sm:inline-flex"
+                aria-label={session?.user ? "Compte" : "Connexion"}
               >
-                {session?.user ? "Compte" : "Connexion"}
+                <IconUser />
               </Link>
-            </nav>
+              <Link
+                href="/cart"
+                className="relative inline-flex h-10 w-10 items-center justify-center text-navy hover:opacity-70"
+                aria-label={itemCount > 0 ? `Panier, ${itemCount} articles` : "Panier"}
+              >
+                <IconBag />
+                {itemCount > 0 ? (
+                  <span className="absolute right-0.5 top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--accent-red)] px-1 text-[10px] font-semibold text-white">
+                    {itemCount}
+                  </span>
+                ) : null}
+              </Link>
+              <button
+                type="button"
+                className="inline-flex h-10 w-10 items-center justify-center text-navy lg:hidden"
+                aria-expanded={open}
+                aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
+                onClick={() => setOpen((value) => !value)}
+              >
+                <span aria-hidden className="flex flex-col gap-1.5">
+                  <span className={`h-0.5 w-4 bg-navy transition ${open ? "translate-y-2 rotate-45" : ""}`} />
+                  <span className={`h-0.5 w-4 bg-navy transition ${open ? "opacity-0" : ""}`} />
+                  <span className={`h-0.5 w-4 bg-navy transition ${open ? "-translate-y-2 -rotate-45" : ""}`} />
+                </span>
+              </button>
+            </div>
           </div>
+          {open && (
+            <div className="border-t border-border bg-white lg:hidden">
+              <div className="container-page space-y-4 py-4">
+                <form onSubmit={onSearch}>
+                  <label className="sr-only" htmlFor="mobile-search">
+                    Rechercher
+                  </label>
+                  <input
+                    id="mobile-search"
+                    name="q"
+                    type="search"
+                    placeholder="Rechercher un produit…"
+                    className="input"
+                  />
+                </form>
+                <nav className="grid gap-1 text-navy">
+                  {navigation.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="rounded-lg px-3 py-2.5 hover:bg-cream"
+                      onClick={() => setOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                  <Link
+                    href={session?.user ? "/compte" : "/connexion"}
+                    className="rounded-lg px-3 py-2.5 hover:bg-cream sm:hidden"
+                    onClick={() => setOpen(false)}
+                  >
+                    {session?.user ? "Compte" : "Connexion"}
+                  </Link>
+                </nav>
+              </div>
+            </div>
+          )}
         </div>
-      )}
-    </header>
+      </header>
     </>
   );
 }

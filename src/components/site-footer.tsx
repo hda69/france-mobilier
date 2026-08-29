@@ -2,63 +2,64 @@ import Image from "next/image";
 import Link from "next/link";
 import { store } from "@/config/store";
 
-const footerLinks = [
+const groups = [
   {
-    title: "Boutique",
+    title: "Nos collections",
     links: [
-      { href: "/collections/maison", label: "Maison" },
+      { href: "/nouveautes", label: "Nouveautés" },
       { href: "/collections/rangement", label: "Rangement" },
       { href: "/collections/bureau", label: "Bureau" },
+      { href: "/collections/maison", label: "Maison" },
       { href: "/collections/animaux", label: "Animaux" },
+    ],
+  },
+  {
+    title: "Aide",
+    links: [
+      { href: "/shipping", label: "Livraison" },
+      { href: "/returns", label: "Retours" },
+      { href: "/contact", label: "Contact" },
+      { href: "/faq", label: "FAQ" },
     ],
   },
   {
     title: "Informations",
     links: [
-      { href: "/about", label: "À propos" },
-      { href: "/shipping", label: "Livraison" },
-      { href: "/returns", label: "Retours" },
-      { href: "/contact", label: "Contact" },
-    ],
-  },
-  {
-    title: "Compte",
-    links: [
-      { href: "/connexion", label: "Connexion" },
-      { href: "/inscription", label: "Créer un compte" },
-      { href: "/compte", label: "Mon compte" },
       { href: "/legal", label: "Mentions légales" },
-      { href: "/privacy", label: "Confidentialité" },
       { href: "/terms", label: "CGV" },
+      { href: "/privacy", label: "Confidentialité" },
+      { href: "/privacy", label: "Cookies" },
     ],
   },
 ];
 
 export function SiteFooter() {
   return (
-    <footer className="mt-24 border-t border-border bg-accent-soft/40">
+    <footer className="mt-10 bg-navy text-white">
       <div className="container-page grid gap-10 py-14 md:grid-cols-4">
-        <div className="md:col-span-1">
-          <Image
-            src={store.logoPath}
-            alt={store.storeName}
-            width={400}
-            height={296}
-            className="h-24 w-auto object-contain md:h-32"
-          />
-          <p className="mt-4 text-sm leading-relaxed text-muted">{store.storeTagline}</p>
-          <p className="mt-4 text-sm text-muted">{store.supportEmail}</p>
-          <p className="mt-2 text-xs text-muted">
-            {store.companyName} · {store.companyCity}
+        <div>
+          <div className="inline-flex rounded-md bg-white px-2 py-1.5">
+            <Image
+              src={store.logoPath}
+              alt={store.storeName}
+              width={160}
+              height={118}
+              className="h-12 w-auto object-contain"
+            />
+          </div>
+          <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/75">
+            Meubles et solutions de rangement pour un intérieur plus simple à vivre. Boutique éditée
+            à {store.companyCity}.
           </p>
+          <p className="mt-4 text-sm text-white/75">{store.supportEmail}</p>
         </div>
-        {footerLinks.map((group) => (
+        {groups.map((group) => (
           <div key={group.title}>
-            <p className="text-sm font-medium">{group.title}</p>
-            <ul className="mt-3 space-y-2 text-sm text-muted">
+            <p className="text-sm font-semibold">{group.title}</p>
+            <ul className="mt-4 space-y-2.5 text-sm text-white/75">
               {group.links.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className="hover:text-accent">
+                <li key={`${group.title}-${link.href}-${link.label}`}>
+                  <Link href={link.href} className="hover:text-white">
                     {link.label}
                   </Link>
                 </li>
@@ -67,12 +68,14 @@ export function SiteFooter() {
           </div>
         ))}
       </div>
-      <div className="border-t border-border">
-        <div className="container-page flex flex-col gap-2 py-5 text-xs text-muted md:flex-row md:justify-between">
+      <div className="border-t border-white/10">
+        <div className="container-page flex flex-col gap-2 py-5 text-xs text-white/55 md:flex-row md:justify-between">
           <p>
             © {new Date().getFullYear()} {store.storeName}. Tous droits réservés.
           </p>
-          <p>Livraison France · Paiement sécurisé · Retours 14 jours</p>
+          <p>
+            {store.storeName} — {store.companyCity}
+          </p>
         </div>
       </div>
     </footer>

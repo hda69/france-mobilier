@@ -1,14 +1,22 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #1a1714;
-  --muted: #6f675f;
+  --navy: #0b2b55;
+  --navy-hover: #0e3568;
+  --accent-red: #d71932;
+  --cream: #f7f5f1;
+  --white: #ffffff;
+  --foreground: #222222;
+  --muted: #5c6170;
   --card: #ffffff;
-  --border: #e8e2d9;
-  --accent: #8c6a3f;
-  --accent-soft: #f4eee6;
-  --accent-dark: #6e522f;
+  --border: #e4e0d8;
+  --background: #ffffff;
+  --accent: #0b2b55;
+  --accent-soft: #f7f5f1;
+  --accent-dark: #081f3d;
+  --radius: 0.75rem;
+  --shadow: 0 8px 24px rgba(11, 43, 85, 0.06);
+  --space-section: 5rem;
 }
 
 @theme inline {
@@ -20,13 +28,16 @@
   --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
   --color-accent-dark: var(--accent-dark);
+  --color-navy: var(--navy);
+  --color-cream: var(--cream);
   --font-sans: var(--font-geist-sans);
+  --font-serif: var(--font-serif);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-sans), system-serif, system-ui, sans-serif;
 }
 
 a {
@@ -34,9 +45,57 @@ a {
   text-decoration: none;
 }
 
+:focus-visible {
+  outline: 2px solid var(--navy);
+  outline-offset: 3px;
+}
+
 .container-page {
-  width: min(1120px, calc(100% - 2rem));
+  width: min(1320px, calc(100% - 2rem));
   margin-inline: auto;
+}
+
+.section {
+  padding-block: 4.5rem;
+}
+
+@media (min-width: 768px) {
+  .section {
+    padding-block: 5.5rem;
+  }
+}
+
+.section-cream {
+  background: var(--cream);
+}
+
+.font-serif {
+  font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+}
+
+.display {
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--navy);
+}
+
+.eyebrow::before {
+  content: "";
+  width: 1.25rem;
+  height: 2px;
+  background: var(--accent-red);
 }
 
 .btn {
@@ -44,20 +103,21 @@ a {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  border-radius: 999px;
-  padding: 0.85rem 1.35rem;
+  border-radius: 0.5rem;
+  padding: 0.9rem 1.4rem;
   font-size: 0.95rem;
-  font-weight: 500;
-  transition: 0.2s ease;
+  font-weight: 550;
+  transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease,
+    transform 180ms ease;
 }
 
 .btn-primary {
-  background: var(--accent);
+  background: var(--navy);
   color: #fff;
 }
 
 .btn-primary:hover {
-  background: var(--accent-dark);
+  background: var(--navy-hover);
 }
 
 .btn:disabled {
@@ -67,70 +127,47 @@ a {
 
 .btn-secondary {
   background: transparent;
-  border: 1px solid var(--border);
-  color: var(--foreground);
+  border: 1px solid var(--navy);
+  color: var(--navy);
 }
 
 .btn-secondary:hover {
-  background: var(--accent-soft);
-  border-color: var(--accent);
+  background: var(--navy);
+  color: #fff;
+}
+
+.btn-inverse {
+  background: #fff;
+  color: var(--navy);
+}
+
+.btn-inverse:hover {
+  background: var(--cream);
 }
 
 .badge {
   display: inline-flex;
   align-items: center;
   border-radius: 999px;
-  padding: 0.3rem 0.7rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  background: var(--accent-soft);
-  color: var(--accent-dark);
+  padding: 0.28rem 0.7rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: var(--cream);
+  color: var(--navy);
 }
 
-.magazine-ticker {
-  overflow: hidden;
-  border-block: 1px solid var(--border);
-  background: var(--accent-soft);
+.input {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 0.5rem;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.95rem;
+  outline: none;
 }
 
-.magazine-ticker-track {
-  display: flex;
-  width: max-content;
-  animation: magazine-ticker 90s linear infinite;
-}
-
-.magazine-ticker:hover .magazine-ticker-track {
-  animation-play-state: paused;
-}
-
-.magazine-ticker-item {
-  display: flex;
-  flex: none;
-  align-items: center;
-  height: 4.6rem;
-  padding-inline: 2.6rem;
-}
-
-.magazine-ticker-item img {
-  display: block;
-  height: 2rem;
-  width: auto;
-  max-width: 12.5rem;
-  object-fit: contain;
-  opacity: 0.88;
-}
-
-@keyframes magazine-ticker {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .magazine-ticker-track {
-    animation: none;
-  }
+.input:focus {
+  border-color: var(--navy);
 }

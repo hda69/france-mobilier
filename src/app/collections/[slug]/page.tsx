@@ -51,16 +51,17 @@ export default async function CollectionPage({ params, searchParams }: Props) {
   });
 
   return (
-    <div className="container-page py-10 md:py-14">
+    <div className="container-page py-10 md:py-16">
       <nav className="mb-6 text-sm text-muted">
         <Link href="/">Accueil</Link> / <span className="text-foreground">{collection.name}</span>
       </nav>
-      <div className="mb-8 max-w-2xl">
-        <h1 className="text-3xl font-semibold tracking-tight">{collection.name}</h1>
-        <p className="mt-3 text-muted">{collection.description}</p>
+      <div className="mb-10 max-w-2xl">
+        <p className="eyebrow">Collection</p>
+        <h1 className="display mt-3 text-4xl text-navy">{collection.name}</h1>
+        <p className="mt-4 text-lg text-muted">{collection.description}</p>
       </div>
 
-      <form className="mb-8 flex flex-col gap-3 rounded-2xl border border-border bg-card p-4 md:flex-row md:items-end">
+      <form className="mb-10 flex flex-col gap-3 rounded-[var(--radius)] bg-white p-4 md:flex-row md:items-end">
         <label className="flex-1 text-sm">
           <span className="mb-1 block text-muted">Recherche</span>
           <input

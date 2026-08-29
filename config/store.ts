@@ -4,8 +4,8 @@
 
 export const store = {
   storeName: "France Mobilier",
-  storeTagline: "Mobilier et rangement pour un intérieur mieux pensé.",
-  tagline: "Mobilier et rangement pour un intérieur mieux pensé.",
+  storeTagline: "Des meubles et solutions de rangement pour gagner en confort et en espace.",
+  tagline: "Des meubles et solutions de rangement pour gagner en confort et en espace.",
   domain: "https://francemobilier.com",
   supportEmail: "contact@francemobilier.com",
   country: "FR",
@@ -49,25 +49,25 @@ export const collections = [
   {
     slug: "maison",
     name: "Maison",
-    description: "Équipements utiles pour un quotidien plus fluide à la maison.",
+    description: "Des essentiels pensés pour le quotidien.",
     categories: ["maison", "cuisine", "salle-de-bain"] as const,
   },
   {
     slug: "rangement",
     name: "Rangement",
-    description: "Solutions d’organisation pour optimiser l’espace.",
+    description: "Optimisez chaque mètre carré.",
     categories: ["rangement", "cuisine", "salle-de-bain"] as const,
   },
   {
     slug: "bureau",
     name: "Bureau",
-    description: "Confort et ergonomie pour travailler chez soi.",
+    description: "Travaillez mieux chez vous.",
     categories: ["bureau"] as const,
   },
   {
     slug: "animaux",
     name: "Animaux",
-    description: "Accessoires discrets et pratiques pour la maison avec animaux.",
+    description: "Du pratique sans sacrifier votre intérieur.",
     categories: ["animaux"] as const,
   },
 ] as const;

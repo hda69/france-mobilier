@@ -5,31 +5,25 @@ import { availabilityLabel, formatPrice } from "@/lib/products/repository";
 
 export function ProductCard({ product }: { product: Product }) {
   return (
-    <article className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card">
-      <Link href={`/products/${product.slug}`} className="block flex-1">
-        <div className="relative aspect-[4/5] bg-[#f3efe8]">
+    <article className="group flex flex-col bg-white">
+      <Link href={`/products/${product.slug}`} className="block">
+        <div className="relative aspect-square overflow-hidden rounded-[var(--radius)] bg-cream">
           <Image
             src={product.images[0]}
             alt={product.name}
             fill
-            className="object-cover transition duration-500 group-hover:scale-[1.02]"
+            className="object-cover transition duration-500 group-hover:scale-[1.03]"
             sizes="(max-width: 768px) 100vw, 25vw"
           />
-        </div>
-        <div className="space-y-2 p-4 pb-2">
           {product.availabilityStatus !== "available" ? (
-            <p className="badge">{availabilityLabel(product.availabilityStatus)}</p>
+            <p className="badge absolute left-3 top-3">{availabilityLabel(product.availabilityStatus)}</p>
           ) : null}
-          <h3 className="text-base font-medium leading-snug">{product.name}</h3>
-          <p className="text-sm text-muted line-clamp-2">{product.shortDescription}</p>
-          <p className="pt-1 text-sm font-medium">{formatPrice(product.price)}</p>
+        </div>
+        <div className="space-y-1.5 pt-4">
+          <h3 className="text-base font-medium leading-snug text-navy">{product.name}</h3>
+          <p className="text-sm text-muted">{formatPrice(product.price)}</p>
         </div>
       </Link>
-      <div className="px-4 pb-4">
-        <Link href={`/products/${product.slug}`} className="btn btn-primary w-full text-sm">
-          Voir le produit
-        </Link>
-      </div>
     </article>
   );
 }

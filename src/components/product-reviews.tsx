@@ -74,10 +74,7 @@ export function ProductReviews({
     <section className="mt-16 border-t border-border pt-12">
       <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-semibold tracking-tight">Avis clients</h2>
-          <p className="mt-1 text-sm text-muted">
-            Uniquement après un achat vérifié — pas d’avis fictifs.
-          </p>
+          <h2 className="display text-3xl text-navy">Avis clients vérifiés</h2>
         </div>
         {average !== null && (
           <p className="text-sm text-muted">
@@ -90,7 +87,7 @@ export function ProductReviews({
       </div>
 
       {reviews.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-border bg-accent-soft/40 px-5 py-8 text-sm text-muted">
+        <div className="rounded-[var(--radius)] bg-white px-5 py-8 text-sm text-muted">
           Aucun avis pour le moment.
         </div>
       ) : (

@@ -10,7 +10,7 @@ export default function CartPage() {
 
   return (
     <div className="container-page py-10 md:py-14">
-      <h1 className="text-3xl font-semibold tracking-tight">Panier</h1>
+      <h1 className="display text-4xl text-navy">Panier</h1>
       <p className="mt-2 text-muted">
         {!ready
           ? " "
@@ -22,9 +22,13 @@ export default function CartPage() {
       {!ready ? (
         <div className="mt-10 min-h-48" />
       ) : items.length === 0 ? (
-        <div className="mt-10 rounded-2xl border border-border bg-card p-8">
-          <Link href="/collections/maison" className="btn btn-primary inline-flex">
-            Voir la sélection
+        <div className="mt-10 rounded-[var(--radius)] bg-cream px-6 py-10">
+          <h2 className="display text-2xl text-navy">Votre panier est vide</h2>
+          <p className="mt-2 max-w-md text-muted">
+            Découvrez nos meubles et solutions pour la maison.
+          </p>
+          <Link href="/collections/maison" className="btn btn-primary mt-6 inline-flex">
+            Découvrir la boutique
           </Link>
         </div>
       ) : (

@@ -1,163 +1,271 @@
 import Image from "next/image";
 import Link from "next/link";
-import { MagazineTicker } from "@/components/magazine-ticker";
 import { ProductCard } from "@/components/product-card";
-import { TrustBar } from "@/components/trust-bar";
-import { collections, store } from "@/config/store";
-import { listCollectionProducts, listProducts } from "@/lib/products/repository";
+import { IconPin, IconReturn, IconTag, IconTruck } from "@/components/icons";
+import { store } from "@/config/store";
+import { listProducts } from "@/lib/products/repository";
+
+const categoryVisuals = [
+  {
+    slug: "rangement",
+    image: "/lifestyle/rangement.jpg",
+    title: "Rangement",
+    text: "Optimisez chaque mètre carré.",
+  },
+  {
+    slug: "bureau",
+    image: "/lifestyle/bureau.jpg",
+    title: "Bureau",
+    text: "Travaillez mieux chez vous.",
+  },
+  {
+    slug: "maison",
+    image: "/lifestyle/maison.jpg",
+    title: "Maison",
+    text: "Des essentiels pensés pour le quotidien.",
+  },
+  {
+    slug: "animaux",
+    image: "/lifestyle/animaux.jpg",
+    title: "Animaux",
+    text: "Du pratique sans sacrifier votre intérieur.",
+  },
+] as const;
+
+const guarantees = [
+  {
+    title: "Éditée à Lyon",
+    text: `${store.storeName} est une boutique éditée à ${store.companyCity}.`,
+    icon: IconPin,
+  },
+  {
+    title: "Prix TTC",
+    text: "Pas de mauvaise surprise au paiement.",
+    icon: IconTag,
+  },
+  {
+    title: "Livraison suivie",
+    text: "Livraison en France métropolitaine.",
+    icon: IconTruck,
+  },
+  {
+    title: "Retours sous 14 jours",
+    text: "Commandez en toute tranquillité.",
+    icon: IconReturn,
+  },
+];
 
 export default function HomePage() {
-  const featured = listProducts().slice(0, 8);
+  const products = listProducts();
+  const nouveautes = products.slice(0, 4);
+  const essentiels = [...products].sort((a, b) => a.price - b.price).slice(0, 4);
 
   return (
     <div>
-      <section className="border-b border-border bg-[linear-gradient(180deg,#faf7f2_0%,#ffffff_70%)]">
-        <div className="container-page grid gap-10 py-14 md:grid-cols-[1.15fr_0.85fr] md:items-center md:py-20">
-          <div className="space-y-6">
-            <p className="text-sm uppercase tracking-[0.18em] text-muted">
-              Home & Garden · France
+      <section className="relative min-h-[78vh] overflow-hidden bg-navy text-white md:min-h-[84vh]">
+        <Image
+          src="/lifestyle/hero.jpg"
+          alt="Intérieur contemporain avec mobilier clair et lumineux"
+          fill
+          priority
+          className="object-cover"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-navy/80 via-navy/45 to-navy/15" />
+        <div className="container-page relative flex min-h-[78vh] items-end py-16 md:min-h-[84vh] md:items-center md:py-24">
+          <div className="max-w-xl">
+            <p className="eyebrow text-white">
+              <span className="text-white">Mobilier & rangement</span>
             </p>
-            <h1 className="max-w-3xl text-4xl font-semibold leading-tight tracking-tight md:text-5xl">
-              Des solutions pratiques pour un intérieur mieux pensé.
+            <h1 className="display mt-4 text-4xl text-white md:text-6xl">
+              Le mobilier qui simplifie votre intérieur.
             </h1>
-            <p className="max-w-2xl text-lg leading-relaxed text-muted">
-              Mobilier et rangement pour la maison, le bureau et les espaces contraints. Une
-              sélection claire, des prix TTC, une livraison en France métropolitaine.
+            <p className="mt-5 max-w-md text-base leading-relaxed text-white/85 md:text-lg">
+              Des meubles et solutions de rangement sélectionnés pour gagner en confort, en espace
+              et en simplicité au quotidien.
             </p>
-            <div className="flex flex-wrap gap-3">
-              <Link href="/collections/maison" className="btn btn-primary">
-                Voir la sélection
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="/collections/maison" className="btn btn-inverse">
+                Découvrir nos meubles
               </Link>
-              <Link href="/nouveautes" className="btn btn-secondary">
-                Nouveautés
+              <Link href="/nouveautes" className="btn border border-white/70 text-white hover:bg-white hover:text-navy">
+                Voir les nouveautés
               </Link>
             </div>
           </div>
-          <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
-            <p className="text-sm font-medium">Boutique française</p>
-            <p className="mt-3 text-sm leading-relaxed text-muted">
-              {store.storeName} est éditée à {store.companyCity}. Livraison en France
-              métropolitaine, rétractation 14 jours, paiement par carte.
-            </p>
-          </div>
         </div>
       </section>
 
-      <MagazineTicker />
-
-      <section className="container-page py-10">
-        <TrustBar />
+      <section className="border-b border-border bg-white">
+        <div className="container-page grid grid-cols-2 gap-6 py-8 md:grid-cols-4 md:gap-8 md:py-10">
+          {guarantees.map((item) => (
+            <div key={item.title} className="flex gap-3">
+              <item.icon className="mt-0.5 h-5 w-5 text-navy" />
+              <div>
+                <p className="text-sm font-semibold text-navy">{item.title}</p>
+                <p className="mt-1 text-sm leading-relaxed text-muted">{item.text}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
 
-      <section className="container-page py-10">
-        <div className="mb-8">
-          <h2 className="text-2xl font-semibold tracking-tight">Parcourir par besoin</h2>
-          <p className="mt-2 text-muted">Maison, rangement, bureau et animaux.</p>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {collections.map((collection) => {
-            const preview = listCollectionProducts(collection.slug)[0];
-            return (
+      <section className="section">
+        <div className="container-page">
+          <p className="eyebrow">Collections</p>
+          <h2 className="display mt-3 text-3xl text-navy md:text-4xl">Trouver le bon meuble</h2>
+          <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2">
+            {categoryVisuals.map((item, index) => (
               <Link
-                key={collection.slug}
-                href={`/collections/${collection.slug}`}
-                className="group overflow-hidden rounded-2xl border border-border bg-card transition hover:border-accent/40"
+                key={item.slug}
+                href={`/collections/${item.slug}`}
+                className={`group relative overflow-hidden rounded-[var(--radius)] ${
+                  index === 0 ? "min-h-72 lg:col-span-2 lg:row-span-2 lg:min-h-[34rem]" : "min-h-56"
+                }`}
               >
-                {preview ? (
-                  <div className="relative aspect-[4/3] bg-[#f3efe8]">
-                    <Image
-                      src={preview.images[0]}
-                      alt=""
-                      fill
-                      className="object-cover transition duration-500 group-hover:scale-[1.03]"
-                      sizes="(max-width: 768px) 100vw, 25vw"
-                    />
-                  </div>
-                ) : null}
-                <div className="p-5">
-                  <h3 className="font-medium">{collection.name}</h3>
-                  <p className="mt-2 text-sm text-muted">{collection.description}</p>
-                  <p className="mt-3 text-sm text-accent">Voir les produits</p>
+                <Image
+                  src={item.image}
+                  alt=""
+                  fill
+                  className="object-cover transition duration-500 group-hover:scale-[1.03]"
+                  sizes={index === 0 ? "(max-width: 1024px) 100vw, 50vw" : "(max-width: 768px) 100vw, 25vw"}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-navy/75 via-navy/15 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-5 text-white md:p-6">
+                  <h3 className="display text-2xl">{item.title}</h3>
+                  <p className="mt-1 text-sm text-white/85">{item.text}</p>
                 </div>
               </Link>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="container-page pb-16">
-        <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h2 className="text-2xl font-semibold tracking-tight">La sélection</h2>
-            <p className="mt-2 text-muted">Les essentiels pour organiser et équiper la maison.</p>
-          </div>
-          <Link href="/nouveautes" className="text-sm text-accent underline-offset-4 hover:underline">
-            Voir tout
-          </Link>
-        </div>
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {featured.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      </section>
-
-      <section className="border-y border-border bg-card">
-        <div className="container-page grid gap-8 py-16 md:grid-cols-3">
-          {[
-            {
-              title: "Utile d’abord",
-              text: "Chaque fiche répond à un vrai besoin d’espace, de rangement ou de bureau.",
-            },
-            {
-              title: "Livraison France",
-              text: "Expédition en France métropolitaine, avec suivi de colis.",
-            },
-            {
-              title: "Retours 14 jours",
-              text: "Rétractation conformément au droit de la consommation.",
-            },
-          ].map((item) => (
-            <div key={item.title}>
-              <h3 className="font-medium">{item.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted">{item.text}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="container-page grid gap-10 py-16 md:grid-cols-2">
-        <div>
-          <h2 className="text-2xl font-semibold tracking-tight">Livraison et retours</h2>
-          <p className="mt-3 text-muted leading-relaxed">
-            Livraison en France métropolitaine. Les délais figurent sur chaque fiche. Vous disposez
-            de 14 jours pour vous rétracter après réception, lorsque le droit français le prévoit.
-          </p>
-          <div className="mt-4 flex flex-wrap gap-4 text-sm">
-            <Link href="/shipping" className="text-accent underline-offset-4 hover:underline">
-              Livraison
-            </Link>
-            <Link href="/returns" className="text-accent underline-offset-4 hover:underline">
-              Retours
-            </Link>
+            ))}
           </div>
         </div>
-        <div>
-          <h2 className="text-2xl font-semibold tracking-tight">Questions fréquentes</h2>
-          <div className="mt-4 space-y-4 text-sm">
+      </section>
+
+      <section className="section section-cream">
+        <div className="container-page">
+          <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="font-medium">Livrez-vous en France ?</p>
-              <p className="mt-1 text-muted">Oui, en France métropolitaine.</p>
-            </div>
-            <div>
-              <p className="font-medium">Les prix sont-ils TTC ?</p>
-              <p className="mt-1 text-muted">Oui. Le total est confirmé au paiement.</p>
-            </div>
-            <div>
-              <p className="font-medium">Qui est derrière la boutique ?</p>
-              <p className="mt-1 text-muted">
-                {store.companyName}, à {store.companyCity}. {store.supportEmail}.
+              <p className="eyebrow">Nouveautés</p>
+              <h2 className="display mt-3 text-3xl text-navy md:text-4xl">Les dernières nouveautés</h2>
+              <p className="mt-3 max-w-xl text-muted">
+                Des meubles pratiques sélectionnés pour améliorer votre quotidien.
               </p>
+            </div>
+            <Link href="/nouveautes" className="btn btn-secondary">
+              Voir toutes les nouveautés
+            </Link>
+          </div>
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {nouveautes.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container-page">
+          <p className="eyebrow">Sélection</p>
+          <h2 className="display mt-3 text-3xl text-navy md:text-4xl">Nos essentiels pour la maison</h2>
+          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {essentiels.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section section-cream">
+        <div className="container-page grid items-center gap-10 md:grid-cols-2">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-[var(--radius)]">
+            <Image
+              src="/lifestyle/marque.jpg"
+              alt="Détail de mobilier contemporain en bois clair"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          </div>
+          <div>
+            <p className="eyebrow">La marque</p>
+            <h2 className="display mt-3 text-3xl text-navy md:text-4xl">Un intérieur plus simple à vivre</h2>
+            <p className="mt-5 leading-relaxed text-muted">
+              Chez {store.storeName}, nous sélectionnons des meubles et accessoires pensés pour les
+              logements d’aujourd’hui : moins d’espace perdu, plus de confort et des solutions
+              faciles à intégrer au quotidien.
+            </p>
+            <p className="mt-4 leading-relaxed text-muted">
+              Notre boutique est éditée à {store.companyCity} et s’adresse aux particuliers
+              recherchant des produits pratiques, modernes et accessibles.
+            </p>
+            <Link href="/about" className="btn btn-primary mt-8">
+              Découvrir {store.storeName}
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container-page grid items-center gap-10 md:grid-cols-2">
+          <div className="md:order-2">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[var(--radius)]">
+              <Image
+                src="/lifestyle/petits-espaces.jpg"
+                alt="Studio bien organisé avec du mobilier compact"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+            </div>
+          </div>
+          <div>
+            <p className="eyebrow">Gain de place</p>
+            <h2 className="display mt-3 text-3xl text-navy md:text-4xl">Bien penser les petits espaces</h2>
+            <p className="mt-5 leading-relaxed text-muted">
+              Chaque mètre carré compte. Découvrez des meubles sélectionnés pour les appartements,
+              studios, bureaux et pièces où l’espace doit être optimisé.
+            </p>
+            <Link href="/collections/rangement" className="btn btn-primary mt-8">
+              Voir les solutions gain de place
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="section section-cream">
+        <div className="container-page grid gap-12 md:grid-cols-2">
+          <div>
+            <h2 className="display text-3xl text-navy">Livraison et retours</h2>
+            <p className="mt-4 leading-relaxed text-muted">
+              Livraison en France métropolitaine. Vous disposez de 14 jours pour vous rétracter
+              après réception, lorsque le droit français le prévoit.
+            </p>
+            <div className="mt-5 flex gap-4 text-sm">
+              <Link href="/shipping" className="text-navy underline-offset-4 hover:underline">
+                Livraison
+              </Link>
+              <Link href="/returns" className="text-navy underline-offset-4 hover:underline">
+                Retours
+              </Link>
+            </div>
+          </div>
+          <div>
+            <h2 className="display text-3xl text-navy">Questions fréquentes</h2>
+            <div className="mt-5 space-y-4">
+              <div>
+                <p className="font-medium text-navy">Livrez-vous en France métropolitaine ?</p>
+                <p className="mt-1 text-sm text-muted">Oui. Un suivi est communiqué après l’expédition.</p>
+              </div>
+              <div>
+                <p className="font-medium text-navy">Les prix sont-ils TTC ?</p>
+                <p className="mt-1 text-sm text-muted">Oui. Le total est confirmé au paiement.</p>
+              </div>
+              <div>
+                <p className="font-medium text-navy">Qui édite la boutique ?</p>
+                <p className="mt-1 text-sm text-muted">
+                  {store.companyName}, à {store.companyCity}. {store.supportEmail}.
+                </p>
+              </div>
             </div>
           </div>
         </div>

@@ -4,14 +4,20 @@ import { useState } from "react";
 import { useCart } from "@/components/cart-provider";
 import type { Product } from "@/lib/types/commerce";
 
-export function AddToCartButton({ product }: { product: Product }) {
+export function AddToCartButton({
+  product,
+  className = "btn btn-primary",
+}: {
+  product: Product;
+  className?: string;
+}) {
   const { addItem } = useCart();
   const [added, setAdded] = useState(false);
 
   return (
     <button
       type="button"
-      className="btn btn-primary"
+      className={className}
       onClick={() => {
         addItem({
           productId: product.id,

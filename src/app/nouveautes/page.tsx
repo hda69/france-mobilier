@@ -12,7 +12,8 @@ export default function NewArrivalsPage() {
   const products = listProducts().slice(0, 8);
   return (
     <div className="container-page py-10 md:py-14">
-      <h1 className="text-3xl font-semibold tracking-tight">Nouveautés</h1>
+      <p className="eyebrow">Catalogue</p>
+      <h1 className="display mt-3 text-4xl text-navy">Nouveautés</h1>
       <p className="mt-3 text-muted">
         Les derniers ajouts au catalogue. Prix TTC, livraison en France métropolitaine.
       </p>
