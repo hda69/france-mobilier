@@ -12,12 +12,8 @@ export default function ShippingPage() {
           délai « 48h » ou équivalent n’est promis en pré-lancement.
         </p>
         <p>
-          Zone prévue : France métropolitaine. Les options transporteur et le tracking seront
+          Zone prévue : France métropolitaine. Les options transporteur et le suivi de colis seront
           activés avec le fulfillment.
-        </p>
-        <p>
-          Champs techniques prévus : shippingMinDays, shippingMaxDays, shippingProvider,
-          trackingNumber.
         </p>
       </div>
     </div>

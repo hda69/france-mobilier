@@ -31,11 +31,11 @@ npm run typecheck
 
 ## Branding
 
-Modifier uniquement `src/config/store.ts` (nom, email, adresse légale, etc.).
+Modifier uniquement `config/store.ts` (nom, email, adresse légale, etc.).
 
 ## Produits
 
-Modifier `src/data/products.ts` (ou `data/products.ts`).  
+Modifier `data/products.ts`.  
 Tous les produits de démo sont `availabilityStatus: "coming_soon"`.
 
 ## Feature flags
@@ -62,9 +62,9 @@ Aucune clé secrète ne doit être commitée.
 4. `BUCKYDROP_ENABLED=true`
 
 ### Google Merchant Center
-1. Produits réellement disponibles + prix/stock honnêtes
+1. Produits réellement `available` + prix/stock honnêtes
 2. `GOOGLE_MERCHANT_FEED_ENABLED=true`
-3. Compléter `/api/google-merchant-feed`
+3. Le feed XML est servi par `/api/google-merchant-feed` (uniquement les produits vendables)
 
 ## Déploiement
 

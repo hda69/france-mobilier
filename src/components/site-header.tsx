@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -8,11 +8,26 @@ import { navigation, store } from "@/config/store";
 import { useCart } from "@/components/cart-provider";
 import { authClient } from "@/lib/auth-client";
 
+/** Shrink only after this offset; expand only below the lower bound (hysteresis). */
+const SHRINK_AFTER = 80;
+const EXPAND_BEFORE = 16;
+
 export function SiteHeader() {
   const { itemCount } = useCart();
   const { data: session } = authClient.useSession();
   const [open, setOpen] = useState(false);
+  const [compact, setCompact] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      setCompact((isCompact) => (isCompact ? y > EXPAND_BEFORE : y >= SHRINK_AFTER));
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   function onSearch(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -22,15 +37,29 @@ export function SiteHeader() {
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/80 bg-background/95 backdrop-blur">
-      <div className="container-page flex min-h-16 items-center justify-between gap-4 py-2">
+    <>
+      <div className="h-20 md:h-[9.5rem] lg:h-[12.5rem]" aria-hidden />
+      <header
+        className={`fixed top-0 inset-x-0 z-40 border-b border-border/80 bg-background/95 backdrop-blur transition-shadow duration-300 ${
+          compact ? "shadow-sm" : ""
+        }`}
+      >
+      <div
+        className={`container-page flex items-center justify-between gap-4 transition-[min-height,padding] duration-300 ${
+          compact
+            ? "min-h-14 py-1.5 md:min-h-16 md:py-2"
+            : "min-h-16 py-2 md:min-h-36 md:py-3 lg:min-h-48"
+        }`}
+      >
         <Link href="/" className="flex items-center gap-2 shrink-0" onClick={() => setOpen(false)}>
           <Image
             src={store.logoPath}
             alt={store.storeName}
-            width={160}
-            height={72}
-            className="h-12 w-auto object-contain md:h-14"
+            width={400}
+            height={296}
+            className={`w-auto object-contain transition-[height] duration-300 ${
+              compact ? "h-11 md:h-12 lg:h-14" : "h-16 md:h-32 lg:h-44"
+            }`}
             priority
           />
           <span className="sr-only">{store.storeName}</span>
@@ -121,5 +150,6 @@ export function SiteHeader() {
         </div>
       )}
     </header>
+    </>
   );
 }

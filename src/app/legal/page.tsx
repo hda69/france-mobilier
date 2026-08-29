@@ -6,30 +6,26 @@ export const metadata: Metadata = {
 };
 
 export default function LegalPage() {
+  const siege = [store.companyPostalCode, store.companyCity, store.companyCountry]
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <div className="container-page max-w-3xl py-10 md:py-14">
       <h1 className="text-3xl font-semibold tracking-tight">Mentions légales</h1>
       <div className="mt-6 space-y-4 text-sm leading-relaxed text-muted">
         <p>
-          Éditeur : {store.companyName || store.storeName}
-          {store.companyLegalForm ? ` (${store.companyLegalForm})` : ""}
+          Le site {store.storeName} ({store.domain.replace("https://", "")}) est édité par{" "}
+          {store.companyName}, {store.companyLegalForm.toLowerCase()}
+          {store.companyTradeName ? `, enseigne ${store.companyTradeName}` : ""}.
         </p>
-        <p>
-          Adresse :{" "}
-          {store.companyAddress
-            ? `${store.companyAddress}, ${store.companyPostalCode} ${store.companyCity}, ${store.companyCountry}`
-            : "TODO_LEGAL_CONFIG — adresse à renseigner avant mise en production"}
-        </p>
-        <p>
-          Immatriculation :{" "}
-          {store.companyRegistration || "TODO_LEGAL_CONFIG — SIREN/SIRET à renseigner"}
-        </p>
-        <p>TVA : {store.vatNumber || "TODO_LEGAL_CONFIG — n° TVA si applicable"}</p>
+        <p>Directeur de la publication : {store.companyName}.</p>
+        {siege ? <p>Siège : {siege}.</p> : null}
+        <p>Immatriculation : {store.companyRegistration}.</p>
+        {store.companyNaf ? <p>Activité (NAF) : {store.companyNaf}.</p> : null}
+        {store.vatNumber ? <p>TVA : {store.vatNumber}</p> : null}
         <p>Contact : {store.supportEmail}</p>
-        <p>Hébergement : à compléter selon le prestataire (Vercel / Railway).</p>
-        <p className="text-xs">
-          Mentions à faire vérifier avant tout lancement commercial.
-        </p>
+        <p>Hébergement : Railway, Pays-Bas / UE (infrastructure cloud).</p>
       </div>
     </div>
   );

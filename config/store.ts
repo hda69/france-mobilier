@@ -1,6 +1,5 @@
 /**
  * Branding & store configuration — edit this file to rebrand.
- * Missing legal fields are marked TODO_LEGAL_CONFIG.
  */
 
 export const store = {
@@ -13,25 +12,22 @@ export const store = {
   currency: "EUR",
   locale: "fr-FR",
   logoPath: "/logo-france-mobilier.png",
-  /** TODO_LEGAL_CONFIG */
-  companyName: "France Mobilier",
-  /** TODO_LEGAL_CONFIG */
-  companyLegalForm: "",
-  /** TODO_LEGAL_CONFIG */
+  /** Éditeur (INSEE SIREN 882131071 / SIRET 88213107100038). */
+  companyName: "Hugo RUSU",
+  companyLegalForm: "Entrepreneur individuel",
+  companyTradeName: "DPSP",
+  /** Rue non diffusible INSEE (statut P) — ville confirmée : Lyon 4e. */
   companyAddress: "",
-  /** TODO_LEGAL_CONFIG */
-  companyCity: "",
-  /** TODO_LEGAL_CONFIG */
-  companyPostalCode: "",
+  companyCity: "Lyon",
+  companyPostalCode: "69004",
   companyCountry: "France",
-  /** TODO_LEGAL_CONFIG */
-  companyRegistration: "",
-  /** TODO_LEGAL_CONFIG */
+  companySiren: "882 131 071",
+  companySiret: "882 131 071 00038",
+  companyRegistration: "SIREN 882 131 071 — SIRET 882 131 071 00038",
+  companyNaf: "47.91B — Vente à distance sur catalogue spécialisé",
   vatNumber: "",
-  /** TODO_LEGAL_CONFIG */
   phone: "",
-  /** TODO_LEGAL_CONFIG */
-  returnAddress: "RETURN_ADDRESS_TODO",
+  returnAddress: "",
   socials: {
     instagram: "",
     facebook: "",
@@ -45,6 +41,7 @@ export const navigation = [
   { href: "/collections/rangement", label: "Rangement" },
   { href: "/collections/bureau", label: "Bureau" },
   { href: "/collections/maison", label: "Maison" },
+  { href: "/collections/animaux", label: "Animaux" },
   { href: "/contact", label: "Contact" },
 ] as const;
 

@@ -31,6 +31,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: product.name,
     description: product.shortDescription,
     alternates: { canonical: `${store.domain}/products/${product.slug}` },
+    openGraph: {
+      title: product.name,
+      description: product.shortDescription,
+      url: `${store.domain}/products/${product.slug}`,
+      images: product.images.map((url) => ({ url })),
+    },
   };
 }
 
@@ -116,7 +122,7 @@ export default async function ProductPage({ params }: Props) {
           <div className="space-y-2 text-sm text-muted">
             <p>
               <strong className="text-foreground">Retours :</strong> politique française prévue au
-              lancement. Adresse de retour : à confirmer (RETURN_ADDRESS_TODO).
+              lancement. L’adresse de retour sera indiquée avant l’ouverture commerciale.
             </p>
           </div>
         </div>

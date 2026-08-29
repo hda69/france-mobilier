@@ -13,8 +13,8 @@ const rows = [
   ["Marché principal", "France / Europe"],
   ["Catégorie", "Home & Garden"],
   ["Paiement", "Stripe prévu (non activé)"],
-  ["Sourcing / fulfillment", "BuckyDrop OpenAPI prévu (non configuré)"],
-  ["Acquisition", "Google Shopping / Merchant Center prévu"],
+  ["Sourcing / fulfillment", "BuckyDrop OpenAPI — accès demandé, en attente des identifiants"],
+  ["Acquisition", "Google Shopping / Merchant Center (feed prêt, désactivé)"],
 ];
 
 export default function PlatformPage() {
@@ -51,19 +51,19 @@ export default function PlatformPage() {
             <li>Gestion catalogue / fiches produit</li>
             <li>Domaine commande (statuts, articles, adresse, fulfillment)</li>
             <li>Abstraction provider sourcing (BuckyDrop stub)</li>
-            <li>Préparation paiement Stripe</li>
-            <li>SEO / données structurées / feed Merchant (désactivé)</li>
+            <li>Paiement Stripe prévu, non activé</li>
+            <li>SEO / données structurées / feed Merchant XML (désactivé)</li>
           </ul>
         </div>
         <div className="rounded-2xl border border-border bg-card p-6">
           <h2 className="text-xl font-semibold">BuckyDrop</h2>
           <p className="mt-4 text-sm leading-relaxed text-muted">
-            Intégration BuckyDrop OpenAPI : en cours. Aucun endpoint inventé. Usage prévu : sourcing
-            produits, synchronisation fournisseur, création de commandes, fulfillment, logistique et
-            tracking.
+            Demande d’accès OpenAPI déposée. Aucun endpoint n’est inventé : le client HTTP restera
+            inactif jusqu’à la documentation officielle, l’APPcode et l’APPsecret. Usage prévu :
+            catalogue, commandes, colis, logistique, stock et webhooks.
           </p>
-          <p className="mt-4 text-sm font-medium">BuckyDrop API integration: in progress</p>
-          <p className="mt-2 text-sm text-muted">Status: NOT_CONFIGURED</p>
+          <p className="mt-4 text-sm font-medium">BuckyDrop API integration: access requested</p>
+          <p className="mt-2 text-sm text-muted">Status: WAITING_FOR_CREDENTIALS</p>
         </div>
       </section>
 

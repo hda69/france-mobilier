@@ -104,6 +104,13 @@ export async function ensureDatabase() {
         created_at INTEGER NOT NULL
       )`,
       `CREATE UNIQUE INDEX IF NOT EXISTS idx_stock_alert_email_product ON stock_alert(email, product_id)`,
+      `CREATE TABLE IF NOT EXISTS contact_message (
+        id TEXT PRIMARY KEY NOT NULL,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL,
+        message TEXT NOT NULL,
+        created_at INTEGER NOT NULL
+      )`,
     ],
     "write",
   );

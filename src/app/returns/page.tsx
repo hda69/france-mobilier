@@ -10,12 +10,8 @@ export default function ReturnsPage() {
       <div className="mt-6 space-y-4 text-sm leading-relaxed text-muted">
         <p>
           Une politique de retour conforme au droit français de la consommation sera publiée avant
-          le lancement commercial (rétractation 14 jours lorsque applicable).
-        </p>
-        <p>
-          Adresse de retour : {store.returnAddress === "RETURN_ADDRESS_TODO"
-            ? "RETURN_ADDRESS_TODO — à renseigner avant lancement"
-            : store.returnAddress}
+          le lancement commercial (rétractation 14 jours lorsque applicable). L’adresse de retour
+          sera indiquée à ce moment-là.
         </p>
         <p>Contact : {store.supportEmail}</p>
       </div>

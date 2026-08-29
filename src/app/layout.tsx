@@ -23,16 +23,21 @@ export const metadata: Metadata = {
     template: `%s | ${store.storeName}`,
   },
   description: store.storeTagline,
+  alternates: { canonical: store.domain },
   openGraph: {
     title: store.storeName,
     description: store.storeTagline,
     locale: "fr_FR",
     type: "website",
     url: store.domain,
-    images: [{ url: store.logoPath }],
+    siteName: store.storeName,
+    images: [{ url: store.logoPath, alt: store.storeName }],
   },
-  icons: {
-    icon: store.logoPath,
+  twitter: {
+    card: "summary",
+    title: store.storeName,
+    description: store.storeTagline,
+    images: [store.logoPath],
   },
   robots: {
     index: true,
@@ -50,7 +55,20 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     logo: `${store.domain}${store.logoPath}`,
     address: {
       "@type": "PostalAddress",
+      addressLocality: store.companyCity,
+      postalCode: store.companyPostalCode,
       addressCountry: store.country,
+    },
+  };
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: store.storeName,
+    url: store.domain,
+    potentialAction: {
+      "@type": "SearchAction",
+      target: `${store.domain}/recherche?q={search_term_string}`,
+      "query-input": "required name=search_term_string",
     },
   };
 
@@ -60,6 +78,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
         <CartProvider>
           <SiteHeader />

@@ -81,3 +81,11 @@ export const stockAlert = sqliteTable("stock_alert", {
   productSlug: text("product_slug").notNull(),
   createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
 });
+
+export const contactMessage = sqliteTable("contact_message", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  message: text("message").notNull(),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
+});

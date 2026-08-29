@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
+import { buildGoogleMerchantFeedXml } from "@/lib/merchant/feed";
+import { listProducts } from "@/lib/products/repository";
 
 /**
- * Google Merchant feed endpoint — disabled until real sellable products exist.
+ * Google Merchant RSS feed.
+ * Stays disabled until GOOGLE_MERCHANT_FEED_ENABLED=true and real sellable products exist.
  */
 export async function GET() {
   if (process.env.GOOGLE_MERCHANT_FEED_ENABLED !== "true") {
@@ -10,16 +13,18 @@ export async function GET() {
         status: "DISABLED",
         message:
           "Google Merchant feed is disabled until products are commercially available. Set GOOGLE_MERCHANT_FEED_ENABLED=true later.",
+        sellableProducts: listProducts().filter((p) => p.availabilityStatus === "available").length,
       },
       { status: 503 },
     );
   }
 
-  return NextResponse.json(
-    {
-      status: "NOT_IMPLEMENTED",
-      message: "Feed generation will be implemented when live catalog + availability are ready.",
+  const xml = buildGoogleMerchantFeedXml();
+  return new NextResponse(xml, {
+    status: 200,
+    headers: {
+      "Content-Type": "application/xml; charset=utf-8",
+      "Cache-Control": "public, max-age=300",
     },
-    { status: 501 },
-  );
+  });
 }

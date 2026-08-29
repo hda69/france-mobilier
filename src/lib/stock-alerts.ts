@@ -37,3 +37,14 @@ export async function countStockAlerts() {
     .from(stockAlert);
   return Number(rows[0]?.count ?? 0);
 }
+
+export async function countStockAlertsByProduct() {
+  await ensureDatabase();
+  return db
+    .select({
+      productSlug: stockAlert.productSlug,
+      count: sql<number>`count(*)`,
+    })
+    .from(stockAlert)
+    .groupBy(stockAlert.productSlug);
+}

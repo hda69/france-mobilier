@@ -43,9 +43,9 @@ export function SiteFooter() {
           <Image
             src={store.logoPath}
             alt={store.storeName}
-            width={180}
-            height={80}
-            className="h-16 w-auto object-contain"
+            width={400}
+            height={296}
+            className="h-24 w-auto object-contain md:h-32"
           />
           <p className="mt-4 text-sm leading-relaxed text-muted">{store.storeTagline}</p>
           <p className="mt-4 text-sm text-muted">{store.supportEmail}</p>

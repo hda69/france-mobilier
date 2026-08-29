@@ -17,7 +17,7 @@ export default function TermsPage() {
           rétractation seront publiées avant l’ouverture commerciale.
         </p>
         <p className="text-xs">
-          Brouillon non opposable — à faire rédiger/valider avant production. TODO_LEGAL_CONFIG.
+          Brouillon non opposable — conditions définitives avant ouverture commerciale.
         </p>
       </div>
     </div>

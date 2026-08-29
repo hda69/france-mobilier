@@ -83,7 +83,7 @@ export default function HomePage() {
             },
             {
               title: "Base technique solide",
-              text: "Architecture prête pour Stripe, Google Shopping et une intégration sourcing API.",
+              text: "Architecture prête pour le sourcing API, Google Shopping et un checkout ultérieur.",
             },
           ].map((item) => (
             <div key={item.title}>

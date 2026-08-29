@@ -4,21 +4,32 @@ import { useState } from "react";
 import { store } from "@/config/store";
 
 export default function ContactPage() {
-  const [status, setStatus] = useState<"idle" | "ok" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    const res = await fetch("/api/contact", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: form.get("name"),
-        email: form.get("email"),
-        message: form.get("message"),
-      }),
-    });
-    setStatus(res.ok ? "ok" : "error");
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: data.get("name"),
+          email: data.get("email"),
+          message: data.get("message"),
+        }),
+      });
+      if (res.ok) {
+        form.reset();
+        setStatus("ok");
+      } else {
+        setStatus("error");
+      }
+    } catch {
+      setStatus("error");
+    }
   }
 
   return (
@@ -47,12 +58,13 @@ export default function ContactPage() {
             <textarea
               name="message"
               required
+              minLength={10}
               rows={5}
               className="mt-1 w-full rounded-xl border border-border px-3 py-2"
             />
           </label>
-          <button type="submit" className="btn btn-primary">
-            Envoyer
+          <button type="submit" className="btn btn-primary" disabled={status === "loading"}>
+            {status === "loading" ? "Envoi…" : "Envoyer"}
           </button>
           {status === "ok" && (
             <p className="text-sm text-accent">Message reçu. Nous répondrons dès que possible.</p>
@@ -65,16 +77,7 @@ export default function ContactPage() {
           <p className="font-medium text-foreground">Coordonnées</p>
           <p className="mt-3">{store.storeName}</p>
           <p>{store.supportEmail}</p>
-          {store.phone ? <p>{store.phone}</p> : <p>Téléphone : bientôt disponible</p>}
-          {store.companyAddress ? (
-            <p className="mt-3">
-              {store.companyAddress}
-              <br />
-              {store.companyPostalCode} {store.companyCity}
-            </p>
-          ) : (
-            <p className="mt-3">Adresse légale : à compléter (TODO_LEGAL_CONFIG)</p>
-          )}
+          {store.phone ? <p className="mt-3">{store.phone}</p> : null}
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { saveContactMessage } from "@/lib/contact";
 
 const schema = z.object({
   name: z.string().trim().min(2).max(120),
@@ -39,7 +40,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Validation failed" }, { status: 400 });
   }
 
-  // Pre-launch: accept and acknowledge without external mail provider.
+  try {
+    await saveContactMessage(parsed.data);
+  } catch (error) {
+    console.error("[contact] persist failed", error);
+    return NextResponse.json({ error: "Unable to store message" }, { status: 500 });
+  }
+
   console.info("[contact]", {
     name: parsed.data.name,
     email: parsed.data.email,

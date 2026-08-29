@@ -1,6 +1,0 @@
-﻿<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000" role="img" aria-label="Illustration produit">
-  <rect width="800" height="1000" fill="#F3EFE8"/>
-  <rect x="140" y="220" width="520" height="520" rx="28" fill="#E7E1D6" stroke="#C9C0B2" stroke-width="2"/>
-  <rect x="220" y="320" width="360" height="280" rx="16" fill="#D8D0C3"/>
-  <text x="400" y="900" text-anchor="middle" font-family="Georgia, serif" font-size="28" fill="#5C5346">Maisonora</text>
-</svg>
