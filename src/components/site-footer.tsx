@@ -16,7 +16,6 @@ const footerLinks = [
     title: "Informations",
     links: [
       { href: "/about", label: "À propos" },
-      { href: "/platform", label: "Plateforme" },
       { href: "/shipping", label: "Livraison" },
       { href: "/returns", label: "Retours" },
       { href: "/contact", label: "Contact" },
