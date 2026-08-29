@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { NotifyForm } from "@/components/notify-form";
 import { ProductCard } from "@/components/product-card";
 import { collections, store } from "@/config/store";
 import {
@@ -59,9 +58,6 @@ export default async function CollectionPage({ params, searchParams }: Props) {
       <div className="mb-8 max-w-2xl">
         <h1 className="text-3xl font-semibold tracking-tight">{collection.name}</h1>
         <p className="mt-3 text-muted">{collection.description}</p>
-        <p className="mt-2 text-sm text-muted">
-          Prix TTC indicatifs. Laissez votre e-mail sur une fiche pour être prévenu à l’ouverture.
-        </p>
       </div>
 
       <form className="mb-8 flex flex-col gap-3 rounded-2xl border border-border bg-card p-4 md:flex-row md:items-end">
@@ -118,10 +114,6 @@ export default async function CollectionPage({ params, searchParams }: Props) {
           ))}
         </div>
       )}
-
-      <div className="mt-12 max-w-xl">
-        <NotifyForm variant="launch" />
-      </div>
     </div>
   );
 }

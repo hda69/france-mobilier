@@ -91,8 +91,7 @@ export function ProductReviews({
 
       {reviews.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border bg-accent-soft/40 px-5 py-8 text-sm text-muted">
-          Pas encore d’avis — et c’est normal. Nous n’affichons que des commentaires liés à un
-          achat réellement livré.
+          Aucun avis pour le moment.
         </div>
       ) : (
         <ul className="space-y-4">

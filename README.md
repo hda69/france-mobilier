@@ -1,7 +1,6 @@
 # France Mobilier
 
-MVP e-commerce de **pré-lancement** (Home & Garden, France).  
-Boutique crédible pour présentation partenaires / BuckyDrop OpenAPI, puis base Google Shopping.
+Boutique e-commerce Home & Garden, France.
 
 ## Stack
 
@@ -36,7 +35,7 @@ Modifier uniquement `config/store.ts` (nom, email, adresse légale, etc.).
 ## Produits
 
 Modifier `data/products.ts`.  
-Tous les produits de démo sont `availabilityStatus: "coming_soon"`.
+Les produits du catalogue sont `availabilityStatus: "available"` par défaut.
 
 ## Feature flags
 

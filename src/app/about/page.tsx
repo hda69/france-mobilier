@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { NotifyForm } from "@/components/notify-form";
 import { store } from "@/config/store";
 
 export const metadata: Metadata = {
@@ -15,17 +14,12 @@ export default function AboutPage() {
       <div className="mt-6 space-y-4 text-muted leading-relaxed">
         <p>
           {store.storeName} est une boutique française, éditée à {store.companyCity} par{" "}
-          {store.companyName}. Nous préparons une sélection d’équipements utiles pour la maison, le
-          rangement et le bureau — sans stock inventé, sans avis fictifs, sans promotion fantôme.
+          {store.companyName}. Nous proposons des équipements utiles pour la maison, le rangement et
+          le bureau.
         </p>
         <p>
-          L’idée est simple : vous laisser comparer maintenant, puis commander sereinement dès
-          l’ouverture. Les prix affichés sont indicatifs. Les conditions de livraison et de
-          rétractation (14 jours lorsque le droit français s’applique) seront publiées avant la
-          première commande payante.
-        </p>
-        <p>
-          Une question ? Écrivez à{" "}
+          Livraison en France métropolitaine, prix TTC, rétractation 14 jours. Une question ?
+          Écrivez à{" "}
           <a href={`mailto:${store.supportEmail}`} className="text-accent underline-offset-4 hover:underline">
             {store.supportEmail}
           </a>
@@ -37,11 +31,8 @@ export default function AboutPage() {
           Voir la sélection
         </Link>
         <Link href="/contact" className="btn btn-secondary">
-          Nous écrire
+          Contact
         </Link>
-      </div>
-      <div className="mt-10">
-        <NotifyForm variant="launch" />
       </div>
     </div>
   );

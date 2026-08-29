@@ -36,7 +36,7 @@ export default function ContactPage() {
     <div className="container-page py-10 md:py-14">
       <h1 className="text-3xl font-semibold tracking-tight">Contact</h1>
       <p className="mt-3 max-w-2xl text-muted">
-        Une question sur la plateforme ou le pré-lancement ? Écrivez-nous.
+        Une question sur une commande, un produit ou la livraison ? Écrivez-nous.
       </p>
       <div className="mt-8 grid gap-8 md:grid-cols-2">
         <form onSubmit={onSubmit} className="space-y-4 rounded-2xl border border-border bg-card p-6">

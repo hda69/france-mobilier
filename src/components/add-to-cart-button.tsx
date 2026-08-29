@@ -11,7 +11,7 @@ export function AddToCartButton({ product }: { product: Product }) {
   return (
     <button
       type="button"
-      className="btn btn-secondary"
+      className="btn btn-primary"
       onClick={() => {
         addItem({
           productId: product.id,
@@ -23,7 +23,7 @@ export function AddToCartButton({ product }: { product: Product }) {
         setAdded(true);
       }}
     >
-      {added ? "Ajouté à votre sélection" : "Garder dans ma sélection"}
+      {added ? "Ajouté au panier" : "Ajouter au panier"}
     </button>
   );
 }

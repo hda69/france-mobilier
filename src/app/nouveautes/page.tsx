@@ -5,7 +5,7 @@ import { listProducts } from "@/lib/products/repository";
 
 export const metadata: Metadata = {
   title: "Nouveautés",
-  description: "Sélection récente — bientôt disponible.",
+  description: "Nouveautés — mobilier et rangement.",
 };
 
 export default function NewArrivalsPage() {
@@ -14,8 +14,7 @@ export default function NewArrivalsPage() {
     <div className="container-page py-10 md:py-14">
       <h1 className="text-3xl font-semibold tracking-tight">Nouveautés</h1>
       <p className="mt-3 text-muted">
-        Première sélection en préparation. Comparez les fiches, puis faites-vous prévenir pour
-        commander dès l’ouverture.
+        Les derniers ajouts au catalogue. Prix TTC, livraison en France métropolitaine.
       </p>
       <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {products.map((product) => (

@@ -46,7 +46,7 @@ export default async function SearchPage({ searchParams }: Props) {
       </form>
 
       {!q ? (
-        <p className="mt-8 text-muted">Saisissez un mot-clé pour parcourir le catalogue de pré-lancement.</p>
+        <p className="mt-8 text-muted">Saisissez un mot-clé pour parcourir le catalogue.</p>
       ) : products.length === 0 ? (
         <p className="mt-8 text-muted">Aucun produit ne correspond à « {q} ».</p>
       ) : (

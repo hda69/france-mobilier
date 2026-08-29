@@ -17,20 +17,17 @@ export function ProductCard({ product }: { product: Product }) {
           />
         </div>
         <div className="space-y-2 p-4 pb-2">
-          <p className="badge">{availabilityLabel(product.availabilityStatus)}</p>
+          {product.availabilityStatus !== "available" ? (
+            <p className="badge">{availabilityLabel(product.availabilityStatus)}</p>
+          ) : null}
           <h3 className="text-base font-medium leading-snug">{product.name}</h3>
           <p className="text-sm text-muted line-clamp-2">{product.shortDescription}</p>
-          <p className="pt-1 text-sm font-medium">
-            {formatPrice(product.price)} <span className="font-normal text-muted">indicatif</span>
-          </p>
+          <p className="pt-1 text-sm font-medium">{formatPrice(product.price)}</p>
         </div>
       </Link>
       <div className="px-4 pb-4">
-        <Link
-          href={`/products/${product.slug}#alerte-produit`}
-          className="btn btn-primary w-full text-sm"
-        >
-          Être prévenu
+        <Link href={`/products/${product.slug}`} className="btn btn-primary w-full text-sm">
+          Voir le produit
         </Link>
       </div>
     </article>

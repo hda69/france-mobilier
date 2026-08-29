@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { NotifyForm } from "@/components/notify-form";
 import { ProductCard } from "@/components/product-card";
 import { TrustBar } from "@/components/trust-bar";
 import { collections, store } from "@/config/store";
@@ -18,32 +17,29 @@ export default function HomePage() {
               Home & Garden · France
             </p>
             <h1 className="max-w-3xl text-4xl font-semibold leading-tight tracking-tight md:text-5xl">
-              Choisissez maintenant. Commandez dès l’ouverture.
+              Des solutions pratiques pour un intérieur mieux pensé.
             </h1>
             <p className="max-w-2xl text-lg leading-relaxed text-muted">
-              Une sélection claire pour la maison, le rangement et le bureau. Les prix sont
-              indicatifs. Laissez votre e-mail : on vous prévient le jour où les commandes
-              ouvrent, sans stock inventé ni fausse promo.
+              Mobilier et rangement pour la maison, le bureau et les espaces contraints. Une
+              sélection claire, des prix TTC, une livraison en France métropolitaine.
             </p>
             <div className="flex flex-wrap gap-3">
               <Link href="/collections/maison" className="btn btn-primary">
                 Voir la sélection
               </Link>
-              <a href="#alerte" className="btn btn-secondary">
-                Être prévenu du lancement
-              </a>
+              <Link href="/nouveautes" className="btn btn-secondary">
+                Nouveautés
+              </Link>
             </div>
           </div>
           <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
-            <p className="text-sm font-medium">Pré-lancement, sans artifice</p>
+            <p className="text-sm font-medium">Boutique française</p>
             <p className="mt-3 text-sm leading-relaxed text-muted">
-              {store.storeName} est une boutique française basée à {store.companyCity}. Les fiches
-              sont déjà là pour que vous puissiez comparer. Le paiement n’est pas encore ouvert :
-              votre e-mail sert uniquement à vous prévenir.
+              {store.storeName} est éditée à {store.companyCity}. Livraison en France
+              métropolitaine, rétractation 14 jours, paiement par carte.
             </p>
             <p className="mt-4 text-xs text-muted">
-              Éditeur {store.companyName} · {store.companyLegalForm.toLowerCase()} · SIREN{" "}
-              {store.companySiren}
+              {store.companyName} · {store.companyLegalForm.toLowerCase()} · SIREN {store.companySiren}
             </p>
           </div>
         </div>
@@ -56,7 +52,7 @@ export default function HomePage() {
       <section className="container-page py-10">
         <div className="mb-8">
           <h2 className="text-2xl font-semibold tracking-tight">Parcourir par besoin</h2>
-          <p className="mt-2 text-muted">Quatre univers, une même promesse : utile, lisible, honnête.</p>
+          <p className="mt-2 text-muted">Maison, rangement, bureau et animaux.</p>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {collections.map((collection) => {
@@ -93,12 +89,10 @@ export default function HomePage() {
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
             <h2 className="text-2xl font-semibold tracking-tight">La sélection</h2>
-            <p className="mt-2 text-muted">
-              Comparez, gardez vos favoris, et soyez prévenu dès qu’ils seront commandables.
-            </p>
+            <p className="mt-2 text-muted">Les essentiels pour organiser et équiper la maison.</p>
           </div>
           <Link href="/nouveautes" className="text-sm text-accent underline-offset-4 hover:underline">
-            Toute la sélection
+            Voir tout
           </Link>
         </div>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -108,33 +102,20 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="border-y border-border bg-accent-soft/50">
-        <div className="container-page grid gap-10 py-14 md:grid-cols-[1fr_0.9fr] md:items-center">
-          <div>
-            <h2 className="text-2xl font-semibold tracking-tight">Ne manquez pas l’ouverture</h2>
-            <p className="mt-3 max-w-xl text-muted leading-relaxed">
-              Quand le checkout sera activé, les premiers inscrits seront prévenus en priorité. Pas
-              de compte obligatoire. Pas de relance commerciale.
-            </p>
-          </div>
-          <NotifyForm variant="launch" anchor />
-        </div>
-      </section>
-
-      <section className="container-page py-16">
-        <div className="grid gap-8 md:grid-cols-3">
+      <section className="border-y border-border bg-card">
+        <div className="container-page grid gap-8 py-16 md:grid-cols-3">
           {[
             {
               title: "Utile d’abord",
-              text: "Chaque fiche répond à un vrai problème d’espace, de rangement ou de bureau — pas à une mode.",
+              text: "Chaque fiche répond à un vrai besoin d’espace, de rangement ou de bureau.",
             },
             {
-              title: "Transparence",
-              text: "Pas de faux stock, pas de faux avis, pas de compte à rebours. Ce qui n’est pas vendable est indiqué.",
+              title: "Livraison France",
+              text: "Expédition en France métropolitaine, avec suivi de colis.",
             },
             {
-              title: "Cadre français",
-              text: "Entreprise identifiée, mentions légales, rétractation 14 jours prévue au lancement, contact réel.",
+              title: "Retours 14 jours",
+              text: "Rétractation conformément au droit de la consommation.",
             },
           ].map((item) => (
             <div key={item.title}>
@@ -145,13 +126,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="container-page grid gap-10 pb-16 md:grid-cols-2">
+      <section className="container-page grid gap-10 py-16 md:grid-cols-2">
         <div>
           <h2 className="text-2xl font-semibold tracking-tight">Livraison et retours</h2>
           <p className="mt-3 text-muted leading-relaxed">
-            Zone prévue : France métropolitaine. Les délais et le suivi seront publiés sur chaque
-            fiche à l’ouverture. La rétractation de 14 jours s’appliquera dès les premières
-            commandes, lorsque le droit français le prévoit.
+            Livraison en France métropolitaine. Les délais figurent sur chaque fiche. Vous disposez
+            de 14 jours pour vous rétracter après réception, lorsque le droit français le prévoit.
           </p>
           <div className="mt-4 flex flex-wrap gap-4 text-sm">
             <Link href="/shipping" className="text-accent underline-offset-4 hover:underline">
@@ -166,24 +146,18 @@ export default function HomePage() {
           <h2 className="text-2xl font-semibold tracking-tight">Questions fréquentes</h2>
           <div className="mt-4 space-y-4 text-sm">
             <div>
-              <p className="font-medium">Puis-je commander aujourd’hui ?</p>
-              <p className="mt-1 text-muted">
-                Pas encore. Laissez votre e-mail : on vous prévient le jour de l’ouverture, sans
-                engagement.
-              </p>
+              <p className="font-medium">Livrez-vous en France ?</p>
+              <p className="mt-1 text-muted">Oui, en France métropolitaine.</p>
             </div>
             <div>
-              <p className="font-medium">Les prix affichés sont-ils définitifs ?</p>
-              <p className="mt-1 text-muted">
-                Ce sont des prix TTC indicatifs. Le prix de vente exact sera confirmé avant tout
-                paiement.
-              </p>
+              <p className="font-medium">Les prix sont-ils TTC ?</p>
+              <p className="mt-1 text-muted">Oui. Le total est confirmé au paiement.</p>
             </div>
             <div>
               <p className="font-medium">Qui est derrière la boutique ?</p>
               <p className="mt-1 text-muted">
                 {store.companyName}, {store.companyLegalForm.toLowerCase()}, enseigne{" "}
-                {store.companyTradeName}. Siège à {store.companyCity}. Contact : {store.supportEmail}.
+                {store.companyTradeName}. {store.companyCity}. {store.supportEmail}.
               </p>
             </div>
           </div>

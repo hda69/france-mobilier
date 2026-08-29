@@ -42,9 +42,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 const trustPoints = [
-  { title: "Prix TTC indicatif", text: "Confirmé avant tout paiement." },
-  { title: "France métropolitaine", text: "Livraison et suivi au lancement." },
-  { title: "Rétractation 14 jours", text: "Prévue dès les premières commandes." },
+  { title: "Prix TTC", text: "Total confirmé au paiement." },
+  { title: "Livraison France", text: "France métropolitaine, colis suivi." },
+  { title: "Rétractation 14 jours", text: "Après réception du colis." },
   { title: "Contact", text: store.supportEmail },
 ];
 
@@ -56,6 +56,7 @@ export default async function ProductPage({ params }: Props) {
   const reviews = await listApprovedReviews(product.id);
   const collectionSlug = collectionSlugForCategory(product.category);
   const collection = getCollection(collectionSlug);
+  const outOfStock = product.availabilityStatus === "out_of_stock";
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -70,11 +71,9 @@ export default async function ProductPage({ params }: Props) {
       priceCurrency: "EUR",
       price: product.price,
       availability:
-        product.availabilityStatus === "available"
-          ? "https://schema.org/InStock"
-          : product.availabilityStatus === "out_of_stock"
-            ? "https://schema.org/OutOfStock"
-            : "https://schema.org/PreOrder",
+        product.availabilityStatus === "out_of_stock"
+          ? "https://schema.org/OutOfStock"
+          : "https://schema.org/InStock",
     },
   };
 
@@ -99,20 +98,22 @@ export default async function ProductPage({ params }: Props) {
           />
         </div>
         <div className="space-y-5">
-          <p className="badge">{availabilityLabel(product.availabilityStatus)}</p>
+          {product.availabilityStatus !== "available" ? (
+            <p className="badge">{availabilityLabel(product.availabilityStatus)}</p>
+          ) : null}
           <h1 className="text-3xl font-semibold tracking-tight">{product.name}</h1>
           <p className="text-muted leading-relaxed">{product.shortDescription}</p>
-          <p className="text-2xl font-medium">
-            {formatPrice(product.price)}{" "}
-            <span className="text-sm font-normal text-muted">prix TTC indicatif</span>
-          </p>
-          <NotifyForm productName={product.name} productSlug={product.slug} anchor />
-          <div className="flex flex-wrap items-center gap-3">
-            <AddToCartButton product={product} />
-            <Link href="/cart" className="text-sm text-muted underline-offset-4 hover:underline">
-              Voir ma sélection
-            </Link>
-          </div>
+          <p className="text-2xl font-medium">{formatPrice(product.price)}</p>
+          {outOfStock ? (
+            <NotifyForm productName={product.name} productSlug={product.slug} />
+          ) : (
+            <div className="flex flex-wrap items-center gap-3">
+              <AddToCartButton product={product} />
+              <Link href="/cart" className="btn btn-secondary">
+                Voir le panier
+              </Link>
+            </div>
+          )}
           <ul className="grid gap-2 sm:grid-cols-2">
             {trustPoints.map((item) => (
               <li key={item.title} className="rounded-xl border border-border bg-card px-3 py-2.5">
@@ -126,7 +127,7 @@ export default async function ProductPage({ params }: Props) {
             <p className="text-sm leading-relaxed text-muted">{product.description}</p>
           </div>
           <div className="space-y-3">
-            <h2 className="font-medium">Pourquoi c’est utile</h2>
+            <h2 className="font-medium">Caractéristiques</h2>
             <ul className="list-disc space-y-1 pl-5 text-sm text-muted">
               {product.features.map((feature) => (
                 <li key={feature}>{feature}</li>

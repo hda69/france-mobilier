@@ -12,9 +12,9 @@ const rows = [
   ["Type de plateforme", "E-commerce retail développé sur mesure"],
   ["Marché principal", "France / Europe"],
   ["Catégorie", "Home & Garden"],
-  ["Paiement", "Stripe prévu (non activé)"],
-  ["Sourcing / fulfillment", "BuckyDrop OpenAPI — accès demandé, en attente des identifiants"],
-  ["Acquisition", "Google Shopping / Merchant Center (feed prêt, désactivé)"],
+  ["Paiement", "Carte bancaire (Stripe)"],
+  ["Sourcing / fulfillment", "BuckyDrop"],
+  ["Acquisition", "Google Shopping"],
 ];
 
 export default function PlatformPage() {
@@ -50,20 +50,17 @@ export default function PlatformPage() {
             <li>Backend applicatif custom (Next.js App Router)</li>
             <li>Gestion catalogue / fiches produit</li>
             <li>Domaine commande (statuts, articles, adresse, fulfillment)</li>
-            <li>Abstraction provider sourcing (BuckyDrop stub)</li>
-            <li>Paiement Stripe prévu, non activé</li>
-            <li>SEO / données structurées / feed Merchant XML (désactivé)</li>
+            <li>Intégration sourcing et fulfillment (BuckyDrop)</li>
+            <li>Paiement par carte (Stripe)</li>
+            <li>SEO, données structurées et feed Google Merchant</li>
           </ul>
         </div>
         <div className="rounded-2xl border border-border bg-card p-6">
           <h2 className="text-xl font-semibold">BuckyDrop</h2>
           <p className="mt-4 text-sm leading-relaxed text-muted">
-            Demande d’accès OpenAPI déposée. Aucun endpoint n’est inventé : le client HTTP restera
-            inactif jusqu’à la documentation officielle, l’APPcode et l’APPsecret. Usage prévu :
-            catalogue, commandes, colis, logistique, stock et webhooks.
+            Intégration OpenAPI pour le catalogue, les commandes, les colis, la logistique, le stock
+            et les webhooks.
           </p>
-          <p className="mt-4 text-sm font-medium">BuckyDrop API integration: access requested</p>
-          <p className="mt-2 text-sm text-muted">Status: WAITING_FOR_CREDENTIALS</p>
         </div>
       </section>
 

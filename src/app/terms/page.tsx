@@ -9,16 +9,19 @@ export default function TermsPage() {
       <h1 className="text-3xl font-semibold tracking-tight">Conditions générales de vente</h1>
       <div className="mt-6 space-y-4 text-sm leading-relaxed text-muted">
         <p>
-          {store.storeName} est en phase de pré-lancement. Aucune commande payante n’est acceptée
-          tant que le checkout n’est pas activé.
+          Les présentes conditions s’appliquent aux ventes conclues sur {store.storeName} (
+          {store.domain.replace("https://", "")}), édité par {store.companyName},{" "}
+          {store.companyLegalForm.toLowerCase()}.
         </p>
         <p>
-          Les prix affichés sont indicatifs. Les conditions définitives de vente, de livraison et de
-          rétractation seront publiées avant l’ouverture commerciale.
+          Les prix sont indiqués en euros TTC. La commande est ferme après confirmation du
+          paiement. Livraison en France métropolitaine.
         </p>
-        <p className="text-xs">
-          Brouillon non opposable — conditions définitives avant ouverture commerciale.
+        <p>
+          Conformément au code de la consommation, le client dispose d’un délai de 14 jours à
+          compter de la réception pour se rétracter, lorsque ce droit s’applique.
         </p>
+        <p>Contact : {store.supportEmail}</p>
       </div>
     </div>
   );

@@ -4,19 +4,19 @@ import { store } from "@/config/store";
 const items = [
   {
     title: "Boutique française",
-    text: `${store.companyCity} · ${store.companySiren}`,
+    text: `${store.companyCity} · SIREN ${store.companySiren}`,
   },
   {
-    title: "Prix TTC indicatifs",
-    text: "Confirmés à l’ouverture des commandes.",
+    title: "Prix TTC",
+    text: "Le montant est confirmé au paiement.",
   },
   {
     title: "Retours 14 jours",
-    text: "Droit de rétractation prévu au lancement.",
+    text: "Droit de rétractation après réception.",
     href: "/returns",
   },
   {
-    title: "Contact humain",
+    title: "Contact",
     text: store.supportEmail,
     href: "/contact",
   },
