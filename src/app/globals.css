@@ -86,3 +86,51 @@ a {
   background: var(--accent-soft);
   color: var(--accent-dark);
 }
+
+.magazine-ticker {
+  overflow: hidden;
+  border-block: 1px solid var(--border);
+  background: var(--accent-soft);
+}
+
+.magazine-ticker-track {
+  display: flex;
+  width: max-content;
+  animation: magazine-ticker 90s linear infinite;
+}
+
+.magazine-ticker:hover .magazine-ticker-track {
+  animation-play-state: paused;
+}
+
+.magazine-ticker-item {
+  flex: none;
+  padding: 0.85rem 2.25rem;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--muted);
+}
+
+.magazine-ticker-item + .magazine-ticker-item::before {
+  content: "·";
+  margin-right: 2.25rem;
+  color: var(--border);
+}
+
+@keyframes magazine-ticker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .magazine-ticker-track {
+    animation: none;
+  }
+}

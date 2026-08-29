@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { MagazineTicker } from "@/components/magazine-ticker";
 import { ProductCard } from "@/components/product-card";
 import { TrustBar } from "@/components/trust-bar";
 import { collections, store } from "@/config/store";
@@ -41,6 +42,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <MagazineTicker />
 
       <section className="container-page py-10">
         <TrustBar />
