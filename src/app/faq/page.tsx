@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 const items = [
   {
     q: "Livrez-vous en France métropolitaine ?",
-    a: "Oui. Un numéro de suivi est communiqué après l’expédition.",
+    a: "Oui, livraison offerte. Un numéro de suivi est communiqué après l’expédition.",
   },
   {
     q: "Les prix sont-ils TTC ?",
@@ -21,7 +21,7 @@ const items = [
   },
   {
     q: "Comment vous contacter ?",
-    a: `Écrivez-nous à ${store.supportEmail}. Service client ${store.supportHoursShort}.`,
+    a: `Écrivez-nous à ${store.supportEmail}. SAV en semaine, ${store.supportHoursShort}.`,
   },
 ];
 

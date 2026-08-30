@@ -44,8 +44,8 @@ const guarantees = [
     icon: IconTag,
   },
   {
-    title: "Livraison suivie",
-    text: "Livraison en France métropolitaine.",
+    title: "Livraison gratuite",
+    text: "Offerte en France métropolitaine.",
     icon: IconTruck,
   },
   {
@@ -237,7 +237,7 @@ export default function HomePage() {
           <div>
             <h2 className="display text-3xl text-navy">Livraison et retours</h2>
             <p className="mt-4 leading-relaxed text-muted">
-              Livraison en France métropolitaine. Vous disposez de 14 jours pour vous rétracter
+              Livraison offerte en France métropolitaine. Vous disposez de 14 jours pour vous rétracter
               après réception, lorsque le droit français le prévoit.
             </p>
             <div className="mt-5 flex gap-4 text-sm">
@@ -254,7 +254,7 @@ export default function HomePage() {
             <div className="mt-5 space-y-4">
               <div>
                 <p className="font-medium text-navy">Livrez-vous en France métropolitaine ?</p>
-                <p className="mt-1 text-sm text-muted">Oui. Un suivi est communiqué après l’expédition.</p>
+                <p className="mt-1 text-sm text-muted">Oui, livraison offerte. Un suivi est communiqué après l’expédition.</p>
               </div>
               <div>
                 <p className="font-medium text-navy">Les prix sont-ils TTC ?</p>

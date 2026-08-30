@@ -67,7 +67,7 @@ export function CheckoutForm() {
           Téléphone
           <input name="phone" type="tel" autoComplete="tel" className="input mt-1" />
         </label>
-        <p className="text-sm text-muted">Paiement par carte. Livraison en France métropolitaine.</p>
+        <p className="text-sm text-muted">Paiement par carte. Livraison offerte en France métropolitaine.</p>
       </div>
       <aside className="h-fit space-y-4 rounded-2xl border border-border bg-card p-4 sm:p-6">
         <h2 className="text-lg font-medium">Récapitulatif</h2>

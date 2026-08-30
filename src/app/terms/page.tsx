@@ -14,7 +14,7 @@ export default function TermsPage() {
         </p>
         <p>
           Les prix sont indiqués en euros TTC. La commande est ferme après confirmation du
-          paiement. Livraison en France métropolitaine.
+          paiement. Livraison offerte en France métropolitaine.
         </p>
         <p>
           Conformément au code de la consommation, le client dispose d’un délai de 14 jours à

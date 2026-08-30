@@ -223,7 +223,7 @@ export default async function ProductPage({ params }: Props) {
           <div>
             <h2 className="display text-3xl text-navy">Livraison et retours</h2>
             <p className="mt-4 leading-relaxed text-muted">
-              Livraison en France métropolitaine, colis suivi. Rétractation de 14 jours après
+              Livraison offerte en France métropolitaine, colis suivi. Rétractation de 14 jours après
               réception, lorsque le droit français le prévoit.
             </p>
           </div>

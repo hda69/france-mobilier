@@ -75,7 +75,7 @@ export default function CartPage() {
             <p className="text-sm text-muted">Sous-total TTC</p>
             <p className="mt-1 text-2xl font-semibold">{formatPrice(subtotal)}</p>
             <p className="mt-4 text-sm leading-relaxed text-muted">
-              Frais de livraison calculés à l’étape suivante.
+              Livraison offerte en France métropolitaine.
             </p>
             <Link href="/checkout" className="btn btn-primary mt-6 w-full">
               Commander

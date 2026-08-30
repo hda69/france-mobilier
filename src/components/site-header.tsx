@@ -42,13 +42,15 @@ export function SiteHeader() {
       <header className="fixed inset-x-0 top-0 z-40 bg-white/95 pt-[env(safe-area-inset-top)] backdrop-blur-md">
         <p className="border-b border-border bg-navy text-center text-[11px] tracking-[0.04em] text-white/90 md:text-xs">
           <span className="container-page flex h-8 items-center justify-center gap-x-3 overflow-hidden whitespace-nowrap">
-            <span>Livraison en France</span>
+            <Link href="/shipping" className="hover:text-white">
+              Livraison gratuite
+            </Link>
             <span className="text-white/40">•</span>
             <span>Retours 14 jours</span>
             <span className="hidden text-white/40 sm:inline">•</span>
             <Link href="/contact" className="hidden hover:text-white sm:inline">
-              <span className="md:hidden">Service client {store.supportHoursShort}</span>
-              <span className="hidden md:inline">Service client disponible {store.supportHoursShort}</span>
+              <span className="md:hidden">SAV {store.supportHoursShort}</span>
+              <span className="hidden md:inline">SAV en semaine, 10h–22h</span>
             </Link>
           </span>
         </p>
