@@ -21,7 +21,7 @@ const items = [
   },
   {
     q: "Comment vous contacter ?",
-    a: `Écrivez-nous à ${store.supportEmail}.`,
+    a: `Écrivez-nous à ${store.supportEmail}. Service client ${store.supportHoursShort}.`,
   },
 ];
 

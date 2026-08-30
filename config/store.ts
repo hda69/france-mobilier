@@ -8,6 +8,9 @@ export const store = {
   tagline: "Des meubles et solutions de rangement pour gagner en confort et en espace.",
   domain: "https://francemobilier.com",
   supportEmail: "contact@francemobilier.com",
+  /** Horaires affichés publiquement (bandeau, contact). */
+  supportHoursShort: "lun–ven 10h–22h",
+  supportHours: "Du lundi au vendredi, de 10h à 22h",
   country: "FR",
   currency: "EUR",
   locale: "fr-FR",

@@ -46,7 +46,10 @@ export function SiteHeader() {
             <span className="text-white/40">•</span>
             <span>Retours 14 jours</span>
             <span className="hidden text-white/40 sm:inline">•</span>
-            <span className="hidden sm:inline">Service client</span>
+            <Link href="/contact" className="hidden hover:text-white sm:inline">
+              <span className="md:hidden">Service client {store.supportHoursShort}</span>
+              <span className="hidden md:inline">Service client disponible {store.supportHoursShort}</span>
+            </Link>
           </span>
         </p>
         <div
