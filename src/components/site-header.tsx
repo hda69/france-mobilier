@@ -50,7 +50,7 @@ export function SiteHeader() {
             <span className="hidden text-white/40 sm:inline">•</span>
             <Link href="/contact" className="hidden hover:text-white sm:inline">
               <span className="md:hidden">SAV {store.supportHoursShort}</span>
-              <span className="hidden md:inline">SAV en semaine, 10h–22h</span>
+              <span className="hidden md:inline">SAV du lundi au vendredi, 10h–22h</span>
             </Link>
           </span>
         </p>

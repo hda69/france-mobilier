@@ -78,7 +78,7 @@ export default function ContactPage() {
           <p className="font-medium text-foreground">Coordonnées</p>
           <p className="mt-3">{store.storeName}</p>
           <p>{store.supportEmail}</p>
-          <p className="mt-3">SAV en semaine : {store.supportHours}.</p>
+          <p className="mt-3">SAV : {store.supportHours}.</p>
           {store.phone ? <p className="mt-3">{store.phone}</p> : null}
         </div>
       </div>

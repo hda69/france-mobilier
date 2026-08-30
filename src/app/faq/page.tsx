@@ -21,7 +21,7 @@ const items = [
   },
   {
     q: "Comment vous contacter ?",
-    a: `Écrivez-nous à ${store.supportEmail}. SAV en semaine, ${store.supportHoursShort}.`,
+    a: `Écrivez-nous à ${store.supportEmail}. SAV du lundi au vendredi, 10h–22h.`,
   },
 ];
 
