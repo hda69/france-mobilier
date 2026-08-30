@@ -38,7 +38,7 @@ export function SiteFooter() {
     <footer className="mt-10 bg-navy text-white pb-[env(safe-area-inset-bottom)]">
       <div className="container-page grid gap-8 py-10 md:grid-cols-4 md:gap-10 md:py-14">
         <div>
-          <div className="inline-flex rounded-md bg-white px-2 py-1.5">
+          <Link href="/" className="inline-flex rounded-md bg-white px-2 py-1.5">
             <Image
               src={store.logoPath}
               alt={store.storeName}
@@ -46,7 +46,7 @@ export function SiteFooter() {
               height={118}
               className="h-12 w-auto object-contain"
             />
-          </div>
+          </Link>
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/75">
             Meubles et solutions de rangement pour un intérieur plus simple à vivre. Boutique éditée
             à {store.companyCity}.
