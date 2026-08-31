@@ -78,8 +78,8 @@ export default function ComptePage() {
           payée et associée à ce compte).
         </p>
         <ProStatus />
-        <Link href="/pro" className="btn btn-secondary mt-4 inline-flex w-full">
-          Accès professionnel
+        <Link href="/pro" className="btn btn-primary mt-4 inline-flex w-full">
+          Demander un accès pro
         </Link>
         <button type="button" onClick={logout} className="btn btn-secondary mt-3 w-full">
           Se déconnecter

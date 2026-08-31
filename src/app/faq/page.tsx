@@ -21,7 +21,7 @@ const items = [
   },
   {
     q: "Proposez-vous un accès professionnel ?",
-    a: "Oui. Depuis votre compte, vous pouvez demander un accès pro. Nous vérifions le SIREN de l’entreprise au répertoire Sirene, sans pièce d’identité.",
+    a: "Oui. Demandez un accès professionnel depuis votre compte. Nous vérifions ensuite le SIREN de l’entreprise, sans pièce d’identité.",
   },
   {
     q: "Comment vous contacter ?",

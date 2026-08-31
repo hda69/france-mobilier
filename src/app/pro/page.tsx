@@ -4,8 +4,8 @@ import { ProAccessForm } from "@/components/pro-access-form";
 import { store } from "@/config/store";
 
 export const metadata: Metadata = {
-  title: "Accès professionnel",
-  description: `Demander un accès pro ${store.storeName} : SIREN vérifié, lié à votre compte, sans pièce d’identité.`,
+  title: "Demander un accès pro",
+  description: `Demander un accès professionnel ${store.storeName}. Compte client, vérification SIREN, sans pièce d’identité.`,
   alternates: { canonical: `${store.domain}/pro` },
 };
 
@@ -17,8 +17,8 @@ export default function ProPage() {
         Demander un accès professionnel
       </h1>
       <p className="mt-4 max-w-2xl leading-relaxed text-muted">
-        Bureaux, commerces, copropriétés, commandes d’équipe : nous ouvrons un accès pro lié à votre
-        compte. L’éligibilité se vérifie avec le SIREN de l’entreprise — pas de carte d’identité.
+        Bureaux, commerces, copropriétés, commandes d’équipe : demandez un accès professionnel lié à
+        votre compte. Nous vérifions ensuite le SIREN de l’entreprise — pas de carte d’identité.
       </p>
 
       <div className="mt-10 grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">

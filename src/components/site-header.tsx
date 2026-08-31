@@ -105,6 +105,12 @@ export function SiteHeader() {
             </form>
             <div className="flex items-center gap-1">
               <Link
+                href="/pro"
+                className="hidden h-11 items-center px-2 text-sm font-medium text-navy hover:opacity-70 sm:inline-flex"
+              >
+                Accès pro
+              </Link>
+              <Link
                 href={session?.user ? "/compte" : "/connexion"}
                 className="hidden h-11 w-11 items-center justify-center text-navy hover:opacity-70 sm:inline-flex"
                 aria-label={session?.user ? "Compte" : "Connexion"}
@@ -164,6 +170,13 @@ export function SiteHeader() {
                       {item.label}
                     </Link>
                   ))}
+                  <Link
+                    href="/pro"
+                    className="rounded-lg px-3 py-3 font-medium hover:bg-cream"
+                    onClick={() => setOpen(false)}
+                  >
+                    Demander un accès pro
+                  </Link>
                   <Link
                     href={session?.user ? "/compte" : "/connexion"}
                     className="rounded-lg px-3 py-3 hover:bg-cream sm:hidden"

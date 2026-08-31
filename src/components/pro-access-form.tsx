@@ -118,7 +118,7 @@ export function ProAccessForm() {
     <form onSubmit={onSubmit} className="space-y-4 rounded-[var(--radius)] border border-border bg-white p-6">
       <p className="text-sm text-muted">
         Compte : {session.user.email}. Nous vérifions le SIREN dans le répertoire Sirene. Pas de
-        carte d’identité.
+        pièce d’identité.
       </p>
       <label className="block text-sm">
         SIREN

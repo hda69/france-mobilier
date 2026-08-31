@@ -18,7 +18,7 @@ const groups = [
     links: [
       { href: "/shipping", label: "Livraison" },
       { href: "/returns", label: "Retours" },
-      { href: "/pro", label: "Accès professionnel" },
+      { href: "/pro", label: "Demander un accès pro" },
       { href: "/contact", label: "Contact" },
       { href: "/faq", label: "FAQ" },
     ],

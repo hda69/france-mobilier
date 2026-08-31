@@ -141,6 +141,30 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="bg-navy text-white">
+        <div className="container-page flex flex-col gap-8 py-12 md:flex-row md:items-center md:justify-between md:py-16">
+          <div className="max-w-2xl">
+            <p className="eyebrow text-white">Professionnels</p>
+            <h2 className="display mt-3 text-[1.85rem] text-white sm:text-4xl md:text-5xl">
+              Demander un accès professionnel
+            </h2>
+            <p className="mt-4 max-w-xl text-[0.95rem] leading-relaxed text-white/85 md:text-lg">
+              Bureaux, commerces, copropriétés, commandes d’équipe : ouvrez un accès lié à votre
+              compte pour commander comme une entreprise.
+            </p>
+            <p className="mt-3 text-sm text-white/55">
+              Demande en ligne, vérification de l’entreprise au SIREN — sans pièce d’identité.
+            </p>
+          </div>
+          <Link
+            href="/pro"
+            className="btn btn-inverse w-full shrink-0 text-base sm:w-auto md:min-h-12 md:px-8"
+          >
+            Demander un accès pro
+          </Link>
+        </div>
+      </section>
+
       <section className="section section-cream">
         <div className="container-page">
           <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
@@ -241,22 +265,6 @@ export default function HomePage() {
           </div>
           <Link href="/about" className="btn btn-secondary mt-8 inline-flex w-full sm:w-auto">
             Découvrir {store.storeName}
-          </Link>
-        </div>
-      </section>
-
-      <section className="section section-cream">
-        <div className="container-page max-w-2xl">
-          <p className="eyebrow">Professionnels</p>
-          <h2 className="display mt-3 text-3xl text-navy md:text-4xl">
-            Un accès pro, vérifié par SIREN
-          </h2>
-          <p className="mt-4 leading-relaxed text-muted">
-            Bureaux, commerces, équipes : demandez un accès professionnel depuis votre compte. Nous
-            vérifions l’entreprise au répertoire Sirene — sans pièce d’identité.
-          </p>
-          <Link href="/pro" className="btn btn-primary mt-6 inline-flex w-full sm:w-auto">
-            Demander un accès professionnel
           </Link>
         </div>
       </section>
