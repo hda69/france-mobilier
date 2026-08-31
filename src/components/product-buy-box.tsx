@@ -3,9 +3,7 @@
 import { useState } from "react";
 import { useCart } from "@/components/cart-provider";
 import { IconLock, IconReturn, IconTruck } from "@/components/icons";
-import { SignedNote } from "@/components/signed-note";
 import { store } from "@/config/store";
-import { founderNotes } from "@/content/founder-notes";
 import type { Product } from "@/lib/types/commerce";
 
 const objections = [
@@ -74,9 +72,6 @@ export function ProductBuyBox({ product }: { product: Product }) {
           ))}
         </ul>
 
-        <SignedNote>
-          <p className="text-sm">{founderNotes.trust}</p>
-        </SignedNote>
         <p className="text-xs text-muted">
           Une question avant d’ajouter ? {store.supportEmail} — {store.supportHoursShort}.
         </p>
