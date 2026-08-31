@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { navigation, store } from "@/config/store";
 import { useCart } from "@/components/cart-provider";
-import { IconBag, IconSearch, IconUser } from "@/components/icons";
+import { IconBag, IconHeadset, IconReturn, IconSearch, IconTruck, IconUser } from "@/components/icons";
 import { authClient } from "@/lib/auth-client";
 
 const SHRINK_AFTER = 80;
@@ -42,13 +42,18 @@ export function SiteHeader() {
       <header className="fixed inset-x-0 top-0 z-40 bg-white/95 pt-[env(safe-area-inset-top)] backdrop-blur-md">
         <p className="border-b border-border bg-navy text-center text-[11px] tracking-[0.04em] text-white/90 md:text-xs">
           <span className="container-page flex h-8 items-center justify-center gap-x-3 overflow-hidden whitespace-nowrap">
-            <Link href="/shipping" className="hover:text-white">
+            <Link href="/shipping" className="inline-flex items-center gap-1.5 hover:text-white">
+              <IconTruck className="h-3.5 w-3.5" />
               Livraison gratuite
             </Link>
             <span className="text-white/40">•</span>
-            <span>Retours 14 jours</span>
+            <span className="inline-flex items-center gap-1.5">
+              <IconReturn className="h-3.5 w-3.5" />
+              Retours 14 jours
+            </span>
             <span className="hidden text-white/40 sm:inline">•</span>
-            <Link href="/contact" className="hidden hover:text-white sm:inline">
+            <Link href="/contact" className="hidden items-center gap-1.5 hover:text-white sm:inline-flex">
+              <IconHeadset className="h-3.5 w-3.5" />
               <span className="md:hidden">SAV {store.supportHoursShort}</span>
               <span className="hidden md:inline">SAV du lundi au vendredi, 10h–22h</span>
             </Link>
