@@ -25,6 +25,7 @@ const groups = [
   {
     title: "Informations",
     links: [
+      { href: "/about", label: "Notre histoire" },
       { href: "/legal", label: "Mentions légales" },
       { href: "/terms", label: "CGV" },
       { href: "/privacy", label: "Confidentialité" },

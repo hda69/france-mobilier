@@ -199,13 +199,53 @@ export default function HomePage() {
               recherchant des produits pratiques, modernes et accessibles.
             </p>
             <Link href="/about" className="btn btn-primary mt-8 w-full sm:w-auto">
-              Découvrir {store.storeName}
+              Lire notre histoire
             </Link>
           </div>
         </div>
       </section>
 
       <section className="section">
+        <div className="container-page">
+          <p className="eyebrow">Notre histoire</p>
+          <h2 className="display mt-3 max-w-2xl text-3xl text-navy md:text-4xl">
+            Née d’un besoin simple : mieux vivre avec moins d’espace.
+          </h2>
+          <p className="mt-5 max-w-2xl leading-relaxed text-muted">
+            {store.storeName} est née à {store.companyCity} de l’observation des logements
+            d’aujourd’hui. Plutôt que d’empiler les références, nous choisissons des meubles qui
+            gagnent de la place, du confort et de la clarté au quotidien.
+          </p>
+          <div className="mt-10 grid gap-8 md:grid-cols-3">
+            <div>
+              <p className="text-sm font-semibold text-navy">Le constat</p>
+              <p className="mt-2 text-sm leading-relaxed text-muted">
+                Les pièces sont plus petites, les usages se mélangent. Un meuble doit justifier sa
+                place, pas seulement habiller une photo.
+              </p>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-navy">La sélection</p>
+              <p className="mt-2 text-sm leading-relaxed text-muted">
+                Peu de références, choisies pour un geste précis : ranger, travailler, s’installer,
+                vivre avec un animal sans encombrer.
+              </p>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-navy">La boutique</p>
+              <p className="mt-2 text-sm leading-relaxed text-muted">
+                Une boutique en ligne éditée à {store.companyCity}. Livraison offerte en France
+                métropolitaine, SAV du lundi au vendredi.
+              </p>
+            </div>
+          </div>
+          <Link href="/about" className="btn btn-secondary mt-10 inline-flex w-full sm:w-auto">
+            Découvrir {store.storeName}
+          </Link>
+        </div>
+      </section>
+
+      <section className="section section-cream">
         <div className="container-page grid items-center gap-10 md:grid-cols-2">
           <div className="md:order-2">
             <div className="relative aspect-[4/3] overflow-hidden rounded-[var(--radius)]">
@@ -232,7 +272,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section section-cream">
+      <section className="section">
         <div className="container-page grid gap-12 md:grid-cols-2">
           <div>
             <h2 className="display text-3xl text-navy">Livraison et retours</h2>
