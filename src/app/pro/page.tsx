@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ProAccessForm } from "@/components/pro-access-form";
-import { SignedNote } from "@/components/signed-note";
 import { store } from "@/config/store";
-import { founderNotes } from "@/content/founder-notes";
 
 export const metadata: Metadata = {
   title: "Accès professionnel",
@@ -25,29 +23,24 @@ export default function ProPage() {
 
       <div className="mt-10 grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
         <ProAccessForm />
-        <div className="space-y-6">
-          <SignedNote>
-            <p>{founderNotes.daily}</p>
-          </SignedNote>
-          <div className="rounded-[var(--radius)] bg-cream p-6 text-sm leading-relaxed text-muted">
-            <p className="font-medium text-navy">Ce que nous vérifions</p>
-            <ul className="mt-3 list-disc space-y-2 pl-5">
-              <li>SIREN à 9 chiffres, valide ;</li>
-              <li>entreprise active au répertoire Sirene ;</li>
-              <li>demande rattachée à votre compte client.</li>
-            </ul>
-            <p className="mt-4">
-              Pas de justificatif d’identité. Une fois le SIREN confirmé, nous vous écrivons pour
-              activer devis, facture et commandes d’équipe.
-            </p>
-            <p className="mt-4">
-              Particulier ?{" "}
-              <Link href="/collections/maison" className="text-navy underline-offset-4 hover:underline">
-                Continuer vos achats
-              </Link>
-              .
-            </p>
-          </div>
+        <div className="rounded-[var(--radius)] bg-cream p-6 text-sm leading-relaxed text-muted">
+          <p className="font-medium text-navy">Ce que nous vérifions</p>
+          <ul className="mt-3 list-disc space-y-2 pl-5">
+            <li>SIREN à 9 chiffres, valide ;</li>
+            <li>entreprise active au répertoire Sirene ;</li>
+            <li>demande rattachée à votre compte client.</li>
+          </ul>
+          <p className="mt-4">
+            Pas de justificatif d’identité. Une fois le SIREN confirmé, nous vous écrivons pour
+            activer devis, facture et commandes d’équipe.
+          </p>
+          <p className="mt-4">
+            Particulier ?{" "}
+            <Link href="/collections/maison" className="text-navy underline-offset-4 hover:underline">
+              Continuer vos achats
+            </Link>
+            .
+          </p>
         </div>
       </div>
     </div>

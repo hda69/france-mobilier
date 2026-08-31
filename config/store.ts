@@ -11,9 +11,6 @@ export const store = {
   /** Horaires affichés publiquement (bandeau, contact). */
   supportHoursShort: "lun–ven 10h–22h",
   supportHours: "Du lundi au vendredi, de 10h à 22h",
-  /** Prénom public du fondateur (notes signées). Raison sociale : DPSP. */
-  founderFirstName: "Hugo",
-  founderRole: "Fondateur",
   country: "FR",
   currency: "EUR",
   locale: "fr-FR",
