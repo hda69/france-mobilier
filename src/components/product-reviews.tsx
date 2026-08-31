@@ -57,12 +57,9 @@ export function ProductReviews({
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Envoi impossible");
-      setMessage("Merci — votre avis a été publié.");
+      setMessage("Merci — votre avis a bien été envoyé. Il sera publié après validation.");
       setTitle("");
       setBody("");
-      const refreshed = await fetch(`/api/reviews?productId=${encodeURIComponent(productId)}`);
-      const refreshedData = await refreshed.json();
-      setReviews(refreshedData.reviews || []);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erreur");
     } finally {
@@ -162,7 +159,7 @@ export function ProductReviews({
             {error && <p className="text-sm text-red-700">{error}</p>}
             {message && <p className="text-sm text-accent">{message}</p>}
             <button type="submit" disabled={loading} className="btn btn-primary w-full sm:w-auto">
-              {loading ? "Envoi…" : "Publier mon avis"}
+              {loading ? "Envoi…" : "Envoyer mon avis"}
             </button>
           </form>
         )}

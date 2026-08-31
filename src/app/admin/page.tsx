@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AdminReviews } from "@/components/admin-reviews";
 import { collections } from "@/config/store";
+import { getAdminSession, listAdminEmails } from "@/lib/admin";
 import { countContactMessages } from "@/lib/contact";
 import { listProducts } from "@/lib/products/repository";
 import { getIntegrationStatuses } from "@/lib/providers/manual/provider";
 import { countProAccessRequests } from "@/lib/pro-access";
+import { countPendingReviews, listModerationReviews } from "@/lib/reviews";
 import { countStockAlerts, countStockAlertsByProduct } from "@/lib/stock-alerts";
 
 export const metadata: Metadata = {
@@ -15,13 +18,18 @@ export const metadata: Metadata = {
 export default async function AdminPage() {
   const products = listProducts();
   const statuses = getIntegrationStatuses();
-  const [alertCount, contactCount, proCount, alertsByProduct] = await Promise.all([
-    countStockAlerts(),
-    countContactMessages(),
-    countProAccessRequests(),
-    countStockAlertsByProduct(),
-  ]);
+  const admin = await getAdminSession();
+  const [alertCount, contactCount, proCount, pendingReviews, alertsByProduct, reviews] =
+    await Promise.all([
+      countStockAlerts(),
+      countContactMessages(),
+      countProAccessRequests(),
+      countPendingReviews(),
+      countStockAlertsByProduct(),
+      admin ? listModerationReviews() : Promise.resolve([]),
+    ]);
   const sellable = products.filter((p) => p.availabilityStatus === "available").length;
+  const adminEmail = listAdminEmails()[0];
 
   return (
     <div className="container-page py-10 md:py-14">
@@ -49,6 +57,10 @@ export default async function AdminPage() {
         <div className="rounded-2xl border border-border bg-card p-5">
           <p className="text-sm text-muted">Demandes accès pro</p>
           <p className="mt-1 text-3xl font-semibold">{proCount}</p>
+        </div>
+        <div className="rounded-2xl border border-border bg-card p-5">
+          <p className="text-sm text-muted">Avis à valider</p>
+          <p className="mt-1 text-3xl font-semibold">{pendingReviews}</p>
         </div>
       </div>
 
@@ -96,6 +108,25 @@ export default async function AdminPage() {
           </table>
         </div>
       ) : null}
+
+      {admin ? (
+        <AdminReviews initialReviews={reviews} />
+      ) : (
+        <section className="mt-10 rounded-2xl border border-border bg-white p-5">
+          <h2 className="text-xl font-semibold tracking-tight">Avis clients</h2>
+          <p className="mt-2 text-sm text-muted">
+            Connectez-vous avec le compte administrateur pour mettre un avis en ligne ou l’archiver.
+            {adminEmail ? (
+              <>
+                {" "}
+                <Link href="/connexion?next=/admin" className="text-navy underline-offset-2 hover:underline">
+                  Se connecter
+                </Link>
+              </>
+            ) : null}
+          </p>
+        </section>
+      )}
 
       <p className="mt-6 text-sm text-muted">
         Retour boutique : <Link href="/" className="underline">accueil</Link>

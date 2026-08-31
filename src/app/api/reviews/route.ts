@@ -54,6 +54,18 @@ export async function POST(request: Request) {
         { status: 403 },
       );
     }
+    if (message === "AVIS_EN_ATTENTE") {
+      return NextResponse.json(
+        { error: "Votre avis est déjà en attente de validation." },
+        { status: 409 },
+      );
+    }
+    if (message === "AVIS_DEJA_PUBLIE") {
+      return NextResponse.json(
+        { error: "Vous avez déjà un avis en ligne pour ce produit." },
+        { status: 409 },
+      );
+    }
     return NextResponse.json({ error: "Impossible d’enregistrer l’avis" }, { status: 500 });
   }
 }

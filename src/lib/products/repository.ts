@@ -12,6 +12,10 @@ export function findProductBySlug(slug: string): Product | null {
   return catalog.find((p) => p.slug === slug) ?? null;
 }
 
+export function findProductById(id: string): Product | null {
+  return catalog.find((p) => p.id === id) ?? null;
+}
+
 export const getProductBySlug = findProductBySlug;
 
 export function findRelatedProducts(product: Product, limit = 4): Product[] {

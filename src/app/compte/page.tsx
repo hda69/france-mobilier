@@ -74,8 +74,8 @@ export default function ComptePage() {
         <p className="mt-4 text-sm text-muted">E-mail</p>
         <p className="font-medium">{session.user.email}</p>
         <p className="mt-6 text-sm leading-relaxed text-muted">
-          Les avis produits seront débloqués automatiquement après un achat vérifié (commande
-          payée et associée à ce compte).
+          Les avis produits sont réservés aux achats vérifiés. Une fois envoyé, un avis n’apparaît
+          en ligne qu’après validation.
         </p>
         <ProStatus />
         <Link href="/pro" className="btn btn-primary mt-4 inline-flex w-full">
