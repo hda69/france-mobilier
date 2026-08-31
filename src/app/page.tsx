@@ -1,8 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ProductCard } from "@/components/product-card";
+import { SignedNote } from "@/components/signed-note";
 import { IconPin, IconReturn, IconTag, IconTruck } from "@/components/icons";
 import { store } from "@/config/store";
+import { founderNotes } from "@/content/founder-notes";
 import { listProducts } from "@/lib/products/repository";
 
 const categoryVisuals = [
@@ -239,13 +241,37 @@ export default function HomePage() {
               </p>
             </div>
           </div>
-          <Link href="/about" className="btn btn-secondary mt-10 inline-flex w-full sm:w-auto">
+          <SignedNote className="mt-10 max-w-2xl">
+            <p>{founderNotes.origin}</p>
+          </SignedNote>
+          <Link href="/about" className="btn btn-secondary mt-8 inline-flex w-full sm:w-auto">
             Découvrir {store.storeName}
           </Link>
         </div>
       </section>
 
       <section className="section section-cream">
+        <div className="container-page grid items-center gap-8 md:grid-cols-[1.2fr_0.8fr]">
+          <div>
+            <p className="eyebrow">Professionnels</p>
+            <h2 className="display mt-3 text-3xl text-navy md:text-4xl">
+              Un accès pro, vérifié par SIREN
+            </h2>
+            <p className="mt-4 max-w-xl leading-relaxed text-muted">
+              Bureaux, commerces, équipes : demandez un accès professionnel depuis votre compte. Nous
+              vérifions l’entreprise au répertoire Sirene — sans pièce d’identité.
+            </p>
+            <Link href="/pro" className="btn btn-primary mt-6 inline-flex w-full sm:w-auto">
+              Demander un accès professionnel
+            </Link>
+          </div>
+          <SignedNote>
+            <p>{founderNotes.daily}</p>
+          </SignedNote>
+        </div>
+      </section>
+
+      <section className="section">
         <div className="container-page grid items-center gap-10 md:grid-cols-2">
           <div className="md:order-2">
             <div className="relative aspect-[4/3] overflow-hidden rounded-[var(--radius)]">
@@ -272,7 +298,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section">
+      <section className="section section-cream">
         <div className="container-page grid gap-12 md:grid-cols-2">
           <div>
             <h2 className="display text-3xl text-navy">Livraison et retours</h2>

@@ -20,6 +20,10 @@ const items = [
     a: "Vous disposez de 14 jours à compter de la réception pour exercer votre droit de rétractation, lorsque le droit français le prévoit.",
   },
   {
+    q: "Proposez-vous un accès professionnel ?",
+    a: "Oui. Depuis votre compte, vous pouvez demander un accès pro. Nous vérifions le SIREN de l’entreprise au répertoire Sirene, sans pièce d’identité.",
+  },
+  {
     q: "Comment vous contacter ?",
     a: `Écrivez-nous à ${store.supportEmail}. SAV du lundi au vendredi, 10h–22h.`,
   },

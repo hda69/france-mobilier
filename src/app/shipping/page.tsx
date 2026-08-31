@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SignedNote } from "@/components/signed-note";
+import { founderNotes } from "@/content/founder-notes";
 
 export const metadata: Metadata = { title: "Livraison" };
 
@@ -13,6 +15,9 @@ export default function ShippingPage() {
           produit. Un numéro de suivi est communiqué après l’expédition.
         </p>
       </div>
+      <SignedNote className="mt-8">
+        <p>{founderNotes.trust}</p>
+      </SignedNote>
       <Link href="/collections/maison" className="btn btn-secondary mt-8 inline-flex">
         Voir la sélection
       </Link>

@@ -1,14 +1,22 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, Suspense, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 
 type Mode = "login" | "register";
 
-export function AuthForm({ mode }: { mode: Mode }) {
+function safeNext(value: string | null) {
+  if (!value || !value.startsWith("/") || value.startsWith("//")) return "/compte";
+  return value;
+}
+
+function AuthFormFields({ mode }: { mode: Mode }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const next = safeNext(searchParams.get("next"));
+  const nextQuery = next !== "/compte" ? `?next=${encodeURIComponent(next)}` : "";
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -31,7 +39,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
         const result = await authClient.signIn.email({ email, password });
         if (result.error) throw new Error(result.error.message || "Identifiants incorrects");
       }
-      router.push("/compte");
+      router.push(next);
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Une erreur est survenue");
@@ -90,19 +98,27 @@ export function AuthForm({ mode }: { mode: Mode }) {
         {mode === "login" ? (
           <>
             Pas encore de compte ?{" "}
-            <Link href="/inscription" className="text-accent underline-offset-2 hover:underline">
+            <Link href={`/inscription${nextQuery}`} className="text-accent underline-offset-2 hover:underline">
               S’inscrire
             </Link>
           </>
         ) : (
           <>
             Déjà inscrit ?{" "}
-            <Link href="/connexion" className="text-accent underline-offset-2 hover:underline">
+            <Link href={`/connexion${nextQuery}`} className="text-accent underline-offset-2 hover:underline">
               Se connecter
             </Link>
           </>
         )}
       </p>
     </form>
+  );
+}
+
+export function AuthForm({ mode }: { mode: Mode }) {
+  return (
+    <Suspense fallback={<div className="mx-auto max-w-md min-h-48" />}>
+      <AuthFormFields mode={mode} />
+    </Suspense>
   );
 }

@@ -4,6 +4,7 @@ import { collections } from "@/config/store";
 import { countContactMessages } from "@/lib/contact";
 import { listProducts } from "@/lib/products/repository";
 import { getIntegrationStatuses } from "@/lib/providers/manual/provider";
+import { countProAccessRequests } from "@/lib/pro-access";
 import { countStockAlerts, countStockAlertsByProduct } from "@/lib/stock-alerts";
 
 export const metadata: Metadata = {
@@ -14,9 +15,10 @@ export const metadata: Metadata = {
 export default async function AdminPage() {
   const products = listProducts();
   const statuses = getIntegrationStatuses();
-  const [alertCount, contactCount, alertsByProduct] = await Promise.all([
+  const [alertCount, contactCount, proCount, alertsByProduct] = await Promise.all([
     countStockAlerts(),
     countContactMessages(),
+    countProAccessRequests(),
     countStockAlertsByProduct(),
   ]);
   const sellable = products.filter((p) => p.availabilityStatus === "available").length;
@@ -43,6 +45,10 @@ export default async function AdminPage() {
         <div className="rounded-2xl border border-border bg-card p-5">
           <p className="text-sm text-muted">Messages contact</p>
           <p className="mt-1 text-3xl font-semibold">{contactCount}</p>
+        </div>
+        <div className="rounded-2xl border border-border bg-card p-5">
+          <p className="text-sm text-muted">Demandes accès pro</p>
+          <p className="mt-1 text-3xl font-semibold">{proCount}</p>
         </div>
       </div>
 

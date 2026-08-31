@@ -111,6 +111,21 @@ export async function ensureDatabase() {
         message TEXT NOT NULL,
         created_at INTEGER NOT NULL
       )`,
+      `CREATE TABLE IF NOT EXISTS pro_access_request (
+        id TEXT PRIMARY KEY NOT NULL,
+        user_id TEXT NOT NULL UNIQUE REFERENCES user(id) ON DELETE CASCADE,
+        siren TEXT NOT NULL,
+        siret TEXT,
+        company_name TEXT NOT NULL,
+        legal_name TEXT NOT NULL,
+        city TEXT,
+        activity TEXT,
+        vat_number TEXT,
+        message TEXT,
+        status TEXT NOT NULL,
+        created_at INTEGER NOT NULL,
+        updated_at INTEGER NOT NULL
+      )`,
     ],
     "write",
   );

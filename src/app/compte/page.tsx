@@ -1,8 +1,32 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+
+function ProStatus() {
+  const [label, setLabel] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/pro-access")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!data?.request) {
+          setLabel("Pas encore d’accès pro. Demande liée au SIREN de l’entreprise.");
+          return;
+        }
+        if (data.request.status === "approved") setLabel("Accès professionnel activé.");
+        else if (data.request.status === "eligible") {
+          setLabel(`SIREN ${data.request.siren} vérifié. Accès en cours d’ouverture.`);
+        } else setLabel("Demande d’accès pro non retenue.");
+      })
+      .catch(() => {});
+  }, []);
+
+  if (!label) return null;
+  return <p className="mt-4 text-sm leading-relaxed text-muted">{label}</p>;
+}
 
 export default function ComptePage() {
   const router = useRouter();
@@ -53,7 +77,11 @@ export default function ComptePage() {
           Les avis produits seront débloqués automatiquement après un achat vérifié (commande
           payée et associée à ce compte).
         </p>
-        <button type="button" onClick={logout} className="btn btn-secondary mt-6">
+        <ProStatus />
+        <Link href="/pro" className="btn btn-secondary mt-4 inline-flex w-full">
+          Accès professionnel
+        </Link>
+        <button type="button" onClick={logout} className="btn btn-secondary mt-3 w-full">
           Se déconnecter
         </button>
       </div>

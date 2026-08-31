@@ -12,6 +12,10 @@ export default function PrivacyPage() {
         <ul className="list-disc space-y-1 pl-5">
           <li>contact : nom, e-mail, message ;</li>
           <li>compte client : nom, e-mail, mot de passe hashé ;</li>
+          <li>
+            accès professionnel : SIREN / SIRET, dénomination issue du répertoire Sirene, liés au
+            compte — sans pièce d’identité ;
+          </li>
           <li>commande : coordonnées de livraison et historique d’achat ;</li>
           <li>paiement par carte : traité par le prestataire de paiement ;</li>
           <li>journaux techniques d’hébergement.</li>

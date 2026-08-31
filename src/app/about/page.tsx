@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { SignedNote } from "@/components/signed-note";
 import { store } from "@/config/store";
+import { founderNotes } from "@/content/founder-notes";
 
 export const metadata: Metadata = {
   title: "Notre histoire",
@@ -70,8 +72,11 @@ export default function AboutPage() {
             Plutôt que de multiplier les collections pour le spectacle, nous avons choisi une ligne
             claire : du mobilier utile, des rangements qui libèrent de la place, des pièces que l’on
             peut installer sans projet de rénovation. C’est cette exigence, tenue depuis{" "}
-            {store.companyCity}, qui guide encore chaque ajout au catalogue.
+            {store.companyCity},             qui guide encore chaque ajout au catalogue.
           </p>
+          <SignedNote className="mt-8">
+            <p>{founderNotes.origin}</p>
+          </SignedNote>
         </div>
         <div className="container-page mt-12 grid gap-8 md:grid-cols-3">
           {chapters.map((chapter) => (
@@ -109,6 +114,9 @@ export default function AboutPage() {
               {store.companyName}. Livraison offerte en France métropolitaine, rétractation sous 14
               jours lorsque le droit le prévoit, SAV du lundi au vendredi.
             </p>
+            <SignedNote className="mt-6">
+              <p>{founderNotes.daily}</p>
+            </SignedNote>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href="/collections/maison" className="btn btn-primary w-full sm:w-auto">
                 Découvrir nos meubles

@@ -89,3 +89,22 @@ export const contactMessage = sqliteTable("contact_message", {
   message: text("message").notNull(),
   createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
 });
+
+export const proAccessRequest = sqliteTable("pro_access_request", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .unique()
+    .references(() => user.id, { onDelete: "cascade" }),
+  siren: text("siren").notNull(),
+  siret: text("siret"),
+  companyName: text("company_name").notNull(),
+  legalName: text("legal_name").notNull(),
+  city: text("city"),
+  activity: text("activity"),
+  vatNumber: text("vat_number"),
+  message: text("message"),
+  status: text("status").notNull(),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
+  updatedAt: integer("updated_at", { mode: "timestamp_ms" }).notNull(),
+});
