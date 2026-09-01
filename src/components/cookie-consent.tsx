@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { IconCookie } from "@/components/icons";
 import {
   COOKIE_CONSENT_OPEN_EVENT,
   readCookieConsent,
@@ -27,9 +28,14 @@ export function CookieConsent() {
 
   return (
     <div className="cookie-banner" role="dialog" aria-labelledby="cookie-consent-title" aria-modal="false">
-      <h2 id="cookie-consent-title" className="text-lg font-semibold tracking-tight text-navy">
-        Cookies
-      </h2>
+      <div className="flex items-center gap-2.5">
+        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-cream text-navy">
+          <IconCookie className="h-5 w-5" />
+        </span>
+        <h2 id="cookie-consent-title" className="text-lg font-semibold tracking-tight text-navy">
+          Cookies
+        </h2>
+      </div>
       <p className="mt-2 text-sm leading-relaxed text-muted">
         Nous utilisons des cookies et un stockage local nécessaires à la boutique : compte, panier,
         accès aux commandes et paiement. Aucun cookie publicitaire ou de mesure d’audience n’est

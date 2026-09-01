@@ -103,6 +103,21 @@ export function IconCopy({ className = base }: IconProps) {
   );
 }
 
+export function IconCookie({ className = base }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden>
+      <path
+        fill="currentColor"
+        d="M12.1 3.15c.35 0 .62.27.7.6a3.15 3.15 0 0 0 3.75 2.35c.36-.08.74.12.84.48a3.2 3.2 0 0 0 2.72 2.42c.37.07.6.42.52.78A9 9 0 1 1 12.1 3.15Z"
+      />
+      <circle cx="9.1" cy="10.4" r="1.15" fill="#fff" />
+      <circle cx="13.5" cy="13.15" r="1" fill="#fff" />
+      <circle cx="8.7" cy="15.55" r="0.85" fill="#fff" />
+      <circle cx="15.55" cy="16.85" r="0.95" fill="#fff" />
+    </svg>
+  );
+}
+
 export function IconBag({ className = base }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden>
