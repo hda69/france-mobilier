@@ -84,7 +84,7 @@ export function ProductBuyBox({ product }: { product: Product }) {
         </section>
 
         <p className="text-xs text-muted">
-          Une question avant d’ajouter ? {store.supportEmail} — {store.supportHoursShort}.
+          Une question ? {store.supportEmail} — {store.supportHoursShort}.
         </p>
       </div>
       <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-white/95 px-3 pt-3 backdrop-blur md:hidden pb-[max(0.75rem,env(safe-area-inset-bottom))]">
