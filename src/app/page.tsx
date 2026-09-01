@@ -150,7 +150,7 @@ export default function HomePage() {
             </h2>
             <p className="mt-4 max-w-xl text-[0.95rem] leading-relaxed text-white/85 md:text-lg">
               Bureaux, commerces, copropriétés, commandes d’équipe : ouvrez un accès lié à votre
-              compte pour commander comme une entreprise.
+              compte et bénéficiez des tarifs professionnels.
             </p>
             <p className="mt-3 text-sm text-white/55">
               Demande en ligne, vérification de l’entreprise au SIREN — sans pièce d’identité.

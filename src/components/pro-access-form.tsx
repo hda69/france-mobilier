@@ -101,8 +101,8 @@ export function ProAccessForm() {
         {existing.status === "eligible" ? (
           <p className="mt-4 text-sm leading-relaxed text-muted">
             L’entreprise est active au répertoire Sirene. Nous revenons vers vous sur{" "}
-            {session.user.email} pour la suite (devis, facture, commandes d’équipe). Aucune pièce
-            d’identité n’est demandée.
+            {session.user.email} pour activer les tarifs professionnels, la facture au nom de
+            l’entreprise et les devis. Aucune pièce d’identité n’est demandée.
           </p>
         ) : null}
         {existing.status === "rejected" ? (

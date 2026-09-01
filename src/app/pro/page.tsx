@@ -17,22 +17,24 @@ export default function ProPage() {
         Demander un accès professionnel
       </h1>
       <p className="mt-4 max-w-2xl leading-relaxed text-muted">
-        Bureaux, commerces, copropriétés, commandes d’équipe : demandez un accès professionnel lié à
-        votre compte. Nous vérifions ensuite le SIREN de l’entreprise — pas de carte d’identité.
+        Bureaux, commerces, copropriétés, commandes d’équipe : ouvrez un accès lié à votre compte et
+        bénéficiez des tarifs professionnels. Nous vérifions le SIREN de l’entreprise — pas de carte
+        d’identité.
       </p>
 
       <div className="mt-10 grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
         <ProAccessForm />
         <div className="rounded-[var(--radius)] bg-cream p-6 text-sm leading-relaxed text-muted">
-          <p className="font-medium text-navy">Ce que nous vérifions</p>
+          <p className="font-medium text-navy">Ce que l’accès pro ouvre</p>
           <ul className="mt-3 list-disc space-y-2 pl-5">
-            <li>SIREN à 9 chiffres, valide ;</li>
-            <li>entreprise active au répertoire Sirene ;</li>
-            <li>demande rattachée à votre compte client.</li>
+            <li>tarifs professionnels, affichés HT ;</li>
+            <li>facture au nom de l’entreprise (SIREN), TVA détaillée ;</li>
+            <li>devis et commandes d’équipe, une fois l’accès activé.</li>
           </ul>
           <p className="mt-4">
-            Pas de justificatif d’identité. Une fois le SIREN confirmé, nous vous écrivons pour
-            activer devis, facture et commandes d’équipe.
+            Pas de justificatif d’identité. Nous vérifions un SIREN actif, puis nous vous écrivons
+            pour activer le compte pro. Ce n’est pas un code promo : les particuliers voient les
+            prix TTC du catalogue public.
           </p>
           <p className="mt-4">
             Particulier ?{" "}

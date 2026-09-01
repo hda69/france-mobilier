@@ -21,7 +21,7 @@ const items = [
   },
   {
     q: "Proposez-vous un accès professionnel ?",
-    a: "Oui. Demandez un accès professionnel depuis votre compte. Nous vérifions ensuite le SIREN de l’entreprise, sans pièce d’identité.",
+    a: "Oui. Demandez un accès professionnel depuis votre compte. Après vérification du SIREN, nous activons les tarifs HT, la facture au nom de l’entreprise et les devis — sans pièce d’identité.",
   },
   {
     q: "Comment vous contacter ?",
