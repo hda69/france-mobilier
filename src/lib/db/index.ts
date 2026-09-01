@@ -126,6 +126,32 @@ export async function ensureDatabase() {
         created_at INTEGER NOT NULL,
         updated_at INTEGER NOT NULL
       )`,
+      `CREATE TABLE IF NOT EXISTS shop_order (
+        id TEXT PRIMARY KEY NOT NULL,
+        stripe_session_id TEXT UNIQUE,
+        user_id TEXT REFERENCES user(id) ON DELETE SET NULL,
+        email TEXT NOT NULL,
+        name TEXT NOT NULL,
+        phone TEXT,
+        line1 TEXT NOT NULL,
+        postal_code TEXT NOT NULL,
+        city TEXT NOT NULL,
+        country TEXT NOT NULL DEFAULT 'FR',
+        amount_cents INTEGER NOT NULL,
+        currency TEXT NOT NULL DEFAULT 'eur',
+        status TEXT NOT NULL,
+        created_at INTEGER NOT NULL,
+        paid_at INTEGER
+      )`,
+      `CREATE TABLE IF NOT EXISTS shop_order_item (
+        id TEXT PRIMARY KEY NOT NULL,
+        order_id TEXT NOT NULL REFERENCES shop_order(id) ON DELETE CASCADE,
+        product_id TEXT NOT NULL,
+        name TEXT NOT NULL,
+        quantity INTEGER NOT NULL,
+        unit_price_cents INTEGER NOT NULL
+      )`,
+      `CREATE INDEX IF NOT EXISTS idx_shop_order_email ON shop_order(email)`,
     ],
     "write",
   );

@@ -108,3 +108,32 @@ export const proAccessRequest = sqliteTable("pro_access_request", {
   createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
   updatedAt: integer("updated_at", { mode: "timestamp_ms" }).notNull(),
 });
+
+export const shopOrder = sqliteTable("shop_order", {
+  id: text("id").primaryKey(),
+  stripeSessionId: text("stripe_session_id").unique(),
+  userId: text("user_id").references(() => user.id, { onDelete: "set null" }),
+  email: text("email").notNull(),
+  name: text("name").notNull(),
+  phone: text("phone"),
+  line1: text("line1").notNull(),
+  postalCode: text("postal_code").notNull(),
+  city: text("city").notNull(),
+  country: text("country").notNull().default("FR"),
+  amountCents: integer("amount_cents").notNull(),
+  currency: text("currency").notNull().default("eur"),
+  status: text("status").notNull(),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
+  paidAt: integer("paid_at", { mode: "timestamp_ms" }),
+});
+
+export const shopOrderItem = sqliteTable("shop_order_item", {
+  id: text("id").primaryKey(),
+  orderId: text("order_id")
+    .notNull()
+    .references(() => shopOrder.id, { onDelete: "cascade" }),
+  productId: text("product_id").notNull(),
+  name: text("name").notNull(),
+  quantity: integer("quantity").notNull(),
+  unitPriceCents: integer("unit_price_cents").notNull(),
+});

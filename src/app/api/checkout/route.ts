@@ -1,0 +1,153 @@
+import { NextResponse } from "next/server";
+import { headers } from "next/headers";
+import { z } from "zod";
+import { auth, prepareAuth } from "@/lib/auth";
+import { store } from "@/config/store";
+import {
+  attachStripeSession,
+  createPendingOrder,
+  markOrderPaid,
+  priceCheckoutLines,
+} from "@/lib/orders";
+import {
+  getSiteUrl,
+  getStripe,
+  isCheckoutEnabled,
+  stripeMode,
+} from "@/lib/payments/stripe";
+
+const schema = z.object({
+  items: z
+    .array(
+      z.object({
+        productId: z.string().min(1),
+        quantity: z.number().int().min(1).max(20),
+      }),
+    )
+    .min(1)
+    .max(30),
+  name: z.string().trim().min(2).max(120),
+  email: z.string().trim().email().max(180),
+  line1: z.string().trim().min(3).max(200),
+  postalCode: z.string().trim().min(4).max(12),
+  city: z.string().trim().min(2).max(80),
+  phone: z.string().trim().max(30).optional(),
+});
+
+export async function GET(request: Request) {
+  if (!isCheckoutEnabled()) {
+    return NextResponse.json({ enabled: false, mode: stripeMode() });
+  }
+  const { searchParams } = new URL(request.url);
+  const sessionId = searchParams.get("session_id");
+  if (!sessionId) {
+    return NextResponse.json({ enabled: true, mode: stripeMode() });
+  }
+
+  try {
+    const stripe = getStripe();
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    const orderId = session.metadata?.orderId;
+    const paid = session.payment_status === "paid";
+    if (paid && orderId) {
+      await markOrderPaid(orderId, session.id);
+    }
+    return NextResponse.json({
+      enabled: true,
+      mode: stripeMode(),
+      paid,
+      email: session.customer_details?.email || session.customer_email,
+      amountCents: session.amount_total,
+    });
+  } catch {
+    return NextResponse.json({ enabled: true, mode: stripeMode(), paid: false }, { status: 404 });
+  }
+}
+
+export async function POST(request: Request) {
+  if (!isCheckoutEnabled()) {
+    return NextResponse.json(
+      { error: "Le paiement n’est pas encore ouvert." },
+      { status: 503 },
+    );
+  }
+
+  const parsed = schema.safeParse(await request.json());
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Vérifiez les informations de livraison." }, { status: 400 });
+  }
+
+  try {
+    const { lines, amountCents } = priceCheckoutLines(parsed.data.items);
+    await prepareAuth();
+    const sessionAuth = await auth.api.getSession({ headers: await headers() });
+    const orderId = await createPendingOrder({
+      customer: {
+        name: parsed.data.name,
+        email: parsed.data.email,
+        line1: parsed.data.line1,
+        postalCode: parsed.data.postalCode,
+        city: parsed.data.city,
+        phone: parsed.data.phone,
+        userId: sessionAuth?.user?.id ?? null,
+      },
+      lines,
+      amountCents,
+    });
+
+    const siteUrl = getSiteUrl();
+    const stripe = getStripe();
+    const checkoutSession = await stripe.checkout.sessions.create({
+      mode: "payment",
+      locale: "fr",
+      customer_email: parsed.data.email.trim().toLowerCase(),
+      client_reference_id: orderId,
+      metadata: { orderId },
+      success_url: `${siteUrl}/commande/confirmation?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${siteUrl}/checkout`,
+      line_items: lines.map((line) => ({
+        quantity: line.quantity,
+        price_data: {
+          currency: "eur",
+          unit_amount: line.unitPriceCents,
+          product_data: {
+            name: line.name,
+            images: line.image ? [`${store.domain}${line.image}`] : undefined,
+          },
+        },
+      })),
+      payment_intent_data: {
+        metadata: { orderId },
+        shipping: {
+          name: parsed.data.name.trim(),
+          phone: parsed.data.phone?.trim() || undefined,
+          address: {
+            line1: parsed.data.line1.trim(),
+            postal_code: parsed.data.postalCode.trim(),
+            city: parsed.data.city.trim(),
+            country: "FR",
+          },
+        },
+      },
+    });
+
+    if (!checkoutSession.url) {
+      return NextResponse.json({ error: "Impossible d’ouvrir Stripe." }, { status: 502 });
+    }
+    await attachStripeSession(orderId, checkoutSession.id);
+    return NextResponse.json({ url: checkoutSession.url, mode: stripeMode() });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Erreur";
+    const map: Record<string, string> = {
+      PANIER_VIDE: "Votre panier est vide.",
+      QUANTITE_INVALIDE: "Quantité invalide.",
+      PRODUIT_INTROUVABLE: "Un article du panier n’est plus disponible.",
+      PRODUIT_INDISPONIBLE: "Un article du panier n’est plus en vente.",
+      MONTANT_INVALIDE: "Le montant de la commande est invalide.",
+    };
+    return NextResponse.json(
+      { error: map[message] || "Impossible de préparer le paiement." },
+      { status: 400 },
+    );
+  }
+}

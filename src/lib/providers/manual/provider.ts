@@ -5,6 +5,7 @@ import type {
   ProviderTrackingResult,
 } from "@/lib/providers/types";
 import { buckydropProvider } from "@/lib/providers/buckydrop/provider";
+import { isCheckoutEnabled, isStripeConfigured, stripeMode } from "@/lib/payments/stripe";
 
 export class ManualFulfillmentProvider implements FulfillmentProvider {
   id = "manual";
@@ -35,11 +36,8 @@ export function getFulfillmentProvider(id?: string | null): FulfillmentProvider 
 
 export function getIntegrationStatuses() {
   return {
-    checkout: process.env.STORE_CHECKOUT_ENABLED === "true" ? "ENABLED" : "PRE_LAUNCH",
-    stripe:
-      process.env.STRIPE_SECRET_KEY && process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-        ? "CONFIGURED"
-        : "NOT_CONFIGURED",
+    checkout: isCheckoutEnabled() ? (stripeMode() === "test" ? "TEST" : "ENABLED") : "PRE_LAUNCH",
+    stripe: isStripeConfigured() ? (stripeMode() === "test" ? "TEST" : "CONFIGURED") : "NOT_CONFIGURED",
     buckydrop:
       process.env.BUCKYDROP_ENABLED === "true" &&
       process.env.BUCKYDROP_APP_CODE &&
