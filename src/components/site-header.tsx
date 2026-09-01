@@ -99,7 +99,7 @@ export function SiteHeader() {
                   name="q"
                   type="search"
                   placeholder="Rechercher un produit…"
-                  className="input pl-9"
+                  className="input input-with-icon"
                 />
               </div>
             </form>
@@ -151,13 +151,16 @@ export function SiteHeader() {
                   <label className="sr-only" htmlFor="mobile-search">
                     Rechercher
                   </label>
-                  <input
-                    id="mobile-search"
-                    name="q"
-                    type="search"
-                    placeholder="Rechercher un produit…"
-                    className="input"
-                  />
+                  <div className="relative">
+                    <IconSearch className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+                    <input
+                      id="mobile-search"
+                      name="q"
+                      type="search"
+                      placeholder="Rechercher un produit…"
+                      className="input input-with-icon"
+                    />
+                  </div>
                 </form>
                 <nav className="grid gap-1 text-navy">
                   {navigation.map((item) => (
