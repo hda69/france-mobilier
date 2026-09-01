@@ -273,3 +273,29 @@ textarea.input {
     padding: 1.15rem 1.25rem 1.3rem;
   }
 }
+
+.cookie-banner {
+  position: fixed;
+  z-index: 50;
+  right: 0.75rem;
+  bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+  left: 0.75rem;
+  max-height: min(70dvh, 28rem);
+  overflow: auto;
+  padding: 1.15rem 1.1rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: #fff;
+  color: var(--foreground);
+  box-shadow: 0 16px 48px rgba(11, 43, 85, 0.18);
+}
+
+@media (min-width: 640px) {
+  .cookie-banner {
+    right: 1.25rem;
+    bottom: 1.25rem;
+    left: auto;
+    width: min(26.5rem, calc(100% - 2.5rem));
+    padding: 1.35rem 1.4rem 1.25rem;
+  }
+}

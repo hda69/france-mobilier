@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { store } from "@/config/store";
+import { CookieManageButton } from "@/components/cookie-manage-button";
 
 export const metadata: Metadata = { title: "Confidentialité" };
 
@@ -23,6 +24,27 @@ export default function PrivacyPage() {
         <p>
           Base légale : exécution du contrat, obligation légale ou intérêt légitime selon le
           traitement. Droits RGPD (accès, rectification, effacement) : {store.supportEmail}.
+        </p>
+        <h2 id="cookies" className="scroll-mt-28 pt-4 text-xl font-semibold tracking-tight text-navy">
+          Cookies
+        </h2>
+        <p>
+          Des cookies et un stockage local sont utilisés uniquement pour faire fonctionner la
+          boutique :
+        </p>
+        <ul className="list-disc space-y-1 pl-5">
+          <li>compte et session de connexion ;</li>
+          <li>panier (enregistré dans le navigateur) ;</li>
+          <li>accès à une commande payée ;</li>
+          <li>paiement, traité sur la page Stripe selon la politique de Stripe.</li>
+        </ul>
+        <p>
+          Ces traitements sont nécessaires au service. Aucun cookie publicitaire ou de mesure
+          d’audience n’est déposé sans votre accord. Vous pouvez modifier votre choix à tout
+          moment.
+        </p>
+        <p>
+          <CookieManageButton className="btn btn-secondary">Modifier mes choix</CookieManageButton>
         </p>
       </div>
     </div>

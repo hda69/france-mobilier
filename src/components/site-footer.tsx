@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { store } from "@/config/store";
+import { CookieManageButton } from "@/components/cookie-manage-button";
 
 const groups = [
   {
@@ -31,7 +32,6 @@ const groups = [
       { href: "/legal", label: "Mentions légales" },
       { href: "/terms", label: "CGV" },
       { href: "/privacy", label: "Confidentialité" },
-      { href: "/privacy", label: "Cookies" },
     ],
   },
 ];
@@ -67,6 +67,11 @@ export function SiteFooter() {
                   </Link>
                 </li>
               ))}
+              {group.title === "Informations" ? (
+                <li>
+                  <CookieManageButton className="inline-flex min-h-11 items-center bg-transparent p-0 text-inherit hover:text-white" />
+                </li>
+              ) : null}
             </ul>
           </div>
         ))}
