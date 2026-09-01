@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { AccountOrders } from "@/components/account-orders";
 import { authClient } from "@/lib/auth-client";
 
 function ProStatus() {
@@ -48,26 +49,23 @@ export default function ComptePage() {
 
   if (!session?.user) {
     return (
-      <div className="container-page space-y-4 py-14">
-        <h1 className="text-3xl font-semibold tracking-tight">Mon compte</h1>
-        <p className="text-muted">
-          Vous n’êtes pas connecté.{" "}
-          <Link href="/connexion" className="text-accent underline-offset-2 hover:underline">
-            Se connecter
-          </Link>{" "}
-          ou{" "}
-          <Link href="/inscription" className="text-accent underline-offset-2 hover:underline">
-            créer un compte
-          </Link>
-          .
-        </p>
+      <div className="container-page space-y-8 py-14">
+        <div>
+          <h1 className="text-3xl font-semibold tracking-tight">Mon compte</h1>
+          <p className="mt-2 max-w-xl text-muted">
+            Connectez-vous pour l’accès pro et les avis. Les commandes payées se retrouvent aussi
+            sans compte, avec l’e-mail et le code postal du paiement.
+          </p>
+        </div>
+        <AccountOrders signedIn={false} />
       </div>
     );
   }
 
   return (
-    <div className="container-page space-y-6 py-14">
+    <div className="container-page space-y-8 py-14">
       <h1 className="text-3xl font-semibold tracking-tight">Mon compte</h1>
+      <AccountOrders signedIn />
       <div className="max-w-lg rounded-2xl border border-border bg-white p-6">
         <p className="text-sm text-muted">Nom</p>
         <p className="font-medium">{session.user.name}</p>

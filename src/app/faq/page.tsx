@@ -24,6 +24,10 @@ const items = [
     a: "Oui. Demandez un accès professionnel depuis votre compte. Après vérification du SIREN, nous activons les tarifs HT, la facture au nom de l’entreprise et les devis — sans pièce d’identité.",
   },
   {
+    q: "Comment retrouver une commande ?",
+    a: "Dans Mon compte, avec l’e-mail et le code postal utilisés au paiement. Un compte créé avec le même e-mail affiche ensuite vos commandes automatiquement.",
+  },
+  {
     q: "Comment vous contacter ?",
     a: `Écrivez-nous à ${store.supportEmail}. SAV du lundi au vendredi, 10h–22h.`,
   },

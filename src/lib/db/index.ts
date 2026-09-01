@@ -155,5 +155,17 @@ export async function ensureDatabase() {
     ],
     "write",
   );
+  const info = await client.execute("PRAGMA table_info(shop_order)");
+  const cols = new Set(info.rows.map((row) => String(row.name)));
+  const extras: string[] = [];
+  if (!cols.has("reference")) extras.push("ALTER TABLE shop_order ADD COLUMN reference TEXT");
+  if (!cols.has("view_token")) extras.push("ALTER TABLE shop_order ADD COLUMN view_token TEXT");
+  if (!cols.has("confirmation_sent_at")) {
+    extras.push("ALTER TABLE shop_order ADD COLUMN confirmation_sent_at INTEGER");
+  }
+  if (extras.length > 0) await client.batch(extras, "write");
+  await client.execute(
+    "CREATE UNIQUE INDEX IF NOT EXISTS idx_shop_order_reference ON shop_order(reference)",
+  );
   migrated = true;
 }

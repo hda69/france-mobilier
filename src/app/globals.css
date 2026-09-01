@@ -113,6 +113,21 @@ a {
   background: var(--accent-red);
 }
 
+a,
+button,
+label,
+select,
+summary,
+[role="button"],
+.btn {
+  cursor: pointer;
+}
+
+input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]),
+textarea {
+  cursor: text;
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -137,9 +152,10 @@ a {
   background: var(--navy-hover);
 }
 
-.btn:disabled {
+.btn:disabled,
+button:disabled {
+  cursor: not-allowed;
   opacity: 0.6;
-  pointer-events: none;
 }
 
 .btn-secondary {

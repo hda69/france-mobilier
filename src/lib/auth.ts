@@ -41,6 +41,32 @@ export const auth = betterAuth({
     "https://francemobilier.com",
     "https://www.francemobilier.com",
   ],
+  databaseHooks: {
+    user: {
+      create: {
+        after: async (created) => {
+          const { attachOrdersToUser } = await import("@/lib/orders");
+          await attachOrdersToUser(created.id, created.email);
+        },
+      },
+    },
+    session: {
+      create: {
+        after: async (created) => {
+          const { db } = await import("@/lib/db");
+          const { user } = await import("@/lib/db/schema");
+          const { eq } = await import("drizzle-orm");
+          const { attachOrdersToUser } = await import("@/lib/orders");
+          const rows = await db
+            .select({ id: user.id, email: user.email })
+            .from(user)
+            .where(eq(user.id, created.userId))
+            .limit(1);
+          if (rows[0]) await attachOrdersToUser(rows[0].id, rows[0].email);
+        },
+      },
+    },
+  },
   baseURL,
   secret: process.env.BETTER_AUTH_SECRET || process.env.AUTH_SECRET,
 });

@@ -1,12 +1,18 @@
 import { NextResponse } from "next/server";
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { z } from "zod";
 import { auth, prepareAuth } from "@/lib/auth";
 import { store } from "@/config/store";
+import { isMailConfigured } from "@/lib/mail";
 import {
   attachStripeSession,
   createPendingOrder,
+  getOrderAccessSecrets,
+  getOrderById,
   markOrderPaid,
+  mergeOrderAccessCookie,
+  ORDER_ACCESS_COOKIE,
+  orderAccessCookieOptions,
   priceCheckoutLines,
 } from "@/lib/orders";
 import {
@@ -52,13 +58,47 @@ export async function GET(request: Request) {
     if (paid && orderId) {
       await markOrderPaid(orderId, session.id);
     }
-    return NextResponse.json({
+    const order = orderId ? await getOrderById(orderId) : null;
+    const secrets = orderId ? await getOrderAccessSecrets(orderId) : null;
+    const response = NextResponse.json({
       enabled: true,
       mode: stripeMode(),
       paid,
       email: session.customer_details?.email || session.customer_email,
       amountCents: session.amount_total,
+      mailEnabled: isMailConfigured(),
+      order:
+        paid && order
+          ? {
+              id: order.id,
+              reference: order.reference,
+              name: order.name,
+              email: order.email,
+              line1: order.line1,
+              postalCode: order.postalCode,
+              city: order.city,
+              amountCents: order.amountCents,
+              confirmationSent: Boolean(order.confirmationSentAt),
+              items: order.items.map((item) => ({
+                name: item.name,
+                quantity: item.quantity,
+                unitPriceCents: item.unitPriceCents,
+              })),
+            }
+          : null,
     });
+    if (paid && secrets?.viewToken) {
+      const jar = await cookies();
+      response.cookies.set(
+        ORDER_ACCESS_COOKIE,
+        mergeOrderAccessCookie(jar.get(ORDER_ACCESS_COOKIE)?.value, {
+          id: secrets.id,
+          viewToken: secrets.viewToken,
+        }),
+        orderAccessCookieOptions(),
+      );
+    }
+    return response;
   } catch {
     return NextResponse.json({ enabled: true, mode: stripeMode(), paid: false }, { status: 404 });
   }
@@ -118,6 +158,7 @@ export async function POST(request: Request) {
       })),
       payment_intent_data: {
         metadata: { orderId },
+        receipt_email: parsed.data.email.trim().toLowerCase(),
         shipping: {
           name: parsed.data.name.trim(),
           phone: parsed.data.phone?.trim() || undefined,

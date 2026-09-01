@@ -7,6 +7,7 @@ import { countContactMessages } from "@/lib/contact";
 import { listProducts } from "@/lib/products/repository";
 import { getIntegrationStatuses } from "@/lib/providers/manual/provider";
 import { countProAccessRequests } from "@/lib/pro-access";
+import { listRecentPaidOrders } from "@/lib/orders";
 import { countPendingReviews, listModerationReviews } from "@/lib/reviews";
 import { countStockAlerts, countStockAlertsByProduct } from "@/lib/stock-alerts";
 
@@ -19,7 +20,7 @@ export default async function AdminPage() {
   const products = listProducts();
   const statuses = getIntegrationStatuses();
   const admin = await getAdminSession();
-  const [alertCount, contactCount, proCount, pendingReviews, alertsByProduct, reviews] =
+  const [alertCount, contactCount, proCount, pendingReviews, alertsByProduct, reviews, recentOrders] =
     await Promise.all([
       countStockAlerts(),
       countContactMessages(),
@@ -27,6 +28,7 @@ export default async function AdminPage() {
       countPendingReviews(),
       countStockAlertsByProduct(),
       admin ? listModerationReviews() : Promise.resolve([]),
+      admin ? listRecentPaidOrders(30) : Promise.resolve([]),
     ]);
   const sellable = products.filter((p) => p.availabilityStatus === "available").length;
   const adminEmail = listAdminEmails()[0];
@@ -61,6 +63,10 @@ export default async function AdminPage() {
         <div className="rounded-2xl border border-border bg-card p-5">
           <p className="text-sm text-muted">Avis à valider</p>
           <p className="mt-1 text-3xl font-semibold">{pendingReviews}</p>
+        </div>
+        <div className="rounded-2xl border border-border bg-card p-5">
+          <p className="text-sm text-muted">Dernières commandes</p>
+          <p className="mt-1 text-3xl font-semibold">{recentOrders.length}</p>
         </div>
       </div>
 
@@ -102,6 +108,44 @@ export default async function AdminPage() {
                 <tr key={row.productSlug} className="border-b border-border last:border-0">
                   <td className="px-5 py-3">{row.productSlug}</td>
                   <td className="px-5 py-3 font-medium">{Number(row.count)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : null}
+
+      {admin && recentOrders.length > 0 ? (
+        <div className="mt-8 overflow-hidden rounded-2xl border border-border bg-card">
+          <table className="w-full text-left text-sm">
+            <thead className="border-b border-border bg-background/60">
+              <tr>
+                <th className="px-5 py-3 font-medium">Commande</th>
+                <th className="px-5 py-3 font-medium">Client</th>
+                <th className="px-5 py-3 font-medium">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {recentOrders.map((order) => (
+                <tr key={order.id} className="border-b border-border last:border-0">
+                  <td className="px-5 py-3">
+                    <Link href={`/commande/${order.id}`} className="font-medium hover:underline">
+                      {order.reference}
+                    </Link>
+                    <p className="text-xs text-muted">
+                      {order.items.map((item) => `${item.name} × ${item.quantity}`).join(", ")}
+                    </p>
+                  </td>
+                  <td className="px-5 py-3">
+                    {order.name}
+                    <p className="text-xs text-muted">{order.email}</p>
+                  </td>
+                  <td className="px-5 py-3 font-medium">
+                    {(order.amountCents / 100).toLocaleString("fr-FR", {
+                      style: "currency",
+                      currency: "EUR",
+                    })}
+                  </td>
                 </tr>
               ))}
             </tbody>
