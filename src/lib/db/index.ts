@@ -28,9 +28,14 @@ function getClient() {
 export const db = drizzle(getClient(), { schema });
 
 let migrated = false;
+let migrating: Promise<void> | null = null;
 
-export async function ensureDatabase() {
-  if (migrated) return;
+function isDuplicateColumnError(error: unknown) {
+  const message = error instanceof Error ? error.message : String(error);
+  return /duplicate column name/i.test(message);
+}
+
+async function migrateDatabase() {
   const client = getClient();
   await client.batch(
     [
@@ -140,6 +145,10 @@ export async function ensureDatabase() {
         amount_cents INTEGER NOT NULL,
         currency TEXT NOT NULL DEFAULT 'eur',
         status TEXT NOT NULL,
+        reference TEXT,
+        view_token TEXT,
+        confirmation_sent_at INTEGER,
+        account_invite_enc TEXT,
         created_at INTEGER NOT NULL,
         paid_at INTEGER
       )`,
@@ -157,18 +166,37 @@ export async function ensureDatabase() {
   );
   const info = await client.execute("PRAGMA table_info(shop_order)");
   const cols = new Set(info.rows.map((row) => String(row.name)));
-  const extras: string[] = [];
-  if (!cols.has("reference")) extras.push("ALTER TABLE shop_order ADD COLUMN reference TEXT");
-  if (!cols.has("view_token")) extras.push("ALTER TABLE shop_order ADD COLUMN view_token TEXT");
-  if (!cols.has("confirmation_sent_at")) {
-    extras.push("ALTER TABLE shop_order ADD COLUMN confirmation_sent_at INTEGER");
+  const extras = [
+    !cols.has("reference") ? "ALTER TABLE shop_order ADD COLUMN reference TEXT" : null,
+    !cols.has("view_token") ? "ALTER TABLE shop_order ADD COLUMN view_token TEXT" : null,
+    !cols.has("confirmation_sent_at")
+      ? "ALTER TABLE shop_order ADD COLUMN confirmation_sent_at INTEGER"
+      : null,
+    !cols.has("account_invite_enc")
+      ? "ALTER TABLE shop_order ADD COLUMN account_invite_enc TEXT"
+      : null,
+  ].filter((sql): sql is string => Boolean(sql));
+  for (const sql of extras) {
+    try {
+      await client.execute(sql);
+    } catch (error) {
+      if (!isDuplicateColumnError(error)) throw error;
+    }
   }
-  if (!cols.has("account_invite_enc")) {
-    extras.push("ALTER TABLE shop_order ADD COLUMN account_invite_enc TEXT");
-  }
-  if (extras.length > 0) await client.batch(extras, "write");
   await client.execute(
     "CREATE UNIQUE INDEX IF NOT EXISTS idx_shop_order_reference ON shop_order(reference)",
   );
   migrated = true;
 }
+
+export async function ensureDatabase() {
+  if (migrated) return;
+  if (!migrating) {
+    migrating = migrateDatabase().catch((error) => {
+      migrating = null;
+      throw error;
+    });
+  }
+  await migrating;
+}
+
