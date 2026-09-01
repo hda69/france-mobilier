@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useCart } from "@/components/cart-provider";
 import { authClient } from "@/lib/auth-client";
@@ -11,14 +11,6 @@ export function CheckoutForm() {
   const { data: session } = authClient.useSession();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [testMode, setTestMode] = useState(false);
-
-  useEffect(() => {
-    fetch("/api/checkout")
-      .then((res) => res.json())
-      .then((data) => setTestMode(data.mode === "test"))
-      .catch(() => {});
-  }, []);
 
   if (!ready) {
     return <div className="min-h-48" />;
@@ -117,13 +109,6 @@ export function CheckoutForm() {
           besoin de créer un compte avant : s’il n’existe pas encore, un accès est ouvert après le
           paiement, identifiant = votre e-mail.
         </p>
-        {testMode ? (
-          <p className="text-sm text-muted">
-            Mode test Stripe : aucun débit réel. Carte d’essai{" "}
-            <span className="font-medium text-navy">4242 4242 4242 4242</span>, une date future, un
-            CVC à 3 chiffres.
-          </p>
-        ) : null}
       </div>
       <aside className="h-fit space-y-4 rounded-2xl border border-border bg-card p-4 sm:p-6">
         <h2 className="text-lg font-medium">Récapitulatif</h2>

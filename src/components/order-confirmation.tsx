@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCart } from "@/components/cart-provider";
 import { OrderSummary } from "@/components/order-summary";
+import { CopyTextButton } from "@/components/copy-text-button";
 import { formatPrice } from "@/lib/products/repository";
 import type { PublicOrder } from "@/lib/orders";
 
@@ -105,8 +106,11 @@ export function OrderConfirmation() {
           <p className="mt-2 text-sm leading-relaxed text-muted">
             Identifiant : <span className="font-medium text-navy">{email}</span>
             <br />
-            Mot de passe provisoire :{" "}
-            <span className="font-medium text-navy">{accountPassword}</span>
+            <span className="mt-1 inline-flex flex-wrap items-center gap-2">
+              Mot de passe provisoire :{" "}
+              <span className="font-medium text-navy">{accountPassword}</span>
+              <CopyTextButton text={accountPassword} />
+            </span>
           </p>
           <p className="mt-2 text-sm text-muted">
             Changez-le après votre première connexion. Il permet de retrouver vos commandes dans Mon

@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { OrderSummary } from "@/components/order-summary";
+import { CopyTextButton } from "@/components/copy-text-button";
 import type { PublicOrder } from "@/lib/orders";
 
 export function AccountOrders({ signedIn }: { signedIn: boolean }) {
@@ -62,8 +63,11 @@ export function AccountOrders({ signedIn }: { signedIn: boolean }) {
           <p className="mt-2 text-sm leading-relaxed text-muted">
             Identifiant : <span className="font-medium text-navy">{guestAccount.email}</span>
             <br />
-            Mot de passe provisoire :{" "}
-            <span className="font-medium text-navy">{guestAccount.password}</span>
+            <span className="mt-1 inline-flex flex-wrap items-center gap-2">
+              Mot de passe provisoire :{" "}
+              <span className="font-medium text-navy">{guestAccount.password}</span>
+              <CopyTextButton text={guestAccount.password} />
+            </span>
           </p>
           <Link href="/connexion" className="btn btn-secondary mt-4 inline-flex">
             Se connecter
