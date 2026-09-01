@@ -7,6 +7,7 @@ import { isMailConfigured } from "@/lib/mail";
 import {
   attachStripeSession,
   createPendingOrder,
+  getAccountInvitePassword,
   getOrderAccessSecrets,
   getOrderById,
   markOrderPaid,
@@ -60,6 +61,7 @@ export async function GET(request: Request) {
     }
     const order = orderId ? await getOrderById(orderId) : null;
     const secrets = orderId ? await getOrderAccessSecrets(orderId) : null;
+    const accountPassword = orderId && paid ? await getAccountInvitePassword(orderId) : null;
     const response = NextResponse.json({
       enabled: true,
       mode: stripeMode(),
@@ -67,6 +69,7 @@ export async function GET(request: Request) {
       email: session.customer_details?.email || session.customer_email,
       amountCents: session.amount_total,
       mailEnabled: isMailConfigured(),
+      accountPassword,
       order:
         paid && order
           ? {
@@ -143,6 +146,7 @@ export async function POST(request: Request) {
       customer_email: parsed.data.email.trim().toLowerCase(),
       client_reference_id: orderId,
       metadata: { orderId },
+      payment_method_types: ["card"],
       success_url: `${siteUrl}/commande/confirmation?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${siteUrl}/checkout`,
       line_items: lines.map((line) => ({

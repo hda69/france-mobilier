@@ -15,7 +15,7 @@ const objections = [
   },
   {
     title: "Paiement sécurisé",
-    text: "Le règlement se fait par carte. Nous ne vous demandons pas de coordonnées bancaires par e-mail. Le total TTC est confirmé avant paiement.",
+    text: "Carte, Apple Pay ou Google Pay sur la page Stripe. Nous ne demandons jamais vos coordonnées bancaires par e-mail. Le total TTC est confirmé avant paiement.",
     icon: IconCheck,
     badge: "bg-emerald-600 text-white",
   },
@@ -63,22 +63,27 @@ export function ProductBuyBox({ product }: { product: Product }) {
           {added ? "Ajouté au panier" : "Ajouter au panier"}
         </button>
 
-        <ul className="space-y-4 border-t border-border pt-4">
-          {objections.map((item) => (
-            <li key={item.title} className="flex gap-3">
-              <span
-                className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${item.badge}`}
-                aria-hidden
-              >
-                <item.icon className="h-5 w-5" />
-              </span>
-              <div>
-                <p className="text-sm font-medium text-navy">{item.title}</p>
-                <p className="mt-1 text-sm leading-relaxed text-muted">{item.text}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <section className="buy-trust">
+          <p className="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-navy">
+            Inclus avec cette commande
+          </p>
+          <ul className="mt-4 space-y-4">
+            {objections.map((item) => (
+              <li key={item.title} className="flex gap-3">
+                <span
+                  className={`mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${item.badge}`}
+                  aria-hidden
+                >
+                  <item.icon className="h-5 w-5" />
+                </span>
+                <div>
+                  <p className="text-[0.95rem] font-semibold text-navy">{item.title}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-muted">{item.text}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
 
         <p className="text-xs text-muted">
           Une question avant d’ajouter ? {store.supportEmail} — {store.supportHoursShort}.

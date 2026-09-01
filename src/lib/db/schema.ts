@@ -126,6 +126,7 @@ export const shopOrder = sqliteTable("shop_order", {
   reference: text("reference"),
   viewToken: text("view_token"),
   confirmationSentAt: integer("confirmation_sent_at", { mode: "timestamp_ms" }),
+  accountInviteEnc: text("account_invite_enc"),
   createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
   paidAt: integer("paid_at", { mode: "timestamp_ms" }),
 });

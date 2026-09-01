@@ -29,6 +29,7 @@ export function OrderConfirmation() {
   const [amountCents, setAmountCents] = useState<number | null>(null);
   const [order, setOrder] = useState<CheckoutOrder | null>(null);
   const [confirmationSent, setConfirmationSent] = useState(false);
+  const [accountPassword, setAccountPassword] = useState<string | null>(null);
 
   useEffect(() => {
     const sessionId = searchParams.get("session_id");
@@ -45,6 +46,7 @@ export function OrderConfirmation() {
           setAmountCents(typeof data.amountCents === "number" ? data.amountCents : null);
           setOrder(data.order || null);
           setConfirmationSent(Boolean(data.order?.confirmationSent));
+          setAccountPassword(typeof data.accountPassword === "string" ? data.accountPassword : null);
           clear();
         } else setState("error");
       })
@@ -97,6 +99,24 @@ export function OrderConfirmation() {
             : ""}
       </p>
       {summary ? <OrderSummary order={summary} href={`/commande/${summary.id}`} /> : null}
+      {accountPassword && email ? (
+        <div className="rounded-2xl border border-navy/20 bg-cream p-4 sm:p-5">
+          <p className="font-medium text-navy">Votre compte a été créé</p>
+          <p className="mt-2 text-sm leading-relaxed text-muted">
+            Identifiant : <span className="font-medium text-navy">{email}</span>
+            <br />
+            Mot de passe provisoire :{" "}
+            <span className="font-medium text-navy">{accountPassword}</span>
+          </p>
+          <p className="mt-2 text-sm text-muted">
+            Changez-le après votre première connexion. Il permet de retrouver vos commandes dans Mon
+            compte.
+          </p>
+          <Link href="/connexion" className="btn btn-secondary mt-4 inline-flex">
+            Se connecter
+          </Link>
+        </div>
+      ) : null}
       <p className="text-sm leading-relaxed text-muted">
         La livraison est offerte en France métropolitaine. Un suivi sera communiqué après
         l’expédition. Retrouvez vos commandes à tout moment dans{" "}

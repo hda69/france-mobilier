@@ -98,7 +98,9 @@ export async function sendOrderPaidEmail(order: {
   city: string;
   items: { name: string; quantity: number; unitPriceCents: number }[];
   viewUrl: string;
+  loginUrl: string;
   testMode: boolean;
+  temporaryPassword?: string | null;
 }) {
   const lines = order.items
     .map(
@@ -124,6 +126,16 @@ export async function sendOrderPaidEmail(order: {
     `Livraison : ${order.line1}, ${order.postalCode} ${order.city}`,
     `Voir la commande : ${order.viewUrl}`,
     "",
+    ...(order.temporaryPassword
+      ? [
+          "Un compte a été créé pour suivre vos commandes :",
+          `Identifiant : ${order.email}`,
+          `Mot de passe provisoire : ${order.temporaryPassword}`,
+          `Connexion : ${order.loginUrl}`,
+          "Changez ce mot de passe après votre première connexion.",
+          "",
+        ]
+      : []),
     `Livraison offerte en France métropolitaine. Un suivi sera envoyé après l’expédition.`,
     `SAV : ${store.supportEmail}`,
   ].join("\n");
@@ -142,6 +154,11 @@ export async function sendOrderPaidEmail(order: {
 <table style="width:100%;border-collapse:collapse">${rows}</table>
 <p>Livraison : ${escapeHtml(order.line1)}, ${escapeHtml(order.postalCode)} ${escapeHtml(order.city)}</p>
 <p><a href="${escapeHtml(order.viewUrl)}">Voir la commande</a></p>
+${
+  order.temporaryPassword
+    ? `<p><strong>Votre compte</strong><br>Identifiant : ${escapeHtml(order.email)}<br>Mot de passe provisoire : ${escapeHtml(order.temporaryPassword)}<br><a href="${escapeHtml(order.loginUrl)}">Se connecter</a><br><span style="color:#5c6170;font-size:14px">Changez ce mot de passe après votre première connexion.</span></p>`
+    : ""
+}
 <p style="color:#5c6170;font-size:14px">Livraison offerte en France métropolitaine. Un suivi sera envoyé après l’expédition.</p>
 <p style="color:#5c6170;font-size:14px">${escapeHtml(store.supportEmail)} — ${escapeHtml(store.supportHoursShort)}</p>
 </div>`;

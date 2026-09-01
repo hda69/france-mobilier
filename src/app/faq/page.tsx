@@ -25,7 +25,7 @@ const items = [
   },
   {
     q: "Comment retrouver une commande ?",
-    a: "Dans Mon compte, avec l’e-mail et le code postal utilisés au paiement. Un compte créé avec le même e-mail affiche ensuite vos commandes automatiquement.",
+    a: "Dans Mon compte, avec l’e-mail et le code postal utilisés au paiement. Si vous n’aviez pas de compte, un accès est créé après le paiement : identifiant = votre e-mail, mot de passe provisoire indiqué sur la page de confirmation.",
   },
   {
     q: "Comment vous contacter ?",

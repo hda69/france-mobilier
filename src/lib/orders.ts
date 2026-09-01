@@ -3,6 +3,7 @@ import { db, ensureDatabase } from "@/lib/db";
 import { purchase, shopOrder, shopOrderItem, user } from "@/lib/db/schema";
 import { isMailConfigured, sendOrderPaidEmail } from "@/lib/mail";
 import { findProductById } from "@/lib/products/repository";
+import { decryptSecret, encryptSecret, provisionCustomerAccount } from "@/lib/provision-account";
 import {
   eurosToCents,
   getSiteUrl,
@@ -262,12 +263,13 @@ async function linkPurchases(orderId: string) {
   }
 }
 
-async function sendOrderConfirmationIfNeeded(orderId: string) {
+async function sendOrderConfirmationIfNeeded(orderId: string, temporaryPassword?: string | null) {
   const full = await getOrderById(orderId);
   if (!full || full.status !== "paid") return;
   if (full.confirmationSentAt) return;
   if (!isMailConfigured()) return;
   const withAccess = await ensureOrderAccess(full);
+  const password = temporaryPassword || decryptSecret(withAccess.accountInviteEnc);
   try {
     const sent = await sendOrderPaidEmail({
       email: withAccess.email,
@@ -279,7 +281,9 @@ async function sendOrderConfirmationIfNeeded(orderId: string) {
       city: withAccess.city,
       items: full.items,
       viewUrl: `${getSiteUrl()}/commande/${withAccess.id}?t=${withAccess.viewToken}`,
+      loginUrl: `${getSiteUrl()}/connexion`,
       testMode: stripeMode() === "test",
+      temporaryPassword: password,
     });
     if (sent) {
       await db
@@ -312,8 +316,23 @@ export async function markOrderPaid(orderId: string, stripeSessionId: string) {
     await db.update(shopOrder).set({ stripeSessionId }).where(eq(shopOrder.id, orderId));
   }
 
+  const paid = (await db.select().from(shopOrder).where(eq(shopOrder.id, orderId)).limit(1))[0] ?? order;
+  let temporaryPassword: string | null = decryptSecret(paid.accountInviteEnc);
+  try {
+    const provisioned = await provisionCustomerAccount({ email: paid.email, name: paid.name });
+    const patch: { userId: string; accountInviteEnc?: string } = { userId: provisioned.userId };
+    if (provisioned.created && provisioned.password) {
+      temporaryPassword = provisioned.password;
+      patch.accountInviteEnc = encryptSecret(provisioned.password);
+    }
+    await db.update(shopOrder).set(patch).where(eq(shopOrder.id, orderId));
+    await attachOrdersToUser(provisioned.userId, paid.email);
+  } catch (error) {
+    console.error("[orders] account provision failed", error);
+  }
+
   await linkPurchases(orderId);
-  await sendOrderConfirmationIfNeeded(orderId);
+  await sendOrderConfirmationIfNeeded(orderId, temporaryPassword);
   const updated = await db.select().from(shopOrder).where(eq(shopOrder.id, orderId)).limit(1);
   return updated[0] ?? order;
 }
@@ -491,13 +510,38 @@ export async function lookupPaidOrders(email: string, postalCode: string) {
     .where(and(eq(shopOrder.email, normalizedEmail), eq(shopOrder.status, "paid")))
     .orderBy(desc(shopOrder.paidAt));
   const matched = rows.filter((row) => normalizePostal(row.postalCode) === postal);
+  let guestAccount: { email: string; password: string } | undefined;
   const result: PublicOrder[] = [];
   for (const order of matched) {
+    try {
+      const provisioned = await provisionCustomerAccount({ email: order.email, name: order.name });
+      const patch: { userId: string; accountInviteEnc?: string } = { userId: provisioned.userId };
+      if (provisioned.created && provisioned.password) {
+        patch.accountInviteEnc = encryptSecret(provisioned.password);
+        guestAccount = { email: order.email, password: provisioned.password };
+      }
+      if (provisioned.userId !== order.userId || patch.accountInviteEnc) {
+        await db.update(shopOrder).set(patch).where(eq(shopOrder.id, order.id));
+        await attachOrdersToUser(provisioned.userId, order.email);
+        await linkPurchases(order.id);
+      }
+      if (!guestAccount) {
+        const existing = decryptSecret(order.accountInviteEnc);
+        if (existing) guestAccount = { email: order.email, password: existing };
+      }
+    } catch (error) {
+      console.error("[orders] lookup account provision failed", error);
+    }
     const withAccess = await ensureOrderAccess(order);
     const items = await db.select().from(shopOrderItem).where(eq(shopOrderItem.orderId, order.id));
     result.push(toPublic(withAccess, items));
   }
-  return result;
+  return { orders: result, guestAccount };
+}
+
+export async function getAccountInvitePassword(orderId: string) {
+  const order = await getOrderById(orderId);
+  return decryptSecret(order?.accountInviteEnc);
 }
 
 export async function getOrderAccessSecrets(orderId: string) {

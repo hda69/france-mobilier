@@ -7,6 +7,7 @@ import type { PublicOrder } from "@/lib/orders";
 
 export function AccountOrders({ signedIn }: { signedIn: boolean }) {
   const [orders, setOrders] = useState<PublicOrder[] | null>(null);
+  const [guestAccount, setGuestAccount] = useState<{ email: string; password: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -34,6 +35,7 @@ export function AccountOrders({ signedIn }: { signedIn: boolean }) {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Recherche impossible");
       setOrders(data.orders || []);
+      setGuestAccount(data.guestAccount || null);
       if ((data.orders || []).length === 0) {
         setError("Aucune commande payée pour cet e-mail et ce code postal.");
       }
@@ -52,6 +54,21 @@ export function AccountOrders({ signedIn }: { signedIn: boolean }) {
           Sans compte, retrouvez une commande avec l’e-mail et le code postal utilisés au paiement.
           Un compte avec le même e-mail les affiche ensuite automatiquement.
         </p>
+      ) : null}
+
+      {guestAccount ? (
+        <div className="rounded-2xl border border-navy/20 bg-cream p-4 sm:p-5">
+          <p className="font-medium text-navy">Compte créé pour cet e-mail</p>
+          <p className="mt-2 text-sm leading-relaxed text-muted">
+            Identifiant : <span className="font-medium text-navy">{guestAccount.email}</span>
+            <br />
+            Mot de passe provisoire :{" "}
+            <span className="font-medium text-navy">{guestAccount.password}</span>
+          </p>
+          <Link href="/connexion" className="btn btn-secondary mt-4 inline-flex">
+            Se connecter
+          </Link>
+        </div>
       ) : null}
 
       {orders && orders.length > 0 ? (

@@ -54,7 +54,8 @@ function AuthFormFields({ mode }: { mode: Mode }) {
         {mode === "login" ? "Connexion" : "Créer un compte"}
       </h1>
       <p className="text-sm text-muted">
-        Les avis produits sont réservés aux clients avec un achat vérifié.
+        Les avis produits sont réservés aux clients avec un achat vérifié. Identifiant : votre
+        e-mail.
       </p>
       {mode === "register" && (
         <label className="block text-sm">

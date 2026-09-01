@@ -39,8 +39,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Indiquez l’e-mail et le code postal de la commande." }, { status: 400 });
   }
 
-  const orders = await lookupPaidOrders(parsed.data.email, parsed.data.postalCode);
-  const response = NextResponse.json({ orders });
+  const { orders, guestAccount } = await lookupPaidOrders(parsed.data.email, parsed.data.postalCode);
+  const response = NextResponse.json({ orders, guestAccount: guestAccount ?? null });
   if (orders.length > 0) {
     const jar = await cookies();
     let value = jar.get(ORDER_ACCESS_COOKIE)?.value;

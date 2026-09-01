@@ -10,7 +10,9 @@ export default function CheckoutPage() {
   return (
     <div className="container-page py-10 md:py-14">
       <h1 className="text-3xl font-semibold tracking-tight">Commande</h1>
-      <p className="mt-2 text-muted">Livraison offerte en France métropolitaine. Paiement par carte.</p>
+      <p className="mt-2 text-muted">
+        Livraison offerte en France métropolitaine. Paiement par carte, Apple Pay ou Google Pay.
+      </p>
       <div className="mt-8">
         <CheckoutForm />
       </div>

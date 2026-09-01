@@ -163,6 +163,9 @@ export async function ensureDatabase() {
   if (!cols.has("confirmation_sent_at")) {
     extras.push("ALTER TABLE shop_order ADD COLUMN confirmation_sent_at INTEGER");
   }
+  if (!cols.has("account_invite_enc")) {
+    extras.push("ALTER TABLE shop_order ADD COLUMN account_invite_enc TEXT");
+  }
   if (extras.length > 0) await client.batch(extras, "write");
   await client.execute(
     "CREATE UNIQUE INDEX IF NOT EXISTS idx_shop_order_reference ON shop_order(reference)",

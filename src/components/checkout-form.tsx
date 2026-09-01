@@ -113,8 +113,9 @@ export function CheckoutForm() {
           <input name="phone" type="tel" autoComplete="tel" className="input mt-1" />
         </label>
         <p className="text-sm text-muted">
-          Paiement par carte sur la page sécurisée Stripe. Livraison offerte en France
-          métropolitaine.
+          Paiement par carte, Apple Pay ou Google Pay sur la page Stripe (selon l’appareil). Pas
+          besoin de créer un compte avant : s’il n’existe pas encore, un accès est ouvert après le
+          paiement, identifiant = votre e-mail.
         </p>
         {testMode ? (
           <p className="text-sm text-muted">

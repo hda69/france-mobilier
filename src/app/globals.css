@@ -221,3 +221,18 @@ textarea.input {
 .input:focus {
   border-color: var(--navy);
 }
+
+.buy-trust {
+  border: 1px solid color-mix(in srgb, var(--navy) 28%, var(--border));
+  border-left: 4px solid var(--navy);
+  background: #efe6d4;
+  box-shadow: 0 10px 28px rgba(11, 43, 85, 0.08);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.15rem 1.15rem;
+}
+
+@media (min-width: 640px) {
+  .buy-trust {
+    padding: 1.25rem 1.35rem 1.35rem;
+  }
+}
