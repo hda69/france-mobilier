@@ -64,10 +64,8 @@ export function ProductBuyBox({ product }: { product: Product }) {
         </button>
 
         <section className="buy-trust">
-          <p className="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-navy">
-            Inclus avec cette commande
-          </p>
-          <ul className="mt-4 space-y-4">
+          <p className="buy-trust-head">Inclus avec cette commande</p>
+          <ul>
             {objections.map((item) => (
               <li key={item.title} className="flex gap-3">
                 <span
