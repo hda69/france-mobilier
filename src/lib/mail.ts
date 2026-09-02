@@ -88,7 +88,58 @@ function formatEuros(cents: number) {
   );
 }
 
-export async function sendOrderPaidEmail(order: {
+const NAVY = "#0b2b55";
+const CREAM = "#f7f5f1";
+const MUTED = "#5c6170";
+const BORDER = "#e4e0d8";
+const LOGO_URL = `${store.domain.replace(/\/$/, "")}${store.logoPath}`;
+
+function emailButton(href: string, label: string) {
+  return `<a href="${escapeHtml(href)}" style="display:inline-block;background:${NAVY};color:#ffffff;text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;padding:12px 22px;border-radius:6px">${escapeHtml(label)}</a>`;
+}
+
+/** Gabarit HTML des e-mails clients — logo, couleurs boutique, compatible Gmail. */
+function layoutCustomerEmail(input: { preheader: string; title: string; body: string }) {
+  return `<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${escapeHtml(input.title)}</title>
+</head>
+<body style="margin:0;padding:0;background:${CREAM};">
+<div style="display:none;max-height:0;overflow:hidden;opacity:0">${escapeHtml(input.preheader)}</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${CREAM};">
+  <tr>
+    <td align="center" style="padding:24px 12px;">
+      <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="width:560px;max-width:100%;background:#ffffff;border:1px solid ${BORDER};border-radius:12px;">
+        <tr>
+          <td align="center" style="padding:28px 32px 20px;border-bottom:1px solid ${BORDER};">
+            <a href="${escapeHtml(store.domain)}" style="text-decoration:none">
+              <img src="${escapeHtml(LOGO_URL)}" alt="${escapeHtml(store.storeName)}" width="168" style="display:block;width:168px;height:auto;border:0;margin:0 auto">
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:28px 32px 8px;font-family:Georgia,'Times New Roman',serif;color:#222222;">
+            ${input.body}
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:20px 32px 24px;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:${MUTED};border-top:1px solid ${BORDER};">
+            ${escapeHtml(store.supportEmail)} — ${escapeHtml(store.supportHoursShort)}<br>
+            ${escapeHtml(store.storeName)} · ${escapeHtml(store.companyCity)}
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>`;
+}
+
+export type OrderPaidEmail = {
   email: string;
   name: string;
   reference: string;
@@ -101,7 +152,9 @@ export async function sendOrderPaidEmail(order: {
   loginUrl: string;
   testMode: boolean;
   temporaryPassword?: string | null;
-}) {
+};
+
+export function buildOrderPaidEmail(order: OrderPaidEmail) {
   const lines = order.items
     .map(
       (item) =>
@@ -109,8 +162,8 @@ export async function sendOrderPaidEmail(order: {
     )
     .join("\n");
   const subject = order.testMode
-    ? `Commande test ${order.reference} — France Mobilier`
-    : `Commande ${order.reference} — France Mobilier`;
+    ? `Commande test ${order.reference} — ${store.storeName}`
+    : `Commande ${order.reference} — ${store.storeName}`;
   const intro = order.testMode
     ? "Paiement test enregistré. Aucun débit réel n’a été effectué."
     : "Nous avons bien reçu votre paiement.";
@@ -143,25 +196,58 @@ export async function sendOrderPaidEmail(order: {
   const rows = order.items
     .map(
       (item) =>
-        `<tr><td style="padding:8px 0;border-bottom:1px solid #e4e0d8">${escapeHtml(item.name)} × ${item.quantity}</td><td style="padding:8px 0;border-bottom:1px solid #e4e0d8;text-align:right">${formatEuros(item.unitPriceCents * item.quantity)}</td></tr>`,
+        `<tr>
+          <td style="padding:10px 0;border-bottom:1px solid ${BORDER};font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#222">${escapeHtml(item.name)} × ${item.quantity}</td>
+          <td style="padding:10px 0;border-bottom:1px solid ${BORDER};font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#222;text-align:right">${formatEuros(item.unitPriceCents * item.quantity)}</td>
+        </tr>`,
     )
     .join("");
 
-  const html = `<div style="font-family:Georgia,serif;color:#222;max-width:560px">
-<p>Bonjour ${escapeHtml(order.name)},</p>
-<p>${intro}</p>
-<p><strong>Référence ${escapeHtml(order.reference)}</strong><br>Total TTC ${formatEuros(order.amountCents)}</p>
-<table style="width:100%;border-collapse:collapse">${rows}</table>
-<p>Livraison : ${escapeHtml(order.line1)}, ${escapeHtml(order.postalCode)} ${escapeHtml(order.city)}</p>
-<p><a href="${escapeHtml(order.viewUrl)}">Voir la commande</a></p>
-${
-  order.temporaryPassword
-    ? `<p><strong>Votre compte</strong><br>Identifiant : ${escapeHtml(order.email)}<br>Mot de passe provisoire : ${escapeHtml(order.temporaryPassword)}<br><a href="${escapeHtml(order.loginUrl)}">Se connecter</a><br><span style="color:#5c6170;font-size:14px">Une fois connecté, changez ce mot de passe dans Mon compte.</span></p>`
-    : ""
-}
-<p style="color:#5c6170;font-size:14px">Livraison offerte en France métropolitaine. Un suivi sera envoyé après l’expédition.</p>
-<p style="color:#5c6170;font-size:14px">${escapeHtml(store.supportEmail)} — ${escapeHtml(store.supportHoursShort)}</p>
-</div>`;
+  const accountBlock = order.temporaryPassword
+    ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0 8px;background:${CREAM};border:1px solid ${BORDER};border-radius:8px">
+        <tr>
+          <td style="padding:16px 18px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.55;color:#222">
+            <strong>Votre compte</strong><br>
+            Identifiant : ${escapeHtml(order.email)}<br>
+            Mot de passe provisoire : ${escapeHtml(order.temporaryPassword)}<br>
+            <span style="color:${MUTED};font-size:13px">Une fois connecté, changez ce mot de passe dans Mon compte.</span>
+            <div style="margin-top:14px">${emailButton(order.loginUrl, "Se connecter")}</div>
+          </td>
+        </tr>
+      </table>`
+    : "";
 
-  return sendMail({ to: order.email, subject, text, html });
+  const body = `
+    ${
+      order.testMode
+        ? `<p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:${NAVY};background:${CREAM};border:1px solid ${BORDER};border-radius:8px;padding:10px 14px">Paiement test — aucun débit réel.</p>`
+        : ""
+    }
+    <p style="margin:0 0 8px;font-family:Georgia,'Times New Roman',serif;font-size:22px;line-height:1.3;color:${NAVY}">Commande confirmée</p>
+    <p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#222">Bonjour ${escapeHtml(order.name)},<br>${escapeHtml(intro)}</p>
+    <p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#222">
+      <strong>Référence ${escapeHtml(order.reference)}</strong><br>
+      Total TTC ${formatEuros(order.amountCents)}
+    </p>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin:0 0 18px">${rows}</table>
+    <p style="margin:0 0 22px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.55;color:${MUTED}">Livraison : ${escapeHtml(order.line1)}, ${escapeHtml(order.postalCode)} ${escapeHtml(order.city)}</p>
+    <p style="margin:0 0 8px">${emailButton(order.viewUrl, "Voir la commande")}</p>
+    ${accountBlock}
+    <p style="margin:22px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.55;color:${MUTED}">Livraison offerte en France métropolitaine. Un suivi sera envoyé après l’expédition.</p>
+  `;
+
+  return {
+    subject,
+    text,
+    html: layoutCustomerEmail({
+      preheader: `${intro} Référence ${order.reference}.`,
+      title: subject,
+      body,
+    }),
+  };
+}
+
+export async function sendOrderPaidEmail(order: OrderPaidEmail) {
+  const built = buildOrderPaidEmail(order);
+  return sendMail({ to: order.email, subject: built.subject, text: built.text, html: built.html });
 }
