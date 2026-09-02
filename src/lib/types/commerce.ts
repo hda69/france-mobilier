@@ -44,7 +44,7 @@ export type Customer = {
   id: string;
   email: string;
   fullName: string;
-  phone?: string;
+  phone: string;
 };
 
 export type ShippingAddress = {
@@ -54,7 +54,7 @@ export type ShippingAddress = {
   city: string;
   postalCode: string;
   country: string;
-  phone?: string;
+  phone: string;
 };
 
 export type OrderItem = {

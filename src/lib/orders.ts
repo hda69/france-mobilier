@@ -22,7 +22,7 @@ export type CheckoutCustomer = {
   line1: string;
   postalCode: string;
   city: string;
-  phone?: string;
+  phone: string;
   userId?: string | null;
 };
 
@@ -44,6 +44,7 @@ export type PublicOrder = {
   status: string;
   email: string;
   name: string;
+  phone: string | null;
   line1: string;
   postalCode: string;
   city: string;
@@ -109,6 +110,7 @@ function toPublic(order: OrderRow, items: ItemRow[]): PublicOrder {
     status: order.status,
     email: order.email,
     name: order.name,
+    phone: order.phone,
     line1: order.line1,
     postalCode: order.postalCode,
     city: order.city,
@@ -189,7 +191,7 @@ export async function createPendingOrder(input: {
     userId: input.customer.userId || null,
     email: input.customer.email.trim().toLowerCase(),
     name: input.customer.name.trim(),
-    phone: input.customer.phone?.trim() || null,
+    phone: input.customer.phone.trim(),
     line1: input.customer.line1.trim(),
     postalCode: input.customer.postalCode.trim(),
     city: input.customer.city.trim(),
@@ -276,6 +278,7 @@ async function sendOrderConfirmationIfNeeded(orderId: string, temporaryPassword?
       name: withAccess.name,
       reference: withAccess.reference || withAccess.id.slice(0, 8).toUpperCase(),
       amountCents: withAccess.amountCents,
+      phone: withAccess.phone,
       line1: withAccess.line1,
       postalCode: withAccess.postalCode,
       city: withAccess.city,

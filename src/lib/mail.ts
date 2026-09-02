@@ -144,6 +144,7 @@ export type OrderPaidEmail = {
   name: string;
   reference: string;
   amountCents: number;
+  phone?: string | null;
   line1: string;
   postalCode: string;
   city: string;
@@ -176,7 +177,7 @@ export function buildOrderPaidEmail(order: OrderPaidEmail) {
     "",
     lines,
     "",
-    `Livraison : ${order.line1}, ${order.postalCode} ${order.city}`,
+    `Livraison : ${order.line1}, ${order.postalCode} ${order.city}${order.phone ? `, ${order.phone}` : ""}`,
     `Voir la commande : ${order.viewUrl}`,
     "",
     ...(order.temporaryPassword
@@ -230,7 +231,7 @@ export function buildOrderPaidEmail(order: OrderPaidEmail) {
       Total TTC ${formatEuros(order.amountCents)}
     </p>
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin:0 0 18px">${rows}</table>
-    <p style="margin:0 0 22px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.55;color:${MUTED}">Livraison : ${escapeHtml(order.line1)}, ${escapeHtml(order.postalCode)} ${escapeHtml(order.city)}</p>
+    <p style="margin:0 0 22px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.55;color:${MUTED}">Livraison : ${escapeHtml(order.line1)}, ${escapeHtml(order.postalCode)} ${escapeHtml(order.city)}${order.phone ? `, ${escapeHtml(order.phone)}` : ""}</p>
     <p style="margin:0 0 8px">${emailButton(order.viewUrl, "Voir la commande")}</p>
     ${accountBlock}
     <p style="margin:22px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.55;color:${MUTED}">Livraison offerte en France métropolitaine. Un suivi sera envoyé après l’expédition.</p>

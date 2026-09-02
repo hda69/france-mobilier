@@ -14,6 +14,7 @@ type CheckoutOrder = {
   reference: string | null;
   name: string;
   email: string;
+  phone: string | null;
   line1: string;
   postalCode: string;
   city: string;
@@ -76,6 +77,7 @@ export function OrderConfirmation() {
         status: "paid",
         email: order.email,
         name: order.name,
+        phone: order.phone,
         line1: order.line1,
         postalCode: order.postalCode,
         city: order.city,

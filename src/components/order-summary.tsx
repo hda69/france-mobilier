@@ -51,6 +51,12 @@ export function OrderSummary({
         {order.line1}
         <br />
         {order.postalCode} {order.city}
+        {order.phone ? (
+          <>
+            <br />
+            {order.phone}
+          </>
+        ) : null}
       </p>
     </article>
   );

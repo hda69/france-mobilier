@@ -22,6 +22,7 @@ import {
   isCheckoutEnabled,
   stripeMode,
 } from "@/lib/payments/stripe";
+import { normalizeFrenchPhone } from "@/lib/phone";
 
 const schema = z.object({
   items: z
@@ -38,7 +39,19 @@ const schema = z.object({
   line1: z.string().trim().min(3).max(200),
   postalCode: z.string().trim().min(4).max(12),
   city: z.string().trim().min(2).max(80),
-  phone: z.string().trim().max(30).optional(),
+  phone: z
+    .string()
+    .trim()
+    .min(8)
+    .max(30)
+    .transform((value, ctx) => {
+      const phone = normalizeFrenchPhone(value);
+      if (!phone) {
+        ctx.addIssue({ code: "custom", message: "Téléphone invalide" });
+        return z.NEVER;
+      }
+      return phone;
+    }),
 });
 
 export async function GET(request: Request) {
@@ -77,6 +90,7 @@ export async function GET(request: Request) {
               reference: order.reference,
               name: order.name,
               email: order.email,
+              phone: order.phone,
               line1: order.line1,
               postalCode: order.postalCode,
               city: order.city,
@@ -165,7 +179,7 @@ export async function POST(request: Request) {
         receipt_email: parsed.data.email.trim().toLowerCase(),
         shipping: {
           name: parsed.data.name.trim(),
-          phone: parsed.data.phone?.trim() || undefined,
+          phone: parsed.data.phone,
           address: {
             line1: parsed.data.line1.trim(),
             postal_code: parsed.data.postalCode.trim(),

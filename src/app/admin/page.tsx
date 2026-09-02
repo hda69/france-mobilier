@@ -139,6 +139,7 @@ export default async function AdminPage() {
                   <td className="px-5 py-3">
                     {order.name}
                     <p className="text-xs text-muted">{order.email}</p>
+                    {order.phone ? <p className="text-xs text-muted">{order.phone}</p> : null}
                   </td>
                   <td className="px-5 py-3 font-medium">
                     {(order.amountCents / 100).toLocaleString("fr-FR", {

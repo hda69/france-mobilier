@@ -17,7 +17,7 @@ export default function PrivacyPage() {
             accès professionnel : SIREN / SIRET, dénomination issue du répertoire Sirene, liés au
             compte — sans pièce d’identité ;
           </li>
-          <li>commande : coordonnées de livraison et historique d’achat ;</li>
+          <li>commande : nom, e-mail, téléphone, adresse de livraison et historique d’achat ;</li>
           <li>paiement par carte : traité par le prestataire de paiement ;</li>
           <li>journaux techniques d’hébergement.</li>
         </ul>

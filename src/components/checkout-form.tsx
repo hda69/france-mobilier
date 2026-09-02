@@ -43,7 +43,7 @@ export function CheckoutForm() {
           line1: String(form.get("line1") || ""),
           postalCode: String(form.get("postalCode") || ""),
           city: String(form.get("city") || ""),
-          phone: String(form.get("phone") || "") || undefined,
+          phone: String(form.get("phone") || ""),
         }),
       });
       const data = await res.json();
@@ -102,7 +102,19 @@ export function CheckoutForm() {
         </div>
         <label className="block text-sm">
           Téléphone
-          <input name="phone" type="tel" autoComplete="tel" className="input mt-1" />
+          <input
+            required
+            name="phone"
+            type="tel"
+            autoComplete="tel"
+            inputMode="tel"
+            placeholder="06 12 34 56 78"
+            maxLength={30}
+            className="input mt-1"
+          />
+          <span className="mt-1 block text-xs text-muted">
+            Obligatoire pour la livraison et le suivi du colis.
+          </span>
         </label>
         <p className="text-sm text-muted">
           Paiement par carte, Apple Pay ou Google Pay sur la page Stripe (selon l’appareil). Pas
