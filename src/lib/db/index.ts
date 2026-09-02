@@ -70,6 +70,7 @@ async function migrateDatabase() {
         refresh_token_expires_at INTEGER,
         scope TEXT,
         password TEXT,
+        issuer TEXT,
         created_at INTEGER NOT NULL,
         updated_at INTEGER NOT NULL
       )`,
@@ -164,24 +165,49 @@ async function migrateDatabase() {
     ],
     "write",
   );
-  const info = await client.execute("PRAGMA table_info(shop_order)");
-  const cols = new Set(info.rows.map((row) => String(row.name)));
+  const shopOrderInfo = await client.execute("PRAGMA table_info(shop_order)");
+  const shopOrderCols = new Set(shopOrderInfo.rows.map((row) => String(row.name)));
   const extras = [
-    !cols.has("reference") ? "ALTER TABLE shop_order ADD COLUMN reference TEXT" : null,
-    !cols.has("view_token") ? "ALTER TABLE shop_order ADD COLUMN view_token TEXT" : null,
-    !cols.has("confirmation_sent_at")
+    !shopOrderCols.has("reference") ? "ALTER TABLE shop_order ADD COLUMN reference TEXT" : null,
+    !shopOrderCols.has("view_token") ? "ALTER TABLE shop_order ADD COLUMN view_token TEXT" : null,
+    !shopOrderCols.has("confirmation_sent_at")
       ? "ALTER TABLE shop_order ADD COLUMN confirmation_sent_at INTEGER"
       : null,
-    !cols.has("account_invite_enc")
+    !shopOrderCols.has("account_invite_enc")
       ? "ALTER TABLE shop_order ADD COLUMN account_invite_enc TEXT"
       : null,
   ].filter((sql): sql is string => Boolean(sql));
+  const accountInfo = await client.execute("PRAGMA table_info(account)");
+  const accountCols = new Set(accountInfo.rows.map((row) => String(row.name)));
+  if (!accountCols.has("issuer")) {
+    extras.push("ALTER TABLE account ADD COLUMN issuer TEXT");
+  }
   for (const sql of extras) {
     try {
       await client.execute(sql);
     } catch (error) {
       if (!isDuplicateColumnError(error)) throw error;
     }
+  }
+  await client.execute(
+    "UPDATE account SET issuer = 'local:credential' WHERE provider_id = 'credential' AND (issuer IS NULL OR issuer = '')",
+  );
+  await client.execute(
+    "UPDATE account SET account_id = user_id WHERE provider_id = 'credential' AND account_id != user_id",
+  );
+  await client.execute(`
+    DELETE FROM account
+    WHERE provider_id = 'credential'
+      AND rowid NOT IN (
+        SELECT MIN(rowid) FROM account WHERE provider_id = 'credential' GROUP BY user_id
+      )
+  `);
+  try {
+    await client.execute(
+      "CREATE UNIQUE INDEX IF NOT EXISTS account_issuer_accountId_uidx ON account (issuer, account_id)",
+    );
+  } catch (error) {
+    console.error("[db] account unique index skipped", error);
   }
   await client.execute(
     "CREATE UNIQUE INDEX IF NOT EXISTS idx_shop_order_reference ON shop_order(reference)",

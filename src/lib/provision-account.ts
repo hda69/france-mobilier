@@ -1,9 +1,10 @@
 import { createCipheriv, createDecipheriv, createHash, randomBytes } from "node:crypto";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { hashPassword } from "better-auth/crypto";
 import { db, ensureDatabase } from "@/lib/db";
 import { account, user } from "@/lib/db/schema";
 
+const CREDENTIAL_ISSUER = "local:credential";
 const ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
 
 function secretKey() {
@@ -41,12 +42,50 @@ export function decryptSecret(payload: string | null | undefined) {
   }
 }
 
+async function ensureCredentialAccount(userId: string) {
+  const now = new Date();
+  const existing = await db
+    .select()
+    .from(account)
+    .where(and(eq(account.userId, userId), eq(account.providerId, "credential")))
+    .limit(1);
+  const current = existing[0];
+  if (current) {
+    if (current.issuer !== CREDENTIAL_ISSUER || current.accountId !== userId) {
+      await db
+        .update(account)
+        .set({ issuer: CREDENTIAL_ISSUER, accountId: userId, updatedAt: now })
+        .where(eq(account.id, current.id));
+    }
+    return { created: false as const };
+  }
+
+  const password = generateGuestPassword();
+  await db.insert(account).values({
+    id: crypto.randomUUID(),
+    accountId: userId,
+    providerId: "credential",
+    issuer: CREDENTIAL_ISSUER,
+    userId,
+    password: await hashPassword(password),
+    createdAt: now,
+    updatedAt: now,
+  });
+  return { created: true as const, password };
+}
+
 export async function provisionCustomerAccount(input: { email: string; name: string }) {
   await ensureDatabase();
   const email = input.email.trim().toLowerCase();
   const name = input.name.trim() || email.split("@")[0];
   const existing = await db.select({ id: user.id }).from(user).where(eq(user.email, email)).limit(1);
-  if (existing[0]) return { userId: existing[0].id, created: false as const };
+  if (existing[0]) {
+    const credential = await ensureCredentialAccount(existing[0].id);
+    if (credential.created) {
+      return { userId: existing[0].id, created: true as const, password: credential.password };
+    }
+    return { userId: existing[0].id, created: false as const };
+  }
 
   const password = generateGuestPassword();
   const id = crypto.randomUUID();
@@ -64,6 +103,7 @@ export async function provisionCustomerAccount(input: { email: string; name: str
       id: crypto.randomUUID(),
       accountId: id,
       providerId: "credential",
+      issuer: CREDENTIAL_ISSUER,
       userId: id,
       password: await hashPassword(password),
       createdAt: now,
@@ -72,7 +112,13 @@ export async function provisionCustomerAccount(input: { email: string; name: str
     return { userId: id, created: true as const, password };
   } catch {
     const again = await db.select({ id: user.id }).from(user).where(eq(user.email, email)).limit(1);
-    if (again[0]) return { userId: again[0].id, created: false as const };
+    if (again[0]) {
+      const credential = await ensureCredentialAccount(again[0].id);
+      if (credential.created) {
+        return { userId: again[0].id, created: true as const, password: credential.password };
+      }
+      return { userId: again[0].id, created: false as const };
+    }
     throw new Error("COMPTE_IMPOSSIBLE");
   }
 }

@@ -30,13 +30,16 @@ function AuthFormFields({ mode }: { mode: Mode }) {
     try {
       if (mode === "register") {
         const result = await authClient.signUp.email({
-          email,
+          email: email.trim().toLowerCase(),
           password,
           name: name.trim() || email.split("@")[0],
         });
         if (result.error) throw new Error(result.error.message || "Inscription impossible");
       } else {
-        const result = await authClient.signIn.email({ email, password });
+        const result = await authClient.signIn.email({
+          email: email.trim().toLowerCase(),
+          password,
+        });
         if (result.error) throw new Error(result.error.message || "Identifiants incorrects");
       }
       router.push(next);
