@@ -4,6 +4,7 @@ import { ProductCard } from "@/components/product-card";
 import { IconPin, IconReturn, IconTag, IconTruck } from "@/components/icons";
 import { store } from "@/config/store";
 import { listProducts } from "@/lib/products/repository";
+import { SHIPPING_OFFERED_SENTENCE, SHIPPING_ZONE_LABEL } from "@/lib/shipping-zone";
 
 const categoryVisuals = [
   {
@@ -45,7 +46,7 @@ const guarantees = [
   },
   {
     title: "Livraison gratuite",
-    text: "Offerte en France métropolitaine.",
+    text: `Offerte en ${SHIPPING_ZONE_LABEL}.`,
     icon: IconTruck,
   },
   {
@@ -258,8 +259,8 @@ export default function HomePage() {
             <div>
               <p className="text-sm font-semibold text-navy">La boutique</p>
               <p className="mt-2 text-sm leading-relaxed text-muted">
-                Une boutique en ligne éditée à {store.companyCity}. Livraison offerte en France
-                métropolitaine, SAV du lundi au vendredi.
+                Une boutique en ligne éditée à {store.companyCity}. {SHIPPING_OFFERED_SENTENCE} SAV
+                du lundi au vendredi.
               </p>
             </div>
           </div>
@@ -301,7 +302,7 @@ export default function HomePage() {
           <div>
             <h2 className="display text-3xl text-navy">Livraison et retours</h2>
             <p className="mt-4 leading-relaxed text-muted">
-              Livraison offerte en France métropolitaine. Vous disposez de 14 jours pour vous rétracter
+              {SHIPPING_OFFERED_SENTENCE} Vous disposez de 14 jours pour vous rétracter
               après réception, lorsque le droit français le prévoit.
             </p>
             <div className="mt-5 flex gap-4 text-sm">
@@ -317,8 +318,8 @@ export default function HomePage() {
             <h2 className="display text-3xl text-navy">Questions fréquentes</h2>
             <div className="mt-5 space-y-4">
               <div>
-                <p className="font-medium text-navy">Livrez-vous en France métropolitaine ?</p>
-                <p className="mt-1 text-sm text-muted">Oui, livraison offerte. Un suivi est communiqué après l’expédition.</p>
+                <p className="font-medium text-navy">Où livrez-vous ?</p>
+                <p className="mt-1 text-sm text-muted">{SHIPPING_OFFERED_SENTENCE} Un suivi est communiqué après l’expédition.</p>
               </div>
               <div>
                 <p className="font-medium text-navy">Les prix sont-ils TTC ?</p>

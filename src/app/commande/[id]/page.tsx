@@ -6,6 +6,7 @@ import { OrderSummary } from "@/components/order-summary";
 import { getAdminSession } from "@/lib/admin";
 import { auth, prepareAuth } from "@/lib/auth";
 import { getAuthorizedOrder, getPublicPaidOrder, ORDER_ACCESS_COOKIE } from "@/lib/orders";
+import { SHIPPING_OFFERED_SENTENCE } from "@/lib/shipping-zone";
 
 export const metadata: Metadata = {
   title: "Commande",
@@ -39,7 +40,7 @@ export default async function OrderPage({ params, searchParams }: Props) {
       <h1 className="text-3xl font-semibold tracking-tight">Votre commande</h1>
       <OrderSummary order={order} />
       <p className="text-sm leading-relaxed text-muted">
-        Livraison offerte en France métropolitaine. Un suivi sera communiqué après l’expédition.
+        {SHIPPING_OFFERED_SENTENCE} Un suivi sera communiqué après l’expédition.
       </p>
       <Link href="/compte" className="btn btn-secondary inline-flex">
         Toutes mes commandes

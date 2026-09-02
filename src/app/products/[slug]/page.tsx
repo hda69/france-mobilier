@@ -7,6 +7,7 @@ import { ProductBuyBox } from "@/components/product-buy-box";
 import { ProductCard } from "@/components/product-card";
 import { ProductReviews } from "@/components/product-reviews";
 import { store } from "@/config/store";
+import { SHIPPING_OFFERED_SENTENCE, SHIPPING_ZONE_LABEL } from "@/lib/shipping-zone";
 import {
   availabilityLabel,
   collectionSlugForCategory,
@@ -223,7 +224,7 @@ export default async function ProductPage({ params }: Props) {
           <div>
             <h2 className="display text-3xl text-navy">Livraison et retours</h2>
             <p className="mt-4 leading-relaxed text-muted">
-              Livraison offerte en France métropolitaine, colis suivi. Rétractation de 14 jours après
+              {SHIPPING_OFFERED_SENTENCE} Colis suivi. Rétractation de 14 jours après
               réception, lorsque le droit français le prévoit.
             </p>
           </div>
@@ -246,7 +247,9 @@ export default async function ProductPage({ params }: Props) {
               ) : null}
               <div>
                 <p className="font-medium text-navy">Où est-il livré ?</p>
-                <p className="mt-1 text-sm text-muted">En France métropolitaine, avec suivi de colis.</p>
+                <p className="mt-1 text-sm text-muted">
+                  En {SHIPPING_ZONE_LABEL}, avec suivi de colis.
+                </p>
               </div>
             </div>
           </div>

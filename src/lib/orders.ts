@@ -20,6 +20,7 @@ export type CheckoutCustomer = {
   name: string;
   email: string;
   line1: string;
+  country: string;
   postalCode: string;
   city: string;
   phone: string;
@@ -48,6 +49,7 @@ export type PublicOrder = {
   line1: string;
   postalCode: string;
   city: string;
+  country: string;
   amountCents: number;
   currency: string;
   paidAt: Date | null;
@@ -114,6 +116,7 @@ function toPublic(order: OrderRow, items: ItemRow[]): PublicOrder {
     line1: order.line1,
     postalCode: order.postalCode,
     city: order.city,
+    country: order.country,
     amountCents: order.amountCents,
     currency: order.currency,
     paidAt: order.paidAt,
@@ -195,7 +198,7 @@ export async function createPendingOrder(input: {
     line1: input.customer.line1.trim(),
     postalCode: input.customer.postalCode.trim(),
     city: input.customer.city.trim(),
-    country: "FR",
+    country: input.customer.country,
     amountCents: input.amountCents,
     currency: "eur",
     status: "pending",
@@ -282,6 +285,7 @@ async function sendOrderConfirmationIfNeeded(orderId: string, temporaryPassword?
       line1: withAccess.line1,
       postalCode: withAccess.postalCode,
       city: withAccess.city,
+      country: withAccess.country,
       items: full.items,
       viewUrl: `${getSiteUrl()}/commande/${withAccess.id}?t=${withAccess.viewToken}`,
       loginUrl: `${getSiteUrl()}/connexion?next=${encodeURIComponent("/compte#mot-de-passe")}`,

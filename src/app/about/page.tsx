@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { store } from "@/config/store";
+import { SHIPPING_OFFERED_SENTENCE } from "@/lib/shipping-zone";
 
 export const metadata: Metadata = {
   title: "Notre histoire",
@@ -19,7 +20,7 @@ const chapters = [
   },
   {
     title: "Une boutique éditée à Lyon",
-    text: `${store.storeName} est éditée à ${store.companyCity} par ${store.companyName}. La sélection se fait depuis cette ville : on y voit, comme ailleurs, des appartements où chaque mètre compte. Livraison offerte en France métropolitaine, prix TTC, SAV du lundi au vendredi.`,
+    text: `${store.storeName} est éditée à ${store.companyCity} par ${store.companyName}. La sélection se fait depuis cette ville : on y voit, comme ailleurs, des appartements où chaque mètre compte. ${SHIPPING_OFFERED_SENTENCE} Prix TTC, SAV du lundi au vendredi.`,
   },
 ];
 
@@ -106,7 +107,7 @@ export default function AboutPage() {
             </p>
             <p className="mt-4 leading-relaxed text-muted">
               {store.storeName} reste une boutique en ligne, éditée à {store.companyCity} par{" "}
-              {store.companyName}. Livraison offerte en France métropolitaine, rétractation sous 14
+              {store.companyName}. {SHIPPING_OFFERED_SENTENCE} Rétractation sous 14
               jours lorsque le droit le prévoit, SAV du lundi au vendredi.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">

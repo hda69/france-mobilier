@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { PublicOrder } from "@/lib/orders";
 import { formatPrice } from "@/lib/products/repository";
+import { shippingCountryName } from "@/lib/shipping-zone";
 
 function formatDate(value: Date | string | null) {
   if (!value) return "";
@@ -51,6 +52,8 @@ export function OrderSummary({
         {order.line1}
         <br />
         {order.postalCode} {order.city}
+        <br />
+        {shippingCountryName(order.country)}
         {order.phone ? (
           <>
             <br />

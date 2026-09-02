@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CheckoutForm } from "@/components/checkout-form";
+import { SHIPPING_OFFERED_SENTENCE } from "@/lib/shipping-zone";
 
 export const metadata: Metadata = {
   title: "Commande",
@@ -11,7 +12,7 @@ export default function CheckoutPage() {
     <div className="container-page py-10 md:py-14">
       <h1 className="text-3xl font-semibold tracking-tight">Commande</h1>
       <p className="mt-2 text-muted">
-        Livraison offerte en France métropolitaine. Paiement par carte, Apple Pay ou Google Pay.
+        {SHIPPING_OFFERED_SENTENCE} Paiement par carte, Apple Pay ou Google Pay.
       </p>
       <div className="mt-8">
         <CheckoutForm />

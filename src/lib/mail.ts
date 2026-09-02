@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 import { store } from "@/config/store";
+import { SHIPPING_OFFERED_SENTENCE, shippingCountryName } from "@/lib/shipping-zone";
 
 export function isMailConfigured() {
   if (process.env.RESEND_API_KEY?.trim()) return true;
@@ -148,6 +149,7 @@ export type OrderPaidEmail = {
   line1: string;
   postalCode: string;
   city: string;
+  country?: string | null;
   items: { name: string; quantity: number; unitPriceCents: number }[];
   viewUrl: string;
   loginUrl: string;
@@ -168,6 +170,9 @@ export function buildOrderPaidEmail(order: OrderPaidEmail) {
   const intro = order.testMode
     ? "Paiement test enregistré. Aucun débit réel n’a été effectué."
     : "Nous avons bien reçu votre paiement.";
+  const destination = `${order.line1}, ${order.postalCode} ${order.city}${
+    order.country ? `, ${shippingCountryName(order.country)}` : ""
+  }${order.phone ? `, ${order.phone}` : ""}`;
   const text = [
     `Bonjour ${order.name},`,
     "",
@@ -177,7 +182,7 @@ export function buildOrderPaidEmail(order: OrderPaidEmail) {
     "",
     lines,
     "",
-    `Livraison : ${order.line1}, ${order.postalCode} ${order.city}${order.phone ? `, ${order.phone}` : ""}`,
+    `Livraison : ${destination}`,
     `Voir la commande : ${order.viewUrl}`,
     "",
     ...(order.temporaryPassword
@@ -190,7 +195,7 @@ export function buildOrderPaidEmail(order: OrderPaidEmail) {
           "",
         ]
       : []),
-    `Livraison offerte en France métropolitaine. Un suivi sera envoyé après l’expédition.`,
+    `${SHIPPING_OFFERED_SENTENCE} Un suivi sera envoyé après l’expédition.`,
     `SAV : ${store.supportEmail}`,
   ].join("\n");
 
@@ -231,10 +236,10 @@ export function buildOrderPaidEmail(order: OrderPaidEmail) {
       Total TTC ${formatEuros(order.amountCents)}
     </p>
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin:0 0 18px">${rows}</table>
-    <p style="margin:0 0 22px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.55;color:${MUTED}">Livraison : ${escapeHtml(order.line1)}, ${escapeHtml(order.postalCode)} ${escapeHtml(order.city)}${order.phone ? `, ${escapeHtml(order.phone)}` : ""}</p>
+    <p style="margin:0 0 22px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.55;color:${MUTED}">Livraison : ${escapeHtml(destination)}</p>
     <p style="margin:0 0 8px">${emailButton(order.viewUrl, "Voir la commande")}</p>
     ${accountBlock}
-    <p style="margin:22px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.55;color:${MUTED}">Livraison offerte en France métropolitaine. Un suivi sera envoyé après l’expédition.</p>
+    <p style="margin:22px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.55;color:${MUTED}">${escapeHtml(SHIPPING_OFFERED_SENTENCE)} Un suivi sera envoyé après l’expédition.</p>
   `;
 
   return {

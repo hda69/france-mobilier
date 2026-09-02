@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { store } from "@/config/store";
+import { SHIPPING_OFFERED_SENTENCE } from "@/lib/shipping-zone";
 
 export const metadata: Metadata = {
   title: "FAQ",
@@ -8,8 +9,8 @@ export const metadata: Metadata = {
 
 const items = [
   {
-    q: "Livrez-vous en France métropolitaine ?",
-    a: "Oui, livraison offerte. Un numéro de suivi est communiqué après l’expédition.",
+    q: "Où livrez-vous ?",
+    a: `${SHIPPING_OFFERED_SENTENCE} Un numéro de suivi est communiqué après l’expédition.`,
   },
   {
     q: "Les prix sont-ils TTC ?",

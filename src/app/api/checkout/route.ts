@@ -22,37 +22,41 @@ import {
   isCheckoutEnabled,
   stripeMode,
 } from "@/lib/payments/stripe";
-import { normalizeFrenchPhone } from "@/lib/phone";
+import { normalizeZonePhone } from "@/lib/phone";
+import { SHIPPING_COUNTRY_CODES, normalizeShippingPostal } from "@/lib/shipping-zone";
 
-const schema = z.object({
-  items: z
-    .array(
-      z.object({
-        productId: z.string().min(1),
-        quantity: z.number().int().min(1).max(20),
-      }),
-    )
-    .min(1)
-    .max(30),
-  name: z.string().trim().min(2).max(120),
-  email: z.string().trim().email().max(180),
-  line1: z.string().trim().min(3).max(200),
-  postalCode: z.string().trim().min(4).max(12),
-  city: z.string().trim().min(2).max(80),
-  phone: z
-    .string()
-    .trim()
-    .min(8)
-    .max(30)
-    .transform((value, ctx) => {
-      const phone = normalizeFrenchPhone(value);
-      if (!phone) {
-        ctx.addIssue({ code: "custom", message: "Téléphone invalide" });
-        return z.NEVER;
-      }
-      return phone;
-    }),
-});
+const schema = z
+  .object({
+    items: z
+      .array(
+        z.object({
+          productId: z.string().min(1),
+          quantity: z.number().int().min(1).max(20),
+        }),
+      )
+      .min(1)
+      .max(30),
+    name: z.string().trim().min(2).max(120),
+    email: z.string().trim().email().max(180),
+    line1: z.string().trim().min(3).max(200),
+    country: z.enum(SHIPPING_COUNTRY_CODES),
+    postalCode: z.string().trim().min(2).max(12),
+    city: z.string().trim().min(2).max(80),
+    phone: z.string().trim().min(6).max(30),
+  })
+  .transform((data, ctx) => {
+    const postalCode = normalizeShippingPostal(data.country, data.postalCode);
+    const phone = normalizeZonePhone(data.phone, data.country);
+    if (!postalCode) {
+      ctx.addIssue({ code: "custom", path: ["postalCode"], message: "Code postal invalide" });
+      return z.NEVER;
+    }
+    if (!phone) {
+      ctx.addIssue({ code: "custom", path: ["phone"], message: "Téléphone invalide" });
+      return z.NEVER;
+    }
+    return { ...data, postalCode, phone };
+  });
 
 export async function GET(request: Request) {
   if (!isCheckoutEnabled()) {
@@ -94,6 +98,7 @@ export async function GET(request: Request) {
               line1: order.line1,
               postalCode: order.postalCode,
               city: order.city,
+              country: order.country,
               amountCents: order.amountCents,
               confirmationSent: Boolean(order.confirmationSentAt),
               items: order.items.map((item) => ({
@@ -143,6 +148,7 @@ export async function POST(request: Request) {
         name: parsed.data.name,
         email: parsed.data.email,
         line1: parsed.data.line1,
+        country: parsed.data.country,
         postalCode: parsed.data.postalCode,
         city: parsed.data.city,
         phone: parsed.data.phone,
@@ -184,7 +190,7 @@ export async function POST(request: Request) {
             line1: parsed.data.line1.trim(),
             postal_code: parsed.data.postalCode.trim(),
             city: parsed.data.city.trim(),
-            country: "FR",
+            country: parsed.data.country,
           },
         },
       },

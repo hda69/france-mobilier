@@ -8,6 +8,7 @@ import { OrderSummary } from "@/components/order-summary";
 import { CopyTextButton } from "@/components/copy-text-button";
 import { formatPrice } from "@/lib/products/repository";
 import type { PublicOrder } from "@/lib/orders";
+import { SHIPPING_OFFERED_SENTENCE } from "@/lib/shipping-zone";
 
 type CheckoutOrder = {
   id: string;
@@ -18,6 +19,7 @@ type CheckoutOrder = {
   line1: string;
   postalCode: string;
   city: string;
+  country?: string;
   amountCents: number;
   confirmationSent: boolean;
   items: { name: string; quantity: number; unitPriceCents: number }[];
@@ -81,6 +83,7 @@ export function OrderConfirmation() {
         line1: order.line1,
         postalCode: order.postalCode,
         city: order.city,
+        country: order.country || "FR",
         amountCents: order.amountCents,
         currency: "eur",
         paidAt: new Date(),
@@ -126,7 +129,7 @@ export function OrderConfirmation() {
         </div>
       ) : null}
       <p className="text-sm leading-relaxed text-muted">
-        La livraison est offerte en France métropolitaine. Un suivi sera communiqué après
+        {SHIPPING_OFFERED_SENTENCE} Un suivi sera communiqué après
         l’expédition. Retrouvez vos commandes à tout moment dans{" "}
         <Link href="/compte" className="text-navy underline-offset-2 hover:underline">
           Mon compte

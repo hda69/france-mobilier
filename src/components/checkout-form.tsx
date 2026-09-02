@@ -1,16 +1,24 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
 import Link from "next/link";
 import { useCart } from "@/components/cart-provider";
 import { authClient } from "@/lib/auth-client";
 import { formatPrice } from "@/lib/products/repository";
+import {
+  SHIPPING_COUNTRIES,
+  SHIPPING_OFFERED_SENTENCE,
+  shippingFieldHints,
+  type ShippingCountryCode,
+} from "@/lib/shipping-zone";
 
 export function CheckoutForm() {
   const { items, subtotal, itemCount, ready } = useCart();
   const { data: session } = authClient.useSession();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [country, setCountry] = useState<ShippingCountryCode>("FR");
+  const hints = useMemo(() => shippingFieldHints(country), [country]);
 
   if (!ready) {
     return <div className="min-h-48" />;
@@ -41,6 +49,7 @@ export function CheckoutForm() {
           name: String(form.get("name") || ""),
           email: String(form.get("email") || ""),
           line1: String(form.get("line1") || ""),
+          country: String(form.get("country") || "FR"),
           postalCode: String(form.get("postalCode") || ""),
           city: String(form.get("city") || ""),
           phone: String(form.get("phone") || ""),
@@ -59,6 +68,23 @@ export function CheckoutForm() {
     <form className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]" onSubmit={onSubmit}>
       <div className="space-y-4 rounded-2xl border border-border bg-card p-4 sm:p-6">
         <h2 className="text-lg font-medium">Livraison</h2>
+        <label className="block text-sm">
+          Pays
+          <select
+            required
+            name="country"
+            autoComplete="country"
+            value={country}
+            onChange={(event) => setCountry(event.target.value as ShippingCountryCode)}
+            className="input mt-1"
+          >
+            {SHIPPING_COUNTRIES.map((item) => (
+              <option key={item.code} value={item.code}>
+                {item.name}
+              </option>
+            ))}
+          </select>
+        </label>
         <label className="block text-sm">
           Nom
           <input
@@ -93,6 +119,7 @@ export function CheckoutForm() {
               className="input mt-1"
               autoComplete="postal-code"
               inputMode="numeric"
+              placeholder={hints.postal}
             />
           </label>
           <label className="block text-sm">
@@ -108,7 +135,7 @@ export function CheckoutForm() {
             type="tel"
             autoComplete="tel"
             inputMode="tel"
-            placeholder="06 12 34 56 78"
+            placeholder={hints.phone}
             maxLength={30}
             className="input mt-1"
           />
@@ -116,6 +143,12 @@ export function CheckoutForm() {
             Obligatoire pour la livraison et le suivi du colis.
           </span>
         </label>
+        {country === "CH" ? (
+          <p className="text-sm text-muted">
+            En Suisse, des droits ou taxes d’importation peuvent s’ajouter à la réception. Ils ne
+            sont pas inclus dans le prix payé ici.
+          </p>
+        ) : null}
         <p className="text-sm text-muted">
           Paiement par carte, Apple Pay ou Google Pay sur la page Stripe (selon l’appareil). Pas
           besoin de créer un compte avant : s’il n’existe pas encore, un accès est ouvert après le
@@ -138,6 +171,7 @@ export function CheckoutForm() {
           <span>Total TTC</span>
           <span>{formatPrice(subtotal)}</span>
         </p>
+        <p className="text-sm text-muted">{SHIPPING_OFFERED_SENTENCE}</p>
         {error ? <p className="text-sm text-red-700">{error}</p> : null}
         <button type="submit" disabled={loading} className="btn btn-primary w-full">
           {loading ? "Ouverture de Stripe…" : `Payer ${formatPrice(subtotal)}`}

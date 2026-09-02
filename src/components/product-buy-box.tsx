@@ -5,11 +5,12 @@ import { useCart } from "@/components/cart-provider";
 import { IconCheck, IconReturn, IconTruck } from "@/components/icons";
 import { store } from "@/config/store";
 import type { Product } from "@/lib/types/commerce";
+import { SHIPPING_OFFERED_SENTENCE } from "@/lib/shipping-zone";
 
 const objections = [
   {
     title: "Livraison offerte, colis suivi",
-    text: "Livraison offerte en France métropolitaine. Un numéro de suivi est envoyé après l’expédition. Les délais estimés figurent sur la fiche.",
+    text: `${SHIPPING_OFFERED_SENTENCE} Un numéro de suivi est envoyé après l’expédition. Les délais estimés figurent sur la fiche.`,
     icon: IconTruck,
     badge: "bg-navy text-white",
   },

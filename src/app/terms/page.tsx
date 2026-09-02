@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { store } from "@/config/store";
+import { SHIPPING_OFFERED_SENTENCE } from "@/lib/shipping-zone";
 
 export const metadata: Metadata = { title: "Conditions générales" };
 
@@ -14,7 +15,8 @@ export default function TermsPage() {
         </p>
         <p>
           Les prix sont indiqués en euros TTC. La commande est ferme après confirmation du
-          paiement. Livraison offerte en France métropolitaine.
+          paiement. {SHIPPING_OFFERED_SENTENCE} Pour la Suisse, des droits ou taxes d’importation
+          peuvent s’appliquer à la réception.
         </p>
         <p>
           Conformément au code de la consommation, le client dispose d’un délai de 14 jours à

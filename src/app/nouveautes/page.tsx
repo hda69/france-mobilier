@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ProductCard } from "@/components/product-card";
 import { listProducts } from "@/lib/products/repository";
+import { SHIPPING_OFFERED_SENTENCE } from "@/lib/shipping-zone";
 
 export const metadata: Metadata = {
   title: "Nouveautés",
@@ -15,7 +16,7 @@ export default function NewArrivalsPage() {
       <p className="eyebrow">Catalogue</p>
       <h1 className="display mt-3 text-3xl text-navy md:text-4xl">Nouveautés</h1>
       <p className="mt-3 text-muted">
-        Les derniers ajouts au catalogue. Prix TTC, livraison en France métropolitaine.
+        Les derniers ajouts au catalogue. Prix TTC. {SHIPPING_OFFERED_SENTENCE}
       </p>
       <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {products.map((product) => (

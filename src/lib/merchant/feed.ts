@@ -1,6 +1,7 @@
 import { store } from "@/config/store";
 import { listProducts } from "@/lib/products/repository";
 import type { Product } from "@/lib/types/commerce";
+import { SHIPPING_COUNTRIES } from "@/lib/shipping-zone";
 
 function escapeXml(value: string) {
   return value
@@ -32,6 +33,10 @@ function itemXml(product: Product, base: string) {
     `<g:brand>${escapeXml(store.storeName)}</g:brand>`,
     `<g:identifier_exists>false</g:identifier_exists>`,
     product.weight != null ? `<g:shipping_weight>${product.weight} kg</g:shipping_weight>` : "",
+    ...SHIPPING_COUNTRIES.map(
+      (country) =>
+        `<g:shipping><g:country>${country.code}</g:country><g:price>0.00 EUR</g:price></g:shipping>`,
+    ),
     `</item>`,
   ];
   return lines.filter(Boolean).join("");
