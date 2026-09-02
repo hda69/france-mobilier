@@ -5,6 +5,7 @@ import type {
   ProviderTrackingResult,
 } from "@/lib/providers/types";
 import { buckydropProvider } from "@/lib/providers/buckydrop/provider";
+import { isKeywordPlannerConfigured } from "@/lib/keywords/google-ads";
 import { isCheckoutEnabled, isStripeConfigured, stripeMode } from "@/lib/payments/stripe";
 
 export class ManualFulfillmentProvider implements FulfillmentProvider {
@@ -47,5 +48,6 @@ export function getIntegrationStatuses() {
         : "NOT_CONFIGURED",
     merchantCenter:
       process.env.GOOGLE_MERCHANT_FEED_ENABLED === "true" ? "ENABLED" : "NOT_CONFIGURED",
+    keywordPlanner: isKeywordPlannerConfigured() ? "CONFIGURED" : "NOT_CONFIGURED",
   };
 }

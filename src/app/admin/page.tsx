@@ -84,6 +84,7 @@ export default async function AdminPage() {
               ["Stripe", statuses.stripe],
               ["BuckyDrop API", statuses.buckydrop],
               ["Merchant Center", statuses.merchantCenter],
+              ["Keyword Planner", statuses.keywordPlanner],
             ].map(([label, value]) => (
               <tr key={label} className="border-b border-border last:border-0">
                 <td className="px-5 py-3">{label}</td>
@@ -153,6 +154,12 @@ export default async function AdminPage() {
           </table>
         </div>
       ) : null}
+
+      <p className="mt-6 text-sm">
+        <Link href="/admin/mots-cles" className="text-navy underline-offset-2 hover:underline">
+          Volumes de recherche (Keyword Planner)
+        </Link>
+      </p>
 
       {admin ? (
         <AdminReviews initialReviews={reviews} />
