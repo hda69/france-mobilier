@@ -113,10 +113,12 @@ export function OrderConfirmation() {
             </span>
           </p>
           <p className="mt-2 text-sm text-muted">
-            Changez-le après votre première connexion. Il permet de retrouver vos commandes dans Mon
-            compte.
+            Après connexion, changez-le dans Mon compte. Il permet de retrouver vos commandes.
           </p>
-          <Link href="/connexion" className="btn btn-secondary mt-4 inline-flex">
+          <Link
+            href="/connexion?next=%2Fcompte%23mot-de-passe"
+            className="btn btn-secondary mt-4 inline-flex"
+          >
             Se connecter
           </Link>
         </div>

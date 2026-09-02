@@ -132,7 +132,7 @@ export async function sendOrderPaidEmail(order: {
           `Identifiant : ${order.email}`,
           `Mot de passe provisoire : ${order.temporaryPassword}`,
           `Connexion : ${order.loginUrl}`,
-          "Changez ce mot de passe après votre première connexion.",
+          "Une fois connecté, changez ce mot de passe dans Mon compte.",
           "",
         ]
       : []),
@@ -156,7 +156,7 @@ export async function sendOrderPaidEmail(order: {
 <p><a href="${escapeHtml(order.viewUrl)}">Voir la commande</a></p>
 ${
   order.temporaryPassword
-    ? `<p><strong>Votre compte</strong><br>Identifiant : ${escapeHtml(order.email)}<br>Mot de passe provisoire : ${escapeHtml(order.temporaryPassword)}<br><a href="${escapeHtml(order.loginUrl)}">Se connecter</a><br><span style="color:#5c6170;font-size:14px">Changez ce mot de passe après votre première connexion.</span></p>`
+    ? `<p><strong>Votre compte</strong><br>Identifiant : ${escapeHtml(order.email)}<br>Mot de passe provisoire : ${escapeHtml(order.temporaryPassword)}<br><a href="${escapeHtml(order.loginUrl)}">Se connecter</a><br><span style="color:#5c6170;font-size:14px">Une fois connecté, changez ce mot de passe dans Mon compte.</span></p>`
     : ""
 }
 <p style="color:#5c6170;font-size:14px">Livraison offerte en France métropolitaine. Un suivi sera envoyé après l’expédition.</p>

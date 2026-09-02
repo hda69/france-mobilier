@@ -25,7 +25,7 @@ const items = [
   },
   {
     q: "Comment retrouver une commande ?",
-    a: "Dans Mon compte, avec l’e-mail et le code postal utilisés au paiement. Si vous n’aviez pas de compte, un accès est créé après le paiement : identifiant = votre e-mail, mot de passe provisoire indiqué sur la page de confirmation.",
+    a: "Dans Mon compte, avec l’e-mail et le code postal utilisés au paiement. Si vous n’aviez pas de compte, un accès est créé après le paiement : identifiant = votre e-mail, mot de passe provisoire indiqué sur la page de confirmation. Une fois connecté, changez ce mot de passe dans Mon compte.",
   },
   {
     q: "Comment vous contacter ?",

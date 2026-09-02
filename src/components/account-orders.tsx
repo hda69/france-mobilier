@@ -69,7 +69,7 @@ export function AccountOrders({ signedIn }: { signedIn: boolean }) {
               <CopyTextButton text={guestAccount.password} />
             </span>
           </p>
-          <Link href="/connexion" className="btn btn-secondary mt-4 inline-flex">
+          <Link href="/connexion?next=%2Fcompte%23mot-de-passe" className="btn btn-secondary mt-4 inline-flex">
             Se connecter
           </Link>
         </div>

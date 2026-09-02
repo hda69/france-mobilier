@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AccountOrders } from "@/components/account-orders";
+import { ChangePasswordForm } from "@/components/change-password-form";
 import { authClient } from "@/lib/auth-client";
 
 function ProStatus() {
@@ -65,12 +66,12 @@ export default function ComptePage() {
   return (
     <div className="container-page space-y-8 py-14">
       <h1 className="text-3xl font-semibold tracking-tight">Mon compte</h1>
-      <AccountOrders signedIn />
       <div className="max-w-lg rounded-2xl border border-border bg-white p-6">
         <p className="text-sm text-muted">Nom</p>
         <p className="font-medium">{session.user.name}</p>
         <p className="mt-4 text-sm text-muted">E-mail</p>
         <p className="font-medium">{session.user.email}</p>
+        <ChangePasswordForm />
         <p className="mt-6 text-sm leading-relaxed text-muted">
           Les avis produits sont réservés aux achats vérifiés. Une fois envoyé, un avis n’apparaît
           en ligne qu’après validation.
@@ -83,6 +84,7 @@ export default function ComptePage() {
           Se déconnecter
         </button>
       </div>
+      <AccountOrders signedIn />
     </div>
   );
 }

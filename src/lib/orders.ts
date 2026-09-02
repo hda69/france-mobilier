@@ -281,7 +281,7 @@ async function sendOrderConfirmationIfNeeded(orderId: string, temporaryPassword?
       city: withAccess.city,
       items: full.items,
       viewUrl: `${getSiteUrl()}/commande/${withAccess.id}?t=${withAccess.viewToken}`,
-      loginUrl: `${getSiteUrl()}/connexion`,
+      loginUrl: `${getSiteUrl()}/connexion?next=${encodeURIComponent("/compte#mot-de-passe")}`,
       testMode: stripeMode() === "test",
       temporaryPassword: password,
     });
@@ -542,6 +542,12 @@ export async function lookupPaidOrders(email: string, postalCode: string) {
 export async function getAccountInvitePassword(orderId: string) {
   const order = await getOrderById(orderId);
   return decryptSecret(order?.accountInviteEnc);
+}
+
+export async function clearAccountInviteSecrets(userId: string) {
+  await ensureDatabase();
+  if (!userId) return;
+  await db.update(shopOrder).set({ accountInviteEnc: null }).where(eq(shopOrder.userId, userId));
 }
 
 export async function getOrderAccessSecrets(orderId: string) {
