@@ -21,6 +21,8 @@ import { listApprovedReviews } from "@/lib/reviews";
 
 type Props = { params: Promise<{ slug: string }> };
 
+export const revalidate = 300;
+
 export async function generateStaticParams() {
   return listProducts().map((product) => ({ slug: product.slug }));
 }

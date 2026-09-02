@@ -20,7 +20,8 @@ RUN echo "=== APP ROUTES IN CONTEXT ===" \
   && test -d src/app/api/reviews
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
-RUN BETTER_AUTH_SECRET=build-time-placeholder-not-for-runtime \
+RUN DATABASE_URL=:memory: \
+  BETTER_AUTH_SECRET=build-time-placeholder-not-for-runtime \
   BETTER_AUTH_URL=http://localhost:3000 \
   npm run build \
   && test -f .next/standalone/server.js \

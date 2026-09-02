@@ -4,7 +4,14 @@ import * as schema from "./schema";
 import fs from "node:fs";
 import path from "node:path";
 
+function isNextProductionBuild() {
+  return process.env.NEXT_PHASE === "phase-production-build";
+}
+
 function resolveDatabaseUrl() {
+  // Next prerenders many pages in parallel workers. A shared file DB deadlocks
+  // (`SQLITE_BUSY`) during `next build`; an in-memory DB keeps workers isolated.
+  if (isNextProductionBuild()) return ":memory:";
   if (process.env.DATABASE_URL) return process.env.DATABASE_URL;
   const dataDir = path.join(process.cwd(), "data");
   if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
@@ -13,12 +20,15 @@ function resolveDatabaseUrl() {
 
 const globalForDb = globalThis as unknown as {
   libsql?: Client;
+  libsqlUrl?: string;
 };
 
 function getClient() {
   if (!globalForDb.libsql) {
+    const url = resolveDatabaseUrl();
+    globalForDb.libsqlUrl = url;
     globalForDb.libsql = createClient({
-      url: resolveDatabaseUrl(),
+      url,
       authToken: process.env.DATABASE_AUTH_TOKEN,
     });
   }
@@ -35,9 +45,32 @@ function isDuplicateColumnError(error: unknown) {
   return /duplicate column name/i.test(message);
 }
 
+function isBusyError(error: unknown) {
+  const message = error instanceof Error ? error.message : String(error);
+  return /SQLITE_BUSY|database is locked/i.test(message);
+}
+
+async function withBusyRetry<T>(fn: () => Promise<T>, attempts = 8): Promise<T> {
+  let lastError: unknown;
+  for (let attempt = 0; attempt < attempts; attempt++) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error;
+      if (!isBusyError(error) || attempt === attempts - 1) throw error;
+      await new Promise((resolve) => setTimeout(resolve, 40 * 2 ** attempt));
+    }
+  }
+  throw lastError;
+}
+
 async function migrateDatabase() {
   const client = getClient();
-  await client.batch(
+  await withBusyRetry(() => client.execute("PRAGMA busy_timeout = 15000"));
+  if (!globalForDb.libsqlUrl?.includes(":memory:")) {
+    await withBusyRetry(() => client.execute("PRAGMA journal_mode = WAL"));
+  }
+  await withBusyRetry(() => client.batch(
     [
       `CREATE TABLE IF NOT EXISTS user (
         id TEXT PRIMARY KEY NOT NULL,
@@ -164,7 +197,7 @@ async function migrateDatabase() {
       `CREATE INDEX IF NOT EXISTS idx_shop_order_email ON shop_order(email)`,
     ],
     "write",
-  );
+  ));
   const shopOrderInfo = await client.execute("PRAGMA table_info(shop_order)");
   const shopOrderCols = new Set(shopOrderInfo.rows.map((row) => String(row.name)));
   const extras = [
@@ -184,7 +217,7 @@ async function migrateDatabase() {
   }
   for (const sql of extras) {
     try {
-      await client.execute(sql);
+      await withBusyRetry(() => client.execute(sql));
     } catch (error) {
       if (!isDuplicateColumnError(error)) throw error;
     }
