@@ -140,7 +140,8 @@ export function CheckoutForm() {
             className="input mt-1"
           />
           <span className="mt-1 block text-xs text-muted">
-            Obligatoire pour la livraison et le suivi du colis.
+            Obligatoire pour la livraison. Numéro français, belge, suisse, luxembourgeois ou
+            monégasque, avec ou sans indicatif (+33, +32, +41, +352, +377).
           </span>
         </label>
         {country === "CH" ? (

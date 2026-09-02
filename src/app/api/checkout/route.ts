@@ -136,7 +136,18 @@ export async function POST(request: Request) {
 
   const parsed = schema.safeParse(await request.json());
   if (!parsed.success) {
-    return NextResponse.json({ error: "Vérifiez les informations de livraison." }, { status: 400 });
+    const paths = new Set(parsed.error.issues.flatMap((issue) => issue.path.map(String)));
+    let error = "Vérifiez les informations de livraison.";
+    if (paths.has("phone")) {
+      error =
+        "Indiquez un numéro valide de la zone de livraison (France, Belgique, Luxembourg, Monaco ou Suisse).";
+    } else if (paths.has("postalCode")) {
+      error = "Code postal invalide pour le pays choisi.";
+    } else if (paths.has("country")) {
+      error =
+        "Livraison uniquement en France métropolitaine, Belgique, Luxembourg, Monaco et Suisse.";
+    }
+    return NextResponse.json({ error }, { status: 400 });
   }
 
   try {
