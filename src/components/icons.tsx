@@ -126,3 +126,23 @@ export function IconBag({ className = base }: IconProps) {
     </svg>
   );
 }
+
+export function IconEye({ className = base }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden>
+      <path d="M3 12s3.6-6.5 9-6.5S21 12 21 12s-3.6 6.5-9 6.5S3 12 3 12Z" strokeWidth="1.6" />
+      <circle cx="12" cy="12" r="2.4" strokeWidth="1.6" />
+    </svg>
+  );
+}
+
+export function IconEyeOff({ className = base }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden>
+      <path d="M3 12s3.6-6.5 9-6.5c2 0 3.7.6 5.1 1.4" strokeWidth="1.6" strokeLinecap="round" />
+      <path d="M21 12s-1.2 2.2-3.2 3.9" strokeWidth="1.6" strokeLinecap="round" />
+      <path d="M10.1 10.2a2.4 2.4 0 0 0 3.7 3.1" strokeWidth="1.6" strokeLinecap="round" />
+      <path d="M4 4l16 16" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}

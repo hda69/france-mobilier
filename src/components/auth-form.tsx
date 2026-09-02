@@ -4,6 +4,7 @@ import { FormEvent, Suspense, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+import { PasswordInput } from "@/components/password-input";
 
 type Mode = "login" | "register";
 
@@ -84,14 +85,12 @@ function AuthFormFields({ mode }: { mode: Mode }) {
       </label>
       <label className="block text-sm">
         <span className="mb-1 block text-muted">Mot de passe</span>
-        <input
+        <PasswordInput
           required
-          type="password"
           minLength={8}
           autoComplete={mode === "login" ? "current-password" : "new-password"}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="input"
         />
       </label>
       {error && <p className="text-sm text-red-700">{error}</p>}

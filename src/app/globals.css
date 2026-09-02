@@ -222,6 +222,11 @@ input.input[type="search"]::-webkit-search-results-decoration {
   padding-inline-start: 3rem;
 }
 
+.input.input-with-trailing-icon {
+  padding-right: 3rem;
+  padding-inline-end: 3rem;
+}
+
 select.input {
   min-height: 2.75rem;
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { PasswordInput } from "@/components/password-input";
 
 export function ChangePasswordForm() {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -47,38 +48,32 @@ export function ChangePasswordForm() {
       <form onSubmit={onSubmit} className="mt-4 space-y-3">
         <label className="block text-sm">
           <span className="mb-1 block text-muted">Mot de passe actuel</span>
-          <input
+          <PasswordInput
             required
-            type="password"
             autoComplete="current-password"
             minLength={8}
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}
-            className="input"
           />
         </label>
         <label className="block text-sm">
           <span className="mb-1 block text-muted">Nouveau mot de passe</span>
-          <input
+          <PasswordInput
             required
-            type="password"
             autoComplete="new-password"
             minLength={8}
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            className="input"
           />
         </label>
         <label className="block text-sm">
           <span className="mb-1 block text-muted">Confirmer le nouveau mot de passe</span>
-          <input
+          <PasswordInput
             required
-            type="password"
             autoComplete="new-password"
             minLength={8}
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="input"
           />
         </label>
         {error ? <p className="text-sm text-red-700">{error}</p> : null}
