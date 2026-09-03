@@ -3,6 +3,43 @@ import type { Product } from "@/lib/types/commerce";
 /** Store catalog. */
 export const products: Product[] = [
   {
+    id: "p-011",
+    slug: "table-de-chevet",
+    name: "Table de chevet",
+    category: "maison",
+    shortDescription: "Chevet compact en bois, tiroir à façade tressée pour la chambre.",
+    description:
+      "Une table de chevet basse et stable, pensée pour le lit. Plateau bois, un tiroir à façade tressée sans poignée apparente, pieds larges. Largeur 50 cm, hauteur 45 cm.",
+    price: 129,
+    compareAtPrice: null,
+    images: [
+      "/products/nightstand.jpg",
+      "/products/nightstand-4.jpg",
+      "/products/nightstand-2.jpg",
+      "/products/nightstand-3.jpg",
+    ],
+    features: [
+      "Tiroir à façade tressée",
+      "Structure bois, pieds larges",
+      "Format compact 50 × 45 cm",
+      "Style naturel pour la chambre",
+    ],
+    specifications: {
+      Largeur: "50 cm",
+      Hauteur: "45 cm",
+      Tiroir: "1, façade tressée",
+      Matériaux: "Bois / fibre naturelle",
+    },
+    availabilityStatus: "available",
+    supplierProvider: "buckydrop",
+    supplierProductId: "1025712736698",
+    supplierVariantId: "6199916742503",
+    weight: null,
+    dimensions: "50 × 45 cm (l × h)",
+    shippingMinDays: 14,
+    shippingMaxDays: 21,
+  },
+  {
     id: "p-001",
     slug: "bureau-assis-debout-electrique",
     name: "Bureau assis-debout électrique",

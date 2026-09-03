@@ -22,6 +22,7 @@ import { listApprovedReviews } from "@/lib/reviews";
 type Props = { params: Promise<{ slug: string }> };
 
 export const revalidate = 300;
+export const dynamicParams = true;
 
 export async function generateStaticParams() {
   return listProducts().map((product) => ({ slug: product.slug }));
@@ -143,6 +144,12 @@ export default async function ProductPage({ params }: Props) {
             <p className="text-2xl font-medium text-navy">{formatPrice(product.price)}</p>
             <p className="text-sm text-muted">Prix TTC. Total confirmé au paiement.</p>
             <p className="leading-relaxed text-muted">{product.shortDescription}</p>
+            {product.shippingMinDays && product.shippingMaxDays ? (
+              <p className="text-sm text-muted">
+                Délai d’expédition estimé : {product.shippingMinDays}–{product.shippingMaxDays} jours
+                après commande.
+              </p>
+            ) : null}
             {benefits.length > 0 ? (
               <ul className="grid gap-2">
                 {benefits.map((feature) => (
