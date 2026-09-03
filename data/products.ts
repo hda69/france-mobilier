@@ -41,7 +41,7 @@ export const products: Product[] = [
     weight: null,
     dimensions: "50 × 45 cm (l × h) — caisson 20 cm, pieds 25 cm, traverse à 13 cm du sol",
     shippingMinDays: 14,
-    shippingMaxDays: 21,
+    shippingMaxDays: 14,
   },
   {
     id: "p-001",

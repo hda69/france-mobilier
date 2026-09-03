@@ -18,8 +18,17 @@ import {
   listProducts,
 } from "@/lib/products/repository";
 import { listApprovedReviews } from "@/lib/reviews";
+import type { Product } from "@/lib/types/commerce";
 
 type Props = { params: Promise<{ slug: string }> };
+
+function shippingLeadLabel(product: Product) {
+  const min = product.shippingMinDays;
+  const max = product.shippingMaxDays;
+  if (!min || !max) return null;
+  if (min === max) return `${min} jours en moyenne`;
+  return `${min}–${max} jours`;
+}
 
 export const revalidate = 300;
 export const dynamicParams = true;
@@ -60,6 +69,7 @@ export default async function ProductPage({ params }: Props) {
     /largeur|hauteur|profondeur|plateau|module|dimensions|caisson|pieds|traverse/i.test(key),
   );
   const mentionsMontage = product.features.some((feature) => /montage/i.test(feature));
+  const shippingLead = shippingLeadLabel(product);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -145,10 +155,10 @@ export default async function ProductPage({ params }: Props) {
             <ProductPrice product={product} size="pdp" />
             <p className="text-sm text-muted">Prix TTC. Total confirmé au paiement.</p>
             <p className="leading-relaxed text-muted">{product.shortDescription}</p>
-            {product.shippingMinDays && product.shippingMaxDays ? (
+            {shippingLead ? (
               <p className="text-sm text-muted">
-                Délai d’expédition estimé : {product.shippingMinDays}–{product.shippingMaxDays}{" "}
-                jours. Chaque article est fabriqué après commande, ce qui explique ce délai.
+                Délai d’expédition estimé : {shippingLead}. Chaque article est fabriqué après
+                commande, ce qui explique ce délai.
               </p>
             ) : null}
             {benefits.length > 0 ? (
@@ -247,13 +257,12 @@ export default async function ProductPage({ params }: Props) {
                   <p className="mt-1 text-sm text-muted">{product.dimensions}</p>
                 </div>
               ) : null}
-              {product.shippingMinDays && product.shippingMaxDays ? (
+              {shippingLead ? (
                 <div>
                   <p className="font-medium text-navy">Pourquoi ce délai de livraison ?</p>
                   <p className="mt-1 text-sm text-muted">
                     Chaque article est fabriqué après commande. L’expédition vers la France part
-                    ensuite, en général sous {product.shippingMinDays} à {product.shippingMaxDays}{" "}
-                    jours.
+                    ensuite, en {shippingLead}.
                   </p>
                 </div>
               ) : null}
