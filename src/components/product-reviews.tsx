@@ -117,7 +117,10 @@ export function ProductReviews({
         <h3 className="font-medium">Laisser un avis</h3>
         {!session?.user ? (
           <p className="mt-2 text-sm text-muted">
-            <Link href="/connexion" className="text-accent underline-offset-2 hover:underline">
+            <Link
+              href="/connexion"
+              className="font-semibold text-navy underline underline-offset-4 decoration-navy/40 hover:decoration-navy"
+            >
               Connectez-vous
             </Link>{" "}
             après un achat vérifié pour commenter ce produit.
