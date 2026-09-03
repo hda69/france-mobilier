@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { NotifyForm } from "@/components/notify-form";
 import { ProductBuyBox } from "@/components/product-buy-box";
 import { ProductCard } from "@/components/product-card";
+import { ProductGallery } from "@/components/product-gallery";
 import { ProductPrice, isOnSale } from "@/components/product-price";
 import { ProductReviews } from "@/components/product-reviews";
 import { store } from "@/config/store";
@@ -124,27 +125,7 @@ export default async function ProductPage({ params }: Props) {
         </nav>
 
         <div className="grid gap-10 md:grid-cols-2 md:gap-14">
-          <div>
-            <div className="relative aspect-square overflow-hidden rounded-[var(--radius)] bg-white">
-              <Image
-                src={product.images[0]}
-                alt={product.name}
-                fill
-                className="object-cover"
-                priority
-                sizes="(max-width:768px) 100vw, 50vw"
-              />
-            </div>
-            {product.images.length > 1 ? (
-              <div className={`mt-3 grid gap-2 ${product.images.length >= 5 ? "grid-cols-5" : "grid-cols-4"}`}>
-                {product.images.map((src) => (
-                  <div key={src} className="relative aspect-square overflow-hidden rounded-md bg-white">
-                    <Image src={src} alt="" fill className="object-cover" sizes="120px" />
-                  </div>
-                ))}
-              </div>
-            ) : null}
-          </div>
+          <ProductGallery images={product.images} name={product.name} />
 
           <div className="space-y-6">
             {isOnSale(product) ? <p className="badge">Offre en cours</p> : null}
