@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/lib/types/commerce";
-import { availabilityLabel, formatPrice } from "@/lib/products/repository";
+import { ProductPrice, isOnSale } from "@/components/product-price";
+import { availabilityLabel } from "@/lib/products/repository";
 
 export function ProductCard({ product }: { product: Product }) {
   return (
@@ -15,13 +16,15 @@ export function ProductCard({ product }: { product: Product }) {
             className="object-cover transition duration-500 group-hover:scale-[1.03]"
             sizes="(max-width: 768px) 100vw, 25vw"
           />
-          {product.availabilityStatus !== "available" ? (
+          {isOnSale(product) ? (
+            <p className="badge absolute left-3 top-3">Offre</p>
+          ) : product.availabilityStatus !== "available" ? (
             <p className="badge absolute left-3 top-3">{availabilityLabel(product.availabilityStatus)}</p>
           ) : null}
         </div>
         <div className="space-y-1.5 pt-4">
           <h3 className="text-base font-medium leading-snug break-words text-navy">{product.name}</h3>
-          <p className="text-sm text-muted">{formatPrice(product.price)}</p>
+          <ProductPrice product={product} />
         </div>
       </Link>
     </article>

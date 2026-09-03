@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { NotifyForm } from "@/components/notify-form";
 import { ProductBuyBox } from "@/components/product-buy-box";
 import { ProductCard } from "@/components/product-card";
+import { ProductPrice, isOnSale } from "@/components/product-price";
 import { ProductReviews } from "@/components/product-reviews";
 import { store } from "@/config/store";
 import { SHIPPING_OFFERED_SENTENCE, SHIPPING_ZONE_LABEL } from "@/lib/shipping-zone";
@@ -13,7 +14,6 @@ import {
   collectionSlugForCategory,
   findProductBySlug,
   findRelatedProducts,
-  formatPrice,
   getCollection,
   listProducts,
 } from "@/lib/products/repository";
@@ -57,7 +57,7 @@ export default async function ProductPage({ params }: Props) {
   const benefits = product.features.slice(0, 4);
   const specEntries = Object.entries(product.specifications);
   const dimKeys = specEntries.filter(([key]) =>
-    /largeur|hauteur|profondeur|plateau|module|dimensions/i.test(key),
+    /largeur|hauteur|profondeur|plateau|module|dimensions|caisson|pieds|traverse/i.test(key),
   );
   const mentionsMontage = product.features.some((feature) => /montage/i.test(feature));
 
@@ -126,7 +126,7 @@ export default async function ProductPage({ params }: Props) {
               />
             </div>
             {product.images.length > 1 ? (
-              <div className="mt-3 grid grid-cols-4 gap-2">
+              <div className={`mt-3 grid gap-2 ${product.images.length >= 5 ? "grid-cols-5" : "grid-cols-4"}`}>
                 {product.images.map((src) => (
                   <div key={src} className="relative aspect-square overflow-hidden rounded-md bg-white">
                     <Image src={src} alt="" fill className="object-cover" sizes="120px" />
@@ -137,17 +137,18 @@ export default async function ProductPage({ params }: Props) {
           </div>
 
           <div className="space-y-6">
+            {isOnSale(product) ? <p className="badge">Offre en cours</p> : null}
             {product.availabilityStatus !== "available" ? (
               <p className="badge">{availabilityLabel(product.availabilityStatus)}</p>
             ) : null}
             <h1 className="display text-[1.75rem] text-navy md:text-4xl">{product.name}</h1>
-            <p className="text-2xl font-medium text-navy">{formatPrice(product.price)}</p>
+            <ProductPrice product={product} size="pdp" />
             <p className="text-sm text-muted">Prix TTC. Total confirmé au paiement.</p>
             <p className="leading-relaxed text-muted">{product.shortDescription}</p>
             {product.shippingMinDays && product.shippingMaxDays ? (
               <p className="text-sm text-muted">
-                Délai d’expédition estimé : {product.shippingMinDays}–{product.shippingMaxDays} jours
-                après commande.
+                Délai d’expédition estimé : {product.shippingMinDays}–{product.shippingMaxDays}{" "}
+                jours. Chaque article est fabriqué après commande, ce qui explique ce délai.
               </p>
             ) : null}
             {benefits.length > 0 ? (
@@ -244,6 +245,16 @@ export default async function ProductPage({ params }: Props) {
                 <div>
                   <p className="font-medium text-navy">Quelles sont ses dimensions ?</p>
                   <p className="mt-1 text-sm text-muted">{product.dimensions}</p>
+                </div>
+              ) : null}
+              {product.shippingMinDays && product.shippingMaxDays ? (
+                <div>
+                  <p className="font-medium text-navy">Pourquoi ce délai de livraison ?</p>
+                  <p className="mt-1 text-sm text-muted">
+                    Chaque article est fabriqué après commande. L’expédition vers la France part
+                    ensuite, en général sous {product.shippingMinDays} à {product.shippingMaxDays}{" "}
+                    jours.
+                  </p>
                 </div>
               ) : null}
               {mentionsMontage ? (

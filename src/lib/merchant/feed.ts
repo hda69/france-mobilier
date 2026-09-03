@@ -29,7 +29,13 @@ function itemXml(product: Product, base: string) {
     image ? `<g:image_link>${escapeXml(image)}</g:image_link>` : "",
     `<g:condition>new</g:condition>`,
     `<g:availability>${availability(product)}</g:availability>`,
-    `<g:price>${product.price.toFixed(2)} EUR</g:price>`,
+    `<g:price>${(product.compareAtPrice && product.compareAtPrice > product.price
+      ? product.compareAtPrice
+      : product.price
+    ).toFixed(2)} EUR</g:price>`,
+    product.compareAtPrice != null && product.compareAtPrice > product.price
+      ? `<g:sale_price>${product.price.toFixed(2)} EUR</g:sale_price>`
+      : "",
     `<g:brand>${escapeXml(store.storeName)}</g:brand>`,
     `<g:identifier_exists>false</g:identifier_exists>`,
     product.weight != null ? `<g:shipping_weight>${product.weight} kg</g:shipping_weight>` : "",
