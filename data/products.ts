@@ -23,26 +23,14 @@ export const products: Product[] = [
     imageAssets: [
       { src: "/products/nightstand.jpg", role: "lifestyle" },
       { src: "/products/nightstand-4.jpg", role: "product" },
-      {
-        src: "/products/nightstand-2.jpg",
-        role: "lifestyle",
-        issues: ["chinese_text", "watermark"],
-        replaceWhenPossible: true,
-        notes: "Filigrane usine (曹县耀正木制品厂). Ne pas utiliser en image principale.",
-      },
-      {
-        src: "/products/nightstand-3.jpg",
-        role: "detail",
-        issues: ["chinese_text", "watermark"],
-        replaceWhenPossible: true,
-        notes: "Filigrane usine (曹县耀正木制品厂). Ne pas utiliser en image principale.",
-      },
+      { src: "/products/nightstand-2.jpg", role: "lifestyle" },
+      { src: "/products/nightstand-3.jpg", role: "detail" },
       {
         src: "/products/nightstand-dims.jpg",
         role: "dimensions",
         issues: ["supplier_diagram", "embedded_commercial"],
         replaceWhenPossible: true,
-        notes: "Schéma fournisseur. Remplacé sur la fiche par ProductDimensionsDiagram.",
+        notes: "Schéma fournisseur. Remplacé sur la fiche par ProductDimensionsDiagram. Non affiché dans la galerie.",
       },
     ],
     features: [
