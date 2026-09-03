@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useCart } from "@/components/cart-provider";
+import { productHeroImage } from "@/lib/products/presentation";
 import type { Product } from "@/lib/types/commerce";
 
 export function AddToCartButton({
@@ -24,7 +25,7 @@ export function AddToCartButton({
           slug: product.slug,
           name: product.name,
           price: product.price,
-          image: product.images[0],
+          image: productHeroImage(product),
         });
         setAdded(true);
       }}

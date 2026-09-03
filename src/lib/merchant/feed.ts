@@ -1,4 +1,5 @@
 import { store } from "@/config/store";
+import { productHeroImage } from "@/lib/products/presentation";
 import { listProducts } from "@/lib/products/repository";
 import type { Product } from "@/lib/types/commerce";
 import { SHIPPING_COUNTRIES } from "@/lib/shipping-zone";
@@ -19,7 +20,8 @@ function availability(product: Product) {
 }
 
 function itemXml(product: Product, base: string) {
-  const image = product.images[0] ? `${base}${product.images[0]}` : "";
+  const hero = productHeroImage(product);
+  const image = hero ? `${base}${hero}` : "";
   const lines = [
     `<item>`,
     `<g:id>${escapeXml(product.id)}</g:id>`,

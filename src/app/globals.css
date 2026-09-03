@@ -84,6 +84,14 @@ a {
   background: var(--cream);
 }
 
+.prose-narrow {
+  max-width: 46rem;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
 .font-serif {
   font-family: var(--font-serif), Georgia, "Times New Roman", serif;
 }

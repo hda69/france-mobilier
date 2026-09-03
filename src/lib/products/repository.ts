@@ -18,10 +18,38 @@ export function findProductById(id: string): Product | null {
 
 export const getProductBySlug = findProductBySlug;
 
+const COMPLEMENTARY_CATEGORIES: Record<Product["category"], Product["category"][]> = {
+  maison: ["rangement"],
+  rangement: ["maison"],
+  bureau: ["rangement", "maison"],
+  cuisine: ["rangement", "maison"],
+  "salle-de-bain": ["rangement"],
+  animaux: ["maison"],
+};
+
+function relatedScore(base: Product, other: Product): number {
+  if (other.id === base.id) return -1;
+  if (base.category !== "animaux" && other.category === "animaux") return -1;
+
+  let score = 0;
+  if (other.category === base.category) score += 100;
+  else if (COMPLEMENTARY_CATEGORIES[base.category].includes(other.category)) score += 40;
+  else return -1;
+
+  const gap = Math.abs(other.price - base.price) / base.price;
+  if (gap <= 0.35) score += 25;
+  else if (gap <= 0.6) score += 10;
+  else score -= 5;
+  return score;
+}
+
 export function findRelatedProducts(product: Product, limit = 4): Product[] {
   return catalog
-    .filter((p) => p.id !== product.id && p.category === product.category)
-    .slice(0, limit);
+    .map((candidate) => ({ candidate, score: relatedScore(product, candidate) }))
+    .filter((row) => row.score >= 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+    .map((row) => row.candidate);
 }
 
 export function getCollection(slug: string) {

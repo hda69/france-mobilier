@@ -7,9 +7,10 @@ export const products: Product[] = [
     slug: "table-de-chevet",
     name: "Table de chevet en rotin",
     category: "maison",
-    shortDescription: "Chevet compact en bois, tiroir à façade en rotin pour la chambre.",
+    shortDescription:
+      "Chevet compact en bois avec façade en rotin, pensé pour ajouter du rangement sans alourdir la chambre.",
     description:
-      "Une table de chevet basse et stable, pensée pour le lit. Plateau bois, un tiroir à façade en rotin sans poignée apparente, pieds larges. Largeur 50 cm, hauteur totale 45 cm (caisson 20 cm, pieds 25 cm).",
+      "Une table de chevet compacte avec tiroir, facile à intégrer dans une chambre aux tons naturels. Plateau bois, façade en rotin sans poignée apparente, structure sur pieds.",
     price: 129,
     compareAtPrice: 159,
     images: [
@@ -19,13 +20,60 @@ export const products: Product[] = [
       "/products/nightstand-3.jpg",
       "/products/nightstand-dims.jpg",
     ],
+    imageAssets: [
+      { src: "/products/nightstand.jpg", role: "lifestyle" },
+      { src: "/products/nightstand-4.jpg", role: "product" },
+      {
+        src: "/products/nightstand-2.jpg",
+        role: "lifestyle",
+        issues: ["chinese_text", "watermark"],
+        replaceWhenPossible: true,
+        notes: "Filigrane usine (曹县耀正木制品厂). Ne pas utiliser en image principale.",
+      },
+      {
+        src: "/products/nightstand-3.jpg",
+        role: "detail",
+        issues: ["chinese_text", "watermark"],
+        replaceWhenPossible: true,
+        notes: "Filigrane usine (曹县耀正木制品厂). Ne pas utiliser en image principale.",
+      },
+      {
+        src: "/products/nightstand-dims.jpg",
+        role: "dimensions",
+        issues: ["supplier_diagram", "embedded_commercial"],
+        replaceWhenPossible: true,
+        notes: "Schéma fournisseur. Remplacé sur la fiche par ProductDimensionsDiagram.",
+      },
+    ],
     features: [
       "Tiroir à façade en rotin",
       "Structure bois, pieds larges",
       "Format compact 50 × 45 cm",
       "Fabriqué après commande",
     ],
+    benefits: ["Format compact", "Tiroir de rangement", "Façade en rotin", "Structure sur pieds"],
+    highlights: [
+      "Un format adapté aux petits espaces",
+      "Un tiroir pour garder l’essentiel à portée de main",
+      "Une association bois et rotin facile à intégrer",
+      "Une structure sur pieds qui allège visuellement le meuble",
+    ],
+    dailyUses: [
+      {
+        title: "Un format qui trouve facilement sa place",
+        text: "Avec son format compact, le meuble peut être installé à côté du lit sans occuper inutilement l’espace.",
+      },
+      {
+        title: "L’essentiel reste à portée de main",
+        text: "Le tiroir permet de ranger chargeur, lunettes, livre ou petits objets du quotidien.",
+      },
+      {
+        title: "Une présence discrète dans la chambre",
+        text: "Le bois et le rotin se mêlent aux tons naturels, sans ajouter de poignée apparente sur la façade.",
+      },
+    ],
     specifications: {
+      Type: "Table de chevet",
       Largeur: "50 cm",
       Hauteur: "45 cm",
       Caisson: "20 cm",
@@ -34,6 +82,14 @@ export const products: Product[] = [
       Tiroir: "1, façade en rotin",
       Matériaux: "Bois / rotin",
     },
+    measures: {
+      widthCm: 50,
+      heightCm: 45,
+      cabinetHeightCm: 20,
+      legHeightCm: 25,
+      crossbarFromFloorCm: 13,
+    },
+    madeToOrder: true,
     availabilityStatus: "available",
     supplierProvider: "buckydrop",
     supplierProductId: "1025712736698",
@@ -60,11 +116,32 @@ export const products: Product[] = [
       "Structure acier renforcée",
       "Commande mémoire de positions",
     ],
+    benefits: ["Hauteur électrique", "Plateau deux écrans", "Structure acier", "Positions mémorisées"],
+    highlights: [
+      "Alterner assis et debout sans changer de bureau",
+      "Un plateau pensé pour deux écrans",
+      "Une structure acier qui reste stable",
+      "Retrouver vos hauteurs habituelles en un geste",
+    ],
+    dailyUses: [
+      {
+        title: "Changer de posture au fil de la journée",
+        text: "Le réglage électrique permet de passer d’une position assise à une position debout sans interrompre le travail.",
+      },
+      {
+        title: "Garder écrans et documents sur le même plateau",
+        text: "Le format accueille deux moniteurs, pour un bureau moins encombré de supports improvisés.",
+      },
+    ],
     specifications: {
       Largeur: "120 cm",
       Profondeur: "60 cm",
       "Hauteur min/max": "72–118 cm",
       Matériaux: "Acier / panneau mélaminé",
+    },
+    measures: {
+      widthCm: 120,
+      depthCm: 60,
     },
     availabilityStatus: "available",
     supplierProvider: null,
@@ -87,6 +164,23 @@ export const products: Product[] = [
     compareAtPrice: null,
     images: ["/products/shoe-cabinet.jpg"],
     features: ["Faible profondeur", "Plusieurs niveaux", "Porte rabattable", "Montage simple"],
+    benefits: ["Faible profondeur", "Plusieurs niveaux", "Porte rabattable", "Montage simple"],
+    highlights: [
+      "Un volume vertical qui économise le passage",
+      "Plusieurs niveaux pour séparer les paires",
+      "Une porte rabattable qui reste discrète",
+      "Un montage simple à l’arrivée",
+    ],
+    dailyUses: [
+      {
+        title: "Libérer le sol de l’entrée",
+        text: "Les chaussures du quotidien se rangent à la verticale, sans empiéter sur le couloir.",
+      },
+      {
+        title: "Garder l’entrée lisible",
+        text: "La porte rabattable referme le rangement, pour une entrée moins encombrée.",
+      },
+    ],
     specifications: {
       Largeur: "60 cm",
       Profondeur: "24 cm",
@@ -114,6 +208,23 @@ export const products: Product[] = [
     compareAtPrice: null,
     images: ["/products/bath-shelf.jpg"],
     features: ["Fixation murale", "Résistant à l’humidité", "Design minimal", "Plusieurs tablettes"],
+    benefits: ["Fixation murale", "Résistant à l’humidité", "Profil mince", "Plusieurs tablettes"],
+    highlights: [
+      "Du rangement sans occuper le sol",
+      "Une structure adaptée aux pièces humides",
+      "Un profil mince, facile à placer",
+      "Plusieurs tablettes pour séparer le quotidien",
+    ],
+    dailyUses: [
+      {
+        title: "Garder les essentiels à hauteur de main",
+        text: "Produits et serviettes se répartissent sur les tablettes, à côté du lavabo.",
+      },
+      {
+        title: "Dégager le plan de toilette",
+        text: "La fixation murale libère le rebord du lavabo, plus simple à essuyer.",
+      },
+    ],
     specifications: {
       Largeur: "40 cm",
       Profondeur: "15 cm",
@@ -141,6 +252,23 @@ export const products: Product[] = [
     compareAtPrice: null,
     images: ["/products/kitchen-cart.jpg"],
     features: ["Roulettes freinées", "Plusieurs niveaux", "Poignée intégrée", "Facile à déplacer"],
+    benefits: ["Roulettes freinées", "Plusieurs niveaux", "Poignée intégrée", "Facile à déplacer"],
+    highlights: [
+      "Un rangement que l’on rapproche du plan de travail",
+      "Plusieurs niveaux pour séparer ustensiles et provisions",
+      "Des roulettes que l’on peut bloquer",
+      "Une poignée pour le déplacer sans effort",
+    ],
+    dailyUses: [
+      {
+        title: "Créer un plan d’appoint le temps d’un service",
+        text: "Le chariot se place près des plaques, puis se range contre un mur une fois le repas terminé.",
+      },
+      {
+        title: "Garder le plan de travail plus libre",
+        text: "Paniers et ustensiles descendent sur les niveaux, plutôt que de s’accumuler sur le plan.",
+      },
+    ],
     specifications: {
       Largeur: "45 cm",
       Profondeur: "35 cm",
@@ -173,6 +301,23 @@ export const products: Product[] = [
       "Fixation clamp ou percement",
       "Câbles guidés",
     ],
+    benefits: ["Deux écrans", "Hauteur et inclinaison", "Clamp ou percement", "Câbles guidés"],
+    highlights: [
+      "Libérer le plateau des pieds d’écran",
+      "Régler hauteur et inclinaison de chaque moniteur",
+      "Fixation par pince ou percement",
+      "Des câbles guidés le long du bras",
+    ],
+    dailyUses: [
+      {
+        title: "Retrouver de la place pour écrire",
+        text: "Les deux écrans se déportent au-dessus du bureau, le plateau reste disponible pour clavier et notes.",
+      },
+      {
+        title: "Ajuster l’écran à la hauteur des yeux",
+        text: "Chaque bras se règle en hauteur et en inclinaison, pour une posture plus confortable.",
+      },
+    ],
     specifications: {
       "Taille écran": 'Jusqu’à 32"',
       "Charge max / bras": "9 kg",
@@ -200,6 +345,23 @@ export const products: Product[] = [
     compareAtPrice: null,
     images: ["/products/litter-cabinet.jpg"],
     features: ["Design mobilier", "Accès chat latéral", "Porte frontale d’entretien", "Finition sobre"],
+    benefits: ["Allure de meuble", "Entrée latérale", "Porte d’entretien", "Finition sobre"],
+    highlights: [
+      "Dissimuler la litière derrière une façade de meuble",
+      "Une entrée latérale pour le chat",
+      "Une porte frontale pour l’entretien",
+      "Une finition sobre, facile à placer dans la pièce",
+    ],
+    dailyUses: [
+      {
+        title: "Garder la litière hors du champ de vision",
+        text: "Le bac se glisse à l’intérieur : la pièce reste un salon ou une entrée, pas un espace technique.",
+      },
+      {
+        title: "Nettoyer sans déplacer tout le meuble",
+        text: "La porte frontale donne accès au bac pour le changement de litière.",
+      },
+    ],
     specifications: {
       Largeur: "70 cm",
       Profondeur: "50 cm",
@@ -227,6 +389,23 @@ export const products: Product[] = [
     compareAtPrice: null,
     images: ["/products/side-table.jpg"],
     features: ["Hauteur réglable", "Base stable", "Plateau antidérapant", "Usage multi-pièces"],
+    benefits: ["Hauteur réglable", "Base stable", "Plateau antidérapant", "Salon ou chambre"],
+    highlights: [
+      "Une hauteur que l’on ajuste selon l’usage",
+      "Une base stable une fois en place",
+      "Un plateau antidérapant pour verre ou ordinateur",
+      "Un format qui passe du salon à la chambre",
+    ],
+    dailyUses: [
+      {
+        title: "Travailler ou lire depuis le canapé",
+        text: "La hauteur se règle pour poser un ordinateur portable ou un livre, sans table basse trop basse.",
+      },
+      {
+        title: "Un plateau d’appoint au réveil",
+        text: "En chambre, elle se glisse près du lit pour un verre ou un petit-déjeuner.",
+      },
+    ],
     specifications: {
       Plateau: "60 × 40 cm",
       Hauteur: "65–95 cm",
@@ -258,6 +437,23 @@ export const products: Product[] = [
       "Esthétique ouverte",
       "Charge utile confortable",
     ],
+    benefits: ["Modules combinables", "Montage simple", "Esthétique ouverte", "Charge utile"],
+    highlights: [
+      "Composer le volume selon le mur disponible",
+      "Un assemblage sans outillage complexe",
+      "Une structure ouverte, lisible",
+      "Une charge utile adaptée aux livres et objets du quotidien",
+    ],
+    dailyUses: [
+      {
+        title: "Créer une bibliothèque à la mesure du mur",
+        text: "Les modules s’assemblent pour suivre la largeur disponible, plutôt que d’imposer un meuble trop large.",
+      },
+      {
+        title: "Séparer livres, cartons et objets",
+        text: "Chaque cube accueille un usage : lecture, rangement fermé par un bac, ou objets du salon.",
+      },
+    ],
     specifications: {
       Module: "40 × 30 × 40 cm",
       Configuration: "4 modules",
@@ -284,11 +480,32 @@ export const products: Product[] = [
     compareAtPrice: null,
     images: ["/products/under-sink.jpg"],
     features: ["Coulissants", "Résistant à l’humidité", "Installation rapide", "Compartiments séparés"],
+    benefits: ["Coulissants", "Résistant à l’humidité", "Installation rapide", "Compartiments séparés"],
+    highlights: [
+      "Atteindre le fond du meuble sans se baisser longtemps",
+      "Une structure adaptée à l’humidité",
+      "Une installation rapide sous l’évier",
+      "Des compartiments pour séparer les produits",
+    ],
+    dailyUses: [
+      {
+        title: "Sortir les produits sans vider le meuble",
+        text: "Les coulissants ramènent éponges et flacons vers soi, y compris derrière le siphon.",
+      },
+      {
+        title: "Séparer entretien et réserve",
+        text: "Les compartiments évitent de mélanger bouteilles d’entretien et stock du quotidien.",
+      },
+    ],
     specifications: {
       Largeur: "ajustable",
       Profondeur: "35 cm",
       Hauteur: "25 cm",
       Usage: "Sous évier",
+    },
+    measures: {
+      depthCm: 35,
+      heightCm: 25,
     },
     availabilityStatus: "available",
     supplierProvider: null,
@@ -311,6 +528,23 @@ export const products: Product[] = [
     compareAtPrice: null,
     images: ["/products/desk-organizer.jpg"],
     features: ["Plusieurs compartiments", "Empreinte compacte", "Finition mate", "Idéal télétravail"],
+    benefits: ["Plusieurs compartiments", "Empreinte compacte", "Finition mate", "Pour le télétravail"],
+    highlights: [
+      "Rassembler stylos et notes au même endroit",
+      "Un format qui occupe peu de plateau",
+      "Une finition mate, discrète",
+      "Pensé pour un bureau à la maison",
+    ],
+    dailyUses: [
+      {
+        title: "Garder le plateau débarrassé",
+        text: "Stylos, trombones et petits accessoires restent dans les compartiments, pas autour du clavier.",
+      },
+      {
+        title: "Un point fixe sur un bureau partagé",
+        text: "Le format compact se place dans un angle et se range facilement en fin de journée.",
+      },
+    ],
     specifications: {
       Largeur: "25 cm",
       Profondeur: "15 cm",

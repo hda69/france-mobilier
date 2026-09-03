@@ -31,6 +31,15 @@ export function IconLock({ className = base }: IconProps) {
   );
 }
 
+export function IconTick({ className = base }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden>
+      <circle cx="12" cy="12" r="8.5" strokeWidth="1.6" />
+      <path d="M8.5 12.2 11 14.7 15.5 9.5" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 export function IconCheck({ className = base }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden>

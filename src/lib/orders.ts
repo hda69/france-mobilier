@@ -2,6 +2,7 @@ import { and, desc, eq, inArray } from "drizzle-orm";
 import { db, ensureDatabase } from "@/lib/db";
 import { purchase, shopOrder, shopOrderItem, user } from "@/lib/db/schema";
 import { isMailConfigured, sendOrderPaidEmail } from "@/lib/mail";
+import { productHeroImage } from "@/lib/products/presentation";
 import { findProductById } from "@/lib/products/repository";
 import { decryptSecret, encryptSecret, provisionCustomerAccount } from "@/lib/provision-account";
 import {
@@ -149,7 +150,7 @@ export function priceCheckoutLines(items: CheckoutLine[]) {
       productId: product.id,
       name: product.name,
       slug: product.slug,
-      image: product.images[0] ?? null,
+      image: productHeroImage(product) || null,
       quantity,
       unitPriceCents: eurosToCents(product.price),
     });

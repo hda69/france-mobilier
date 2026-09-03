@@ -8,6 +8,44 @@ export type ProductCategory =
   | "salle-de-bain"
   | "animaux";
 
+export type ProductImageIssue =
+  | "chinese_text"
+  | "supplier_logo"
+  | "watermark"
+  | "foreign_marketing"
+  | "embedded_commercial"
+  | "supplier_diagram";
+
+export type ProductImageRole = "lifestyle" | "product" | "detail" | "dimensions";
+
+export type ProductImageAsset = {
+  src: string;
+  role?: ProductImageRole;
+  issues?: ProductImageIssue[];
+  replaceWhenPossible?: boolean;
+  notes?: string;
+};
+
+export type ProductDailyUse = {
+  title: string;
+  text: string;
+};
+
+export type ProductFaqItem = {
+  question: string;
+  answer: string;
+};
+
+export type ProductMeasures = {
+  widthCm?: number;
+  depthCm?: number;
+  heightCm?: number;
+  usefulHeightCm?: number;
+  legHeightCm?: number;
+  cabinetHeightCm?: number;
+  crossbarFromFloorCm?: number;
+};
+
 export type Product = {
   id: string;
   slug: string;
@@ -18,8 +56,19 @@ export type Product = {
   price: number;
   compareAtPrice: number | null;
   images: string[];
+  /** Metadata for gallery assets. Does not replace `images` order; used to flag supplier files. */
+  imageAssets?: ProductImageAsset[];
   features: string[];
+  /** Short above-the-fold benefits. Falls back to `features`. */
+  benefits?: string[];
+  /** “Pourquoi vous allez l’aimer” — not a spec dump. */
+  highlights?: string[];
+  /** “Pensé pour votre quotidien” — usage, not technical rows. */
+  dailyUses?: ProductDailyUse[];
+  faq?: ProductFaqItem[];
   specifications: Record<string, string>;
+  measures?: ProductMeasures;
+  madeToOrder?: boolean;
   availabilityStatus: AvailabilityStatus;
   supplierProvider: "buckydrop" | "manual" | null;
   supplierProductId: string | null;

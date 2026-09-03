@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/lib/types/commerce";
 import { ProductPrice, isOnSale } from "@/components/product-price";
+import { productHeroImage } from "@/lib/products/presentation";
 import { availabilityLabel } from "@/lib/products/repository";
 
 export function ProductCard({ product }: { product: Product }) {
@@ -10,7 +11,7 @@ export function ProductCard({ product }: { product: Product }) {
       <Link href={`/products/${product.slug}`} className="block">
         <div className="relative aspect-square overflow-hidden rounded-[var(--radius)] bg-cream">
           <Image
-            src={product.images[0]}
+            src={productHeroImage(product)}
             alt={product.name}
             fill
             className="object-cover transition duration-500 group-hover:scale-[1.03]"

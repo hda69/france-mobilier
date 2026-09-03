@@ -68,7 +68,8 @@ export function ProductReviews({
   }
 
   return (
-    <section className="mt-16 border-t border-border pt-12">
+    <section className="section border-t border-border">
+      <div className="container-page">
       <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
           <h2 className="display text-3xl text-navy">Avis clients vérifiés</h2>
@@ -84,9 +85,9 @@ export function ProductReviews({
       </div>
 
       {reviews.length === 0 ? (
-        <div className="rounded-[var(--radius)] bg-white px-5 py-8 text-sm text-muted">
+        <p className="text-sm text-muted">
           Aucun avis pour le moment.
-        </div>
+        </p>
       ) : (
         <ul className="space-y-4">
           {reviews.map((item) => (
@@ -163,6 +164,7 @@ export function ProductReviews({
             </button>
           </form>
         )}
+      </div>
       </div>
     </section>
   );
