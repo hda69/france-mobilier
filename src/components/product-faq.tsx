@@ -1,5 +1,51 @@
+"use client";
+
+import { useId, useState } from "react";
 import { productFaqItems } from "@/lib/products/presentation";
 import type { Product } from "@/lib/types/commerce";
+
+function ProductFaqItem({ question, answer }: { question: string; answer: string }) {
+  const [open, setOpen] = useState(false);
+  const panelId = useId();
+
+  return (
+    <div className="py-4">
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-controls={panelId}
+        onClick={() => setOpen((current) => !current)}
+        className="flex w-full items-center justify-between gap-4 text-left font-medium text-navy"
+      >
+        {question}
+        <span
+          className={`text-lg leading-none text-muted transition-transform duration-300 ease-out ${
+            open ? "rotate-45" : ""
+          }`}
+          aria-hidden
+        >
+          +
+        </span>
+      </button>
+      <div
+        id={panelId}
+        role="region"
+        className="grid transition-[grid-template-rows] duration-300 ease-out"
+        style={{ gridTemplateRows: open ? "1fr" : "0fr" }}
+      >
+        <div className="overflow-hidden">
+          <p
+            className={`mt-2 max-w-[46rem] text-sm leading-relaxed text-muted transition-opacity duration-300 ease-out ${
+              open ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            {answer}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function ProductFAQ({ product }: { product: Product }) {
   const items = productFaqItems(product);
@@ -11,15 +57,7 @@ export function ProductFAQ({ product }: { product: Product }) {
         <h2 className="display text-3xl text-navy">Questions fréquentes</h2>
         <div className="prose-narrow mt-8 divide-y divide-border border-y border-border">
           {items.map((item) => (
-            <details key={item.question} className="group py-4">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-medium text-navy">
-                {item.question}
-                <span className="text-lg text-muted transition group-open:rotate-45" aria-hidden>
-                  +
-                </span>
-              </summary>
-              <p className="mt-2 max-w-[46rem] text-sm leading-relaxed text-muted">{item.answer}</p>
-            </details>
+            <ProductFaqItem key={item.question} question={item.question} answer={item.answer} />
           ))}
         </div>
       </div>
