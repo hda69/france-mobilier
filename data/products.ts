@@ -247,12 +247,14 @@ export const products: Product[] = [
     sizesLabel: "Longueur",
     variants: tvStandVariants(),
     images: [
+      "/products/tv-stand-5.jpg",
       "/products/tv-stand.jpg",
       "/products/tv-stand-2.jpg",
       "/products/tv-stand-3.jpg",
       "/products/tv-stand-4.jpg",
     ],
     imageAssets: [
+      { src: "/products/tv-stand-5.jpg", role: "lifestyle" },
       { src: "/products/tv-stand.jpg", role: "lifestyle" },
       { src: "/products/tv-stand-2.jpg", role: "product" },
       { src: "/products/tv-stand-3.jpg", role: "product" },
