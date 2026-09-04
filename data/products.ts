@@ -62,7 +62,6 @@ function tvStandVariants(): ProductVariant[] {
     noyer: { 160: "6283791890961", 200: "6283791890962", 240: "6283791890963" },
     "noyer-noir": { 160: "6283791890967", 200: "6283791890968", 240: "6283791890969" },
     naturel: { 160: "6283791890952", 200: "6283791890953", 240: "6283791890954" },
-    noir: { 160: "6283791890973", 200: "6283791890974", 240: "6283791890975" },
   } as const;
   const colors = [
     {
@@ -82,12 +81,6 @@ function tvStandVariants(): ProductVariant[] {
       colorLabel: "Bois naturel",
       swatchClass: "bg-[#e8dcc8] ring-1 ring-black/10",
       image: "/products/tv-stand-4.jpg",
-    },
-    {
-      color: "noir" as const,
-      colorLabel: "Noir",
-      swatchClass: "bg-[#1a1a1a]",
-      image: "/products/tv-stand-5.jpg",
     },
   ];
   return colors.flatMap(({ color, colorLabel, swatchClass, image }) =>
@@ -114,9 +107,9 @@ export const products: Product[] = [
     name: "Meuble TV en bois",
     category: "maison",
     shortDescription:
-      "Meuble TV bas en bois, à poser au sol sous un écran. Quatre compartiments, trois longueurs, plusieurs finitions.",
+      "Meuble TV bas en bois, à poser au sol sous un écran. Quatre compartiments, trois longueurs, trois finitions.",
     description:
-      "Un meuble TV bas, pensé pour rester discret sous un écran mural. La façade se compose de deux tiroirs aux extrémités et de deux portes abattantes au centre, sans poignée apparente. Trois longueurs, de 160 à 240 cm, et quatre finitions.",
+      "Un meuble TV bas, pensé pour rester discret sous un écran mural. La façade se compose de deux tiroirs aux extrémités et de deux portes abattantes au centre, sans poignée apparente. Trois longueurs, de 160 à 240 cm, et trois finitions.",
     price: 289,
     compareAtPrice: 349,
     defaultVariantId: "p-013-noyer-200",
@@ -128,14 +121,12 @@ export const products: Product[] = [
       "/products/tv-stand-2.jpg",
       "/products/tv-stand-3.jpg",
       "/products/tv-stand-4.jpg",
-      "/products/tv-stand-5.jpg",
     ],
     imageAssets: [
       { src: "/products/tv-stand.jpg", role: "lifestyle" },
       { src: "/products/tv-stand-2.jpg", role: "product" },
       { src: "/products/tv-stand-3.jpg", role: "product" },
       { src: "/products/tv-stand-4.jpg", role: "product" },
-      { src: "/products/tv-stand-5.jpg", role: "product" },
     ],
     features: [
       "Meuble TV bas, 24 cm de haut",
@@ -172,7 +163,7 @@ export const products: Product[] = [
       },
       {
         question: "Quelles couleurs sont proposées ?",
-        answer: "Quatre finitions : noyer, noyer et noir, bois naturel, noir.",
+        answer: "Trois finitions : noyer, noyer et noir, bois naturel.",
       },
     ],
     specifications: {
@@ -182,7 +173,7 @@ export const products: Product[] = [
       Hauteur: "24 cm",
       Longueurs: "160, 200 et 240 cm",
       Matériaux: "Bois",
-      Finitions: "Noyer, noyer et noir, bois naturel, noir",
+      Finitions: "Noyer, noyer et noir, bois naturel",
       Rangement: "2 tiroirs, 2 portes abattantes",
     },
     measures: {
