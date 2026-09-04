@@ -17,8 +17,8 @@ export default function ProPage() {
         Demander un accès professionnel
       </h1>
       <p className="mt-4 max-w-2xl leading-relaxed text-muted">
-        Bureaux, commerces, copropriétés, commandes d’équipe : ouvrez un accès lié à votre compte et
-        bénéficiez des tarifs professionnels. Nous vérifions le SIREN de l’entreprise — pas de carte
+        Bureaux, commerces, copropriétés, commandes d’équipe : passez votre compte existant en accès
+        professionnel. Même e-mail, même mot de passe. Nous vérifions le SIREN — pas de carte
         d’identité.
       </p>
 
@@ -27,14 +27,17 @@ export default function ProPage() {
         <div className="rounded-[var(--radius)] bg-cream p-6 text-sm leading-relaxed text-muted">
           <p className="font-medium text-navy">Ce que l’accès pro ouvre</p>
           <ul className="mt-3 list-disc space-y-2 pl-5">
-            <li>tarifs professionnels, affichés HT ;</li>
-            <li>facture au nom de l’entreprise (SIREN), TVA détaillée ;</li>
-            <li>devis et commandes d’équipe, une fois l’accès activé.</li>
+            <li>même e-mail et même mot de passe ;</li>
+            <li>facture au nom de l’entreprise (SIREN) sur les prochaines commandes ;</li>
+            <li>e-mail de confirmation dès que le SIREN est validé.</li>
           </ul>
           <p className="mt-4">
-            Pas de justificatif d’identité. Nous vérifions un SIREN actif, puis nous vous écrivons
-            pour activer le compte pro. Ce n’est pas un code promo : les particuliers voient les
-            prix TTC du catalogue public.
+            Pas de justificatif d’identité. Un SIREN actif ouvre l’accès tout de suite, sur le
+            compte déjà créé. Les prix du catalogue restent TTC. Vous pouvez aussi le faire depuis{" "}
+            <Link href="/compte/entreprise" className="text-navy underline-offset-4 hover:underline">
+              Mon espace
+            </Link>
+            .
           </p>
           <p className="mt-4">
             Particulier ?{" "}

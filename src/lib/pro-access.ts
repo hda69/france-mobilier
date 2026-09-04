@@ -20,6 +20,10 @@ export type ProAccessRow = {
   updatedAt: Date;
 };
 
+export function isProApproved(row: ProAccessRow | null | undefined) {
+  return row?.status === "approved";
+}
+
 export async function getProAccessByUserId(userId: string) {
   await ensureDatabase();
   const rows = await db
@@ -83,6 +87,17 @@ export async function upsertProAccessRequest(input: {
     updatedAt: now,
   });
   return (await getProAccessByUserId(input.userId))!;
+}
+
+export async function markProAccessApproved(userId: string) {
+  await ensureDatabase();
+  const existing = await getProAccessByUserId(userId);
+  if (!existing || existing.status === "approved") return existing;
+  await db
+    .update(proAccessRequest)
+    .set({ status: "approved", updatedAt: new Date() })
+    .where(eq(proAccessRequest.userId, userId));
+  return (await getProAccessByUserId(userId))!;
 }
 
 export async function countProAccessRequests() {

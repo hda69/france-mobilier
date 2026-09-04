@@ -105,7 +105,7 @@ export function SiteHeader() {
             </form>
             <div className="flex items-center gap-1">
               <Link
-                href="/pro"
+                href={session?.user ? "/compte/entreprise" : "/pro"}
                 className="hidden h-11 items-center px-2 text-sm font-medium text-navy hover:opacity-70 sm:inline-flex"
               >
                 Accès pro
@@ -174,11 +174,11 @@ export function SiteHeader() {
                     </Link>
                   ))}
                   <Link
-                    href="/pro"
+                    href={session?.user ? "/compte/entreprise" : "/pro"}
                     className="rounded-lg px-3 py-3 font-medium hover:bg-cream"
                     onClick={() => setOpen(false)}
                   >
-                    Demander un accès pro
+                    {session?.user ? "Compte professionnel" : "Demander un accès pro"}
                   </Link>
                   <Link
                     href={session?.user ? "/compte" : "/connexion"}

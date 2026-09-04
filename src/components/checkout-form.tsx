@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useCart } from "@/components/cart-provider";
 import { authClient } from "@/lib/auth-client";
@@ -18,7 +18,26 @@ export function CheckoutForm() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [country, setCountry] = useState<ShippingCountryCode>("FR");
+  const [pro, setPro] = useState<{ companyName: string; siren: string } | null>(null);
   const hints = useMemo(() => shippingFieldHints(country), [country]);
+
+  useEffect(() => {
+    if (!session?.user) {
+      setPro(null);
+      return;
+    }
+    fetch("/api/pro-access")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.request?.status === "approved") {
+          setPro({
+            companyName: data.request.companyName || data.request.legalName,
+            siren: data.request.siren,
+          });
+        }
+      })
+      .catch(() => {});
+  }, [session?.user]);
 
   if (!ready) {
     return <div className="min-h-48" />;
@@ -68,6 +87,12 @@ export function CheckoutForm() {
     <form className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]" onSubmit={onSubmit}>
       <div className="space-y-4 rounded-2xl border border-border bg-card p-4 sm:p-6">
         <h2 className="text-lg font-medium">Livraison</h2>
+        {pro ? (
+          <p className="rounded-xl bg-cream px-4 py-3 text-sm leading-relaxed text-navy">
+            Compte professionnel — {pro.companyName} (SIREN {pro.siren}). Cette commande porte le
+            nom de l’entreprise. Les prix restent TTC.
+          </p>
+        ) : null}
         <label className="block text-sm">
           Pays
           <select

@@ -128,6 +128,9 @@ export const shopOrder = sqliteTable("shop_order", {
   viewToken: text("view_token"),
   confirmationSentAt: integer("confirmation_sent_at", { mode: "timestamp_ms" }),
   accountInviteEnc: text("account_invite_enc"),
+  companyName: text("company_name"),
+  siren: text("siren"),
+  accountType: text("account_type"),
   createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
   paidAt: integer("paid_at", { mode: "timestamp_ms" }),
 });

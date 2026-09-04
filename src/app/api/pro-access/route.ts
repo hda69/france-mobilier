@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { z } from "zod";
 import { auth, prepareAuth } from "@/lib/auth";
-import { getProAccessByUserId, upsertProAccessRequest } from "@/lib/pro-access";
+import { sendProAccessActivatedEmail } from "@/lib/mail";
+import { getProAccessByUserId, markProAccessApproved, upsertProAccessRequest } from "@/lib/pro-access";
 import { isValidSiren, isValidSiret, lookupSiren, normalizeSiren } from "@/lib/siren";
 
 const schema = z.object({
@@ -31,7 +32,17 @@ export async function GET() {
   if (!session?.user) {
     return NextResponse.json({ error: "Connexion requise" }, { status: 401 });
   }
-  const row = await getProAccessByUserId(session.user.id);
+  let row = await getProAccessByUserId(session.user.id);
+  if (row?.status === "eligible") {
+    row = await markProAccessApproved(session.user.id);
+    if (row) {
+      await sendProAccessActivatedEmail({
+        email: session.user.email,
+        companyName: row.companyName || row.legalName,
+        siren: row.siren,
+      });
+    }
+  }
   return NextResponse.json({ request: row ? publicRow(row) : null });
 }
 
@@ -103,7 +114,13 @@ export async function POST(request: Request) {
     activity: company.activity,
     vatNumber: parsed.data.vatNumber?.trim(),
     message: parsed.data.message?.trim(),
-    status: "eligible",
+    status: "approved",
+  });
+
+  await sendProAccessActivatedEmail({
+    email: session.user.email,
+    companyName: row.companyName || row.legalName,
+    siren: row.siren,
   });
 
   return NextResponse.json({ request: publicRow(row), ok: true });

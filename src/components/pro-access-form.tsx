@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 
 type RequestState = {
@@ -14,6 +15,8 @@ type RequestState = {
 };
 
 export function ProAccessForm() {
+  const pathname = usePathname();
+  const next = pathname?.startsWith("/compte") ? "/compte/entreprise" : "/pro";
   const { data: session, isPending } = authClient.useSession();
   const [existing, setExisting] = useState<RequestState | null>(null);
   const [loading, setLoading] = useState(false);
@@ -70,14 +73,14 @@ export function ProAccessForm() {
     return (
       <div className="rounded-[var(--radius)] border border-border bg-white p-6">
         <p className="leading-relaxed text-muted">
-          L’accès professionnel est lié à votre compte. Connectez-vous, puis nous vérifions le SIREN
-          de l’entreprise — pas de pièce d’identité.
+          Connectez-vous avec votre compte habituel. Après vérification du SIREN, l’accès pro
+          s’ouvre sur le même e-mail et le même mot de passe — pas de pièce d’identité.
         </p>
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-          <Link href="/connexion?next=/pro" className="btn btn-primary w-full sm:w-auto">
+          <Link href={`/connexion?next=${encodeURIComponent(next)}`} className="btn btn-primary w-full sm:w-auto">
             Se connecter
           </Link>
-          <Link href="/inscription?next=/pro" className="btn btn-secondary w-full sm:w-auto">
+          <Link href={`/inscription?next=${encodeURIComponent(next)}`} className="btn btn-secondary w-full sm:w-auto">
             Créer un compte
           </Link>
         </div>
@@ -90,7 +93,7 @@ export function ProAccessForm() {
       existing.status === "approved"
         ? "Accès professionnel activé"
         : existing.status === "eligible"
-          ? "SIREN vérifié — accès en cours d’ouverture"
+          ? "SIREN vérifié — activation en cours"
           : "Demande non retenue";
     return (
       <div className="rounded-[var(--radius)] border border-border bg-white p-6">
@@ -98,11 +101,17 @@ export function ProAccessForm() {
         <p className="mt-3 text-sm text-muted">{existing.legalName || existing.companyName}</p>
         <p className="mt-1 text-sm text-muted">SIREN {existing.siren}</p>
         {existing.city ? <p className="mt-1 text-sm text-muted">{existing.city}</p> : null}
+        {existing.status === "approved" ? (
+          <p className="mt-4 text-sm leading-relaxed text-muted">
+            Vous restez sur le même compte ({session.user.email}), sans nouveau mot de passe. Les
+            prochaines commandes portent le nom et le SIREN de l’entreprise. Un e-mail de
+            confirmation a été envoyé.
+          </p>
+        ) : null}
         {existing.status === "eligible" ? (
           <p className="mt-4 text-sm leading-relaxed text-muted">
-            L’entreprise est active au répertoire Sirene. Nous revenons vers vous sur{" "}
-            {session.user.email} pour activer les tarifs professionnels, la facture au nom de
-            l’entreprise et les devis. Aucune pièce d’identité n’est demandée.
+            L’entreprise est active au répertoire Sirene. Rechargez cette page : l’accès s’ouvre
+            sur le même compte, sans nouvel identifiant.
           </p>
         ) : null}
         {existing.status === "rejected" ? (
@@ -117,8 +126,8 @@ export function ProAccessForm() {
   return (
     <form onSubmit={onSubmit} className="space-y-4 rounded-[var(--radius)] border border-border bg-white p-6">
       <p className="text-sm text-muted">
-        Compte : {session.user.email}. Nous vérifions le SIREN dans le répertoire Sirene. Pas de
-        pièce d’identité.
+        Compte : {session.user.email}. L’e-mail et le mot de passe ne changent pas. Nous vérifions
+        le SIREN dans le répertoire Sirene. Pas de pièce d’identité.
       </p>
       <label className="block text-sm">
         SIREN
@@ -176,7 +185,7 @@ export function ProAccessForm() {
       </label>
       {error ? <p className="text-sm text-red-700">{error}</p> : null}
       <button type="submit" className="btn btn-primary w-full sm:w-auto" disabled={loading}>
-        {loading ? "Vérification du SIREN…" : "Demander un accès professionnel"}
+        {loading ? "Vérification du SIREN…" : "Ouvrir l’accès professionnel"}
       </button>
     </form>
   );

@@ -22,6 +22,8 @@ type CheckoutOrder = {
   country?: string;
   amountCents: number;
   confirmationSent: boolean;
+  companyName?: string | null;
+  siren?: string | null;
   items: { name: string; quantity: number; unitPriceCents: number }[];
 };
 
@@ -89,6 +91,9 @@ export function OrderConfirmation() {
         paidAt: new Date(),
         createdAt: new Date(),
         confirmationSent,
+        companyName: order.companyName || null,
+        siren: order.siren || null,
+        accountType: order.companyName ? "pro" : "personal",
         items: order.items,
       }
     : null;

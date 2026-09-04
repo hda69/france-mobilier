@@ -209,6 +209,9 @@ async function migrateDatabase() {
     !shopOrderCols.has("account_invite_enc")
       ? "ALTER TABLE shop_order ADD COLUMN account_invite_enc TEXT"
       : null,
+    !shopOrderCols.has("company_name") ? "ALTER TABLE shop_order ADD COLUMN company_name TEXT" : null,
+    !shopOrderCols.has("siren") ? "ALTER TABLE shop_order ADD COLUMN siren TEXT" : null,
+    !shopOrderCols.has("account_type") ? "ALTER TABLE shop_order ADD COLUMN account_type TEXT" : null,
   ].filter((sql): sql is string => Boolean(sql));
   const accountInfo = await client.execute("PRAGMA table_info(account)");
   const accountCols = new Set(accountInfo.rows.map((row) => String(row.name)));

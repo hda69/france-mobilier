@@ -22,7 +22,7 @@ const items = [
   },
   {
     q: "Proposez-vous un accès professionnel ?",
-    a: "Oui. Demandez un accès professionnel depuis votre compte. Après vérification du SIREN, nous activons les tarifs HT, la facture au nom de l’entreprise et les devis — sans pièce d’identité.",
+    a: "Oui. Depuis Mon espace, renseignez le SIREN de l’entreprise. L’e-mail et le mot de passe restent les mêmes. Dès que le SIREN est actif, l’accès pro s’ouvre et un e-mail de confirmation est envoyé. Les prochaines commandes portent le nom de l’entreprise. Les prix restent TTC.",
   },
   {
     q: "Comment retrouver une commande ?",

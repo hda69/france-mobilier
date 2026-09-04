@@ -47,6 +47,12 @@ export function OrderSummary({
         <span>{formatPrice(order.amountCents / 100)}</span>
       </p>
       <p className="mt-3 text-sm leading-relaxed text-muted">
+        {order.companyName && order.siren ? (
+          <>
+            {order.companyName} — SIREN {order.siren}
+            <br />
+          </>
+        ) : null}
         {order.name}
         <br />
         {order.line1}

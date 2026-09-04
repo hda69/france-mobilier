@@ -26,6 +26,9 @@ export type CheckoutCustomer = {
   city: string;
   phone: string;
   userId?: string | null;
+  companyName?: string | null;
+  siren?: string | null;
+  accountType?: "pro" | "personal" | null;
 };
 
 export type PricedLine = {
@@ -56,6 +59,9 @@ export type PublicOrder = {
   paidAt: Date | null;
   createdAt: Date;
   confirmationSent: boolean;
+  companyName: string | null;
+  siren: string | null;
+  accountType: string | null;
   items: { name: string; quantity: number; unitPriceCents: number }[];
 };
 
@@ -123,6 +129,9 @@ function toPublic(order: OrderRow, items: ItemRow[]): PublicOrder {
     paidAt: order.paidAt,
     createdAt: order.createdAt,
     confirmationSent: Boolean(order.confirmationSentAt),
+    companyName: order.companyName,
+    siren: order.siren,
+    accountType: order.accountType,
     items: items.map((item) => ({
       name: item.name,
       quantity: item.quantity,
@@ -206,6 +215,9 @@ export async function createPendingOrder(input: {
     reference: await uniqueReference(),
     viewToken: randomToken(),
     confirmationSentAt: null,
+    companyName: input.customer.companyName?.trim() || null,
+    siren: input.customer.siren?.trim() || null,
+    accountType: input.customer.accountType || null,
     createdAt: now,
     paidAt: null,
   });
@@ -292,6 +304,8 @@ async function sendOrderConfirmationIfNeeded(orderId: string, temporaryPassword?
       loginUrl: `${getSiteUrl()}/connexion?next=${encodeURIComponent("/compte#mot-de-passe")}`,
       testMode: stripeMode() === "test",
       temporaryPassword: password,
+      companyName: withAccess.companyName,
+      siren: withAccess.siren,
     });
     if (sent) {
       await db

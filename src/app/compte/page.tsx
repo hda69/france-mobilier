@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { AccountNav } from "@/components/account-nav";
 import { AccountOrders } from "@/components/account-orders";
 import { ChangePasswordForm } from "@/components/change-password-form";
 import { authClient } from "@/lib/auth-client";
@@ -15,12 +16,12 @@ function ProStatus() {
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (!data?.request) {
-          setLabel("Pas encore d’accès pro. Demande liée au SIREN de l’entreprise.");
+          setLabel("Pas encore d’accès pro. Renseignez le SIREN dans Entreprise, sans changer d’e-mail.");
           return;
         }
         if (data.request.status === "approved") setLabel("Accès professionnel activé.");
         else if (data.request.status === "eligible") {
-          setLabel(`SIREN ${data.request.siren} vérifié. Accès en cours d’ouverture.`);
+          setLabel(`SIREN ${data.request.siren} vérifié. Activation en cours.`);
         } else setLabel("Demande d’accès pro non retenue.");
       })
       .catch(() => {});
@@ -65,6 +66,7 @@ export default function ComptePage() {
 
   return (
     <div className="container-page space-y-8 py-14">
+      <AccountNav current="apercu" />
       <h1 className="text-3xl font-semibold tracking-tight">Mon compte</h1>
       <div className="max-w-lg rounded-2xl border border-border bg-white p-6">
         <p className="text-sm text-muted">Nom</p>
@@ -77,8 +79,8 @@ export default function ComptePage() {
           en ligne qu’après validation.
         </p>
         <ProStatus />
-        <Link href="/pro" className="btn btn-primary mt-4 inline-flex w-full">
-          Demander un accès pro
+        <Link href="/compte/entreprise" className="btn btn-primary mt-4 inline-flex w-full">
+          Compte professionnel
         </Link>
         <button type="button" onClick={logout} className="btn btn-secondary mt-3 w-full">
           Se déconnecter

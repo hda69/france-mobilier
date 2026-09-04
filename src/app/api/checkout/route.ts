@@ -23,6 +23,7 @@ import {
   stripeMode,
 } from "@/lib/payments/stripe";
 import { normalizeZonePhone } from "@/lib/phone";
+import { getProAccessByUserId, isProApproved } from "@/lib/pro-access";
 import { SHIPPING_COUNTRY_CODES, normalizeShippingPostal } from "@/lib/shipping-zone";
 
 const schema = z
@@ -101,6 +102,8 @@ export async function GET(request: Request) {
               country: order.country,
               amountCents: order.amountCents,
               confirmationSent: Boolean(order.confirmationSentAt),
+              companyName: order.companyName,
+              siren: order.siren,
               items: order.items.map((item) => ({
                 name: item.name,
                 quantity: item.quantity,
@@ -154,6 +157,11 @@ export async function POST(request: Request) {
     const { lines, amountCents } = priceCheckoutLines(parsed.data.items);
     await prepareAuth();
     const sessionAuth = await auth.api.getSession({ headers: await headers() });
+    const pro =
+      sessionAuth?.user?.id ? await getProAccessByUserId(sessionAuth.user.id) : null;
+    const proActive = isProApproved(pro);
+    const companyName = proActive ? pro?.companyName || pro?.legalName || null : null;
+    const siren = proActive ? pro?.siren || null : null;
     const orderId = await createPendingOrder({
       customer: {
         name: parsed.data.name,
@@ -164,6 +172,9 @@ export async function POST(request: Request) {
         city: parsed.data.city,
         phone: parsed.data.phone,
         userId: sessionAuth?.user?.id ?? null,
+        companyName,
+        siren,
+        accountType: proActive ? "pro" : "personal",
       },
       lines,
       amountCents,
@@ -176,10 +187,24 @@ export async function POST(request: Request) {
       locale: "fr",
       customer_email: parsed.data.email.trim().toLowerCase(),
       client_reference_id: orderId,
-      metadata: { orderId },
+      metadata: {
+        orderId,
+        accountType: proActive ? "pro" : "personal",
+        ...(companyName ? { companyName } : {}),
+        ...(siren ? { siren } : {}),
+      },
       payment_method_types: ["card"],
       success_url: `${siteUrl}/commande/confirmation?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${siteUrl}/checkout`,
+      ...(proActive && companyName && siren
+        ? {
+            custom_text: {
+              submit: {
+                message: `Commande professionnelle — ${companyName} (SIREN ${siren}). Les prix restent TTC.`,
+              },
+            },
+          }
+        : {}),
       line_items: lines.map((line) => ({
         quantity: line.quantity,
         price_data: {
@@ -192,7 +217,12 @@ export async function POST(request: Request) {
         },
       })),
       payment_intent_data: {
-        metadata: { orderId },
+        metadata: {
+          orderId,
+          accountType: proActive ? "pro" : "personal",
+          ...(companyName ? { companyName } : {}),
+          ...(siren ? { siren } : {}),
+        },
         receipt_email: parsed.data.email.trim().toLowerCase(),
         shipping: {
           name: parsed.data.name.trim(),

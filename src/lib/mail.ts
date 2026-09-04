@@ -155,6 +155,8 @@ export type OrderPaidEmail = {
   loginUrl: string;
   testMode: boolean;
   temporaryPassword?: string | null;
+  companyName?: string | null;
+  siren?: string | null;
 };
 
 export function buildOrderPaidEmail(order: OrderPaidEmail) {
@@ -183,6 +185,9 @@ export function buildOrderPaidEmail(order: OrderPaidEmail) {
     lines,
     "",
     `Livraison : ${destination}`,
+    ...(order.companyName && order.siren
+      ? [`Facture entreprise : ${order.companyName} (SIREN ${order.siren})`]
+      : []),
     `Voir la commande : ${order.viewUrl}`,
     "",
     ...(order.temporaryPassword
@@ -236,7 +241,14 @@ export function buildOrderPaidEmail(order: OrderPaidEmail) {
       Total TTC ${formatEuros(order.amountCents)}
     </p>
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin:0 0 18px">${rows}</table>
-    <p style="margin:0 0 22px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.55;color:${MUTED}">Livraison : ${escapeHtml(destination)}</p>
+    <p style="margin:0 0 22px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.55;color:${MUTED}">
+      Livraison : ${escapeHtml(destination)}
+      ${
+        order.companyName && order.siren
+          ? `<br>Facture entreprise : ${escapeHtml(order.companyName)} (SIREN ${escapeHtml(order.siren)})`
+          : ""
+      }
+    </p>
     <p style="margin:0 0 8px">${emailButton(order.viewUrl, "Voir la commande")}</p>
     ${accountBlock}
     <p style="margin:22px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.55;color:${MUTED}">${escapeHtml(SHIPPING_OFFERED_SENTENCE)} Un suivi sera envoyé après l’expédition.</p>
@@ -256,4 +268,45 @@ export function buildOrderPaidEmail(order: OrderPaidEmail) {
 export async function sendOrderPaidEmail(order: OrderPaidEmail) {
   const built = buildOrderPaidEmail(order);
   return sendMail({ to: order.email, subject: built.subject, text: built.text, html: built.html });
+}
+
+export async function sendProAccessActivatedEmail(input: {
+  email: string;
+  companyName: string;
+  siren: string;
+}) {
+  const accountUrl = `${store.domain.replace(/\/$/, "")}/compte/entreprise`;
+  const subject = `Accès professionnel activé — ${store.storeName}`;
+  const text = [
+    `Votre accès professionnel est ouvert pour ${input.companyName} (SIREN ${input.siren}).`,
+    "Connectez-vous avec le même e-mail et le même mot de passe.",
+    "Les prochaines commandes passées depuis ce compte portent le nom et le SIREN de l’entreprise.",
+    `Espace : ${accountUrl}`,
+  ].join("\n");
+  const html = layoutCustomerEmail({
+    preheader: `Accès pro ouvert pour ${input.companyName}.`,
+    title: subject,
+    body: `
+    <p style="margin:0 0 8px;font-family:Georgia,'Times New Roman',serif;font-size:22px;line-height:1.3;color:${NAVY}">Accès professionnel activé</p>
+    <p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#222">
+      Votre compte est désormais un compte professionnel, sans changer d’e-mail ni de mot de passe.
+    </p>
+    <p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#222">
+      Entreprise : ${escapeHtml(input.companyName)}<br>
+      SIREN : ${escapeHtml(input.siren)}
+    </p>
+    <p style="margin:0 0 22px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#222">
+      Les prochaines commandes passées depuis ce compte portent le nom et le SIREN de l’entreprise. Les prix du catalogue restent TTC.
+    </p>
+    <p style="margin:0">${emailButton(accountUrl, "Voir mon espace")}</p>
+    `,
+  });
+  const sent = await sendMail({ to: input.email, subject, text, html });
+  await sendMail({
+    to: store.supportEmail,
+    subject: `Nouvel accès pro — ${input.companyName}`,
+    text: `${input.email} · ${input.companyName} · SIREN ${input.siren}`,
+    html: `<p>${escapeHtml(input.email)} · ${escapeHtml(input.companyName)} · SIREN ${escapeHtml(input.siren)}</p>`,
+  });
+  return sent;
 }
