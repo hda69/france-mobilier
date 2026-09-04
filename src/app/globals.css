@@ -152,6 +152,15 @@ textarea {
     transform 180ms ease;
 }
 
+a.account-nav-link {
+  color: var(--navy);
+}
+
+a.account-nav-link[aria-current="page"] {
+  background: var(--navy);
+  color: #fff !important;
+}
+
 .btn-primary {
   background: var(--navy);
   color: #fff;

@@ -16,8 +16,9 @@ export function AccountNav({ current }: { current: "apercu" | "entreprise" }) {
           <Link
             key={link.href}
             href={link.href}
-            className={`rounded-full px-3.5 py-1.5 text-sm ${
-              active ? "bg-navy text-white" : "bg-cream text-navy"
+            aria-current={active ? "page" : undefined}
+            className={`account-nav-link rounded-full px-3.5 py-1.5 text-sm ${
+              active ? "" : "bg-cream"
             }`}
           >
             {link.label}
