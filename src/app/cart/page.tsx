@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/components/cart-provider";
 import { formatPrice } from "@/lib/products/repository";
+import { ProQuoteActions } from "@/components/pro-quote-actions";
 import { SHIPPING_OFFERED_SENTENCE } from "@/lib/shipping-zone";
 
 export default function CartPage() {
@@ -81,6 +82,12 @@ export default function CartPage() {
             <Link href="/checkout" className="btn btn-primary mt-6 w-full">
               Commander
             </Link>
+            <div className="mt-4">
+              <ProQuoteActions
+                cartItems={items.map((item) => ({ productId: item.productId, quantity: item.quantity }))}
+                cartTotalEuros={subtotal}
+              />
+            </div>
           </aside>
         </div>
       )}

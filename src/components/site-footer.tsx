@@ -20,7 +20,7 @@ const groups = [
       { href: "/shipping", label: "Livraison" },
       { href: "/returns", label: "Retours" },
       { href: "/compte", label: "Mes commandes" },
-      { href: "/pro", label: "Demander un accès pro" },
+      { href: "/pro", label: "France Mobilier Pro" },
       { href: "/contact", label: "Contact" },
       { href: "/faq", label: "FAQ" },
     ],

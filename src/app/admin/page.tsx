@@ -161,6 +161,14 @@ export default async function AdminPage() {
       ) : null}
 
       <p className="mt-6 text-sm">
+        <Link href="/admin/professionnels" className="text-navy underline-offset-2 hover:underline">
+          Professionnels
+        </Link>
+        {" · "}
+        <Link href="/admin/devis" className="text-navy underline-offset-2 hover:underline">
+          Devis professionnels
+        </Link>
+        {" · "}
         <Link href="/admin/mots-cles" className="text-navy underline-offset-2 hover:underline">
           Volumes de recherche (Keyword Planner)
         </Link>

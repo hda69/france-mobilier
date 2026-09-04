@@ -1,24 +1,37 @@
+"use client";
+
 import Link from "next/link";
 
-const links = [
-  { href: "/compte", label: "Aperçu" },
-  { href: "/compte/entreprise", label: "Entreprise" },
-];
+const allLinks = [
+  { href: "/compte", label: "Tableau de bord", key: "apercu" },
+  { href: "/compte#commandes", label: "Mes commandes", key: "commandes" },
+  { href: "/compte/devis", label: "Mes devis", key: "devis" },
+  { href: "/compte/factures", label: "Mes factures", key: "factures" },
+  { href: "/compte/entreprise", label: "Mon entreprise", key: "entreprise" },
+] as const;
 
-export function AccountNav({ current }: { current: "apercu" | "entreprise" }) {
+export function AccountNav({
+  current,
+  proApproved = false,
+}: {
+  current: "apercu" | "entreprise" | "devis" | "factures";
+  proApproved?: boolean;
+}) {
+  const links = proApproved
+    ? allLinks
+    : allLinks.filter((link) => link.key === "apercu" || link.key === "entreprise");
+
   return (
     <nav className="flex flex-wrap gap-2" aria-label="Mon espace">
       {links.map((link) => {
-        const active =
-          (current === "apercu" && link.href === "/compte") ||
-          (current === "entreprise" && link.href === "/compte/entreprise");
+        const active = current === link.key || (current === "apercu" && link.key === "commandes");
         return (
           <Link
             key={link.href}
             href={link.href}
-            aria-current={active ? "page" : undefined}
+            aria-current={active && link.key !== "commandes" ? "page" : undefined}
             className={`account-nav-link rounded-full px-3.5 py-1.5 text-sm ${
-              active ? "" : "bg-cream"
+              current === link.key ? "" : "bg-cream"
             }`}
           >
             {link.label}

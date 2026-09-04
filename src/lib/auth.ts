@@ -35,6 +35,7 @@ export const auth = betterAuth({
       const sent = await sendPasswordResetEmail({ email: user.email, url });
       if (!sent) {
         console.error("[auth] password reset email was not sent");
+        throw new Error("PASSWORD_RESET_EMAIL_FAILED");
       }
     },
   },

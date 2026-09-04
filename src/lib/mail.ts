@@ -157,6 +157,7 @@ export type OrderPaidEmail = {
   temporaryPassword?: string | null;
   companyName?: string | null;
   siren?: string | null;
+  invoicesUrl?: string | null;
 };
 
 export function buildOrderPaidEmail(order: OrderPaidEmail) {
@@ -189,6 +190,7 @@ export function buildOrderPaidEmail(order: OrderPaidEmail) {
       ? [`Facture entreprise : ${order.companyName} (SIREN ${order.siren})`]
       : []),
     `Voir la commande : ${order.viewUrl}`,
+    ...(order.invoicesUrl ? [`Vos factures : ${order.invoicesUrl}`] : []),
     "",
     ...(order.temporaryPassword
       ? [
@@ -250,6 +252,11 @@ export function buildOrderPaidEmail(order: OrderPaidEmail) {
       }
     </p>
     <p style="margin:0 0 8px">${emailButton(order.viewUrl, "Voir la commande")}</p>
+    ${
+      order.invoicesUrl
+        ? `<p style="margin:0 0 8px">${emailButton(order.invoicesUrl, "Télécharger la facture")}</p>`
+        : ""
+    }
     ${accountBlock}
     <p style="margin:22px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.55;color:${MUTED}">${escapeHtml(SHIPPING_OFFERED_SENTENCE)} Un suivi sera envoyé après l’expédition.</p>
   `;
@@ -272,43 +279,113 @@ export async function sendOrderPaidEmail(order: OrderPaidEmail) {
 
 export async function sendProAccessActivatedEmail(input: {
   email: string;
+  firstName?: string | null;
   companyName: string;
-  siren: string;
+  siren?: string | null;
 }) {
-  const accountUrl = `${store.domain.replace(/\/$/, "")}/compte/entreprise`;
-  const subject = `Accès professionnel activé — ${store.storeName}`;
+  const accountUrl = `${store.domain.replace(/\/$/, "")}/compte`;
+  const greeting = input.firstName?.trim() ? `Bonjour ${input.firstName.trim()},` : "Bonjour,";
+  const subject = "Votre accès France Mobilier Pro est activé";
   const text = [
-    `Votre accès professionnel est ouvert pour ${input.companyName} (SIREN ${input.siren}).`,
-    "Connectez-vous avec le même e-mail et le même mot de passe.",
-    "Les prochaines commandes passées depuis ce compte portent le nom et le SIREN de l’entreprise.",
+    greeting,
+    "",
+    "Votre accès professionnel France Mobilier est désormais actif.",
+    input.siren
+      ? `Entreprise : ${input.companyName} (SIREN ${input.siren}).`
+      : `Entreprise : ${input.companyName}.`,
+    "Vous pouvez vous connecter à votre compte afin de gérer vos informations professionnelles, consulter vos commandes et demander un devis pour vos projets.",
     `Espace : ${accountUrl}`,
+    "",
+    "À bientôt,",
+    store.storeName,
   ].join("\n");
   const html = layoutCustomerEmail({
-    preheader: `Accès pro ouvert pour ${input.companyName}.`,
+    preheader: "Votre accès professionnel est actif.",
     title: subject,
     body: `
     <p style="margin:0 0 8px;font-family:Georgia,'Times New Roman',serif;font-size:22px;line-height:1.3;color:${NAVY}">Accès professionnel activé</p>
+    <p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#222">${escapeHtml(greeting)}</p>
     <p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#222">
-      Votre compte est désormais un compte professionnel, sans changer d’e-mail ni de mot de passe.
+      Votre accès professionnel France Mobilier est désormais actif.
     </p>
     <p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#222">
-      Entreprise : ${escapeHtml(input.companyName)}<br>
-      SIREN : ${escapeHtml(input.siren)}
+      ${escapeHtml(input.companyName)}${input.siren ? `<br>SIREN ${escapeHtml(input.siren)}` : ""}
     </p>
     <p style="margin:0 0 22px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#222">
-      Les prochaines commandes passées depuis ce compte portent le nom et le SIREN de l’entreprise. Les prix du catalogue restent TTC.
+      Vous pouvez vous connecter pour gérer vos informations, consulter vos commandes et demander un devis.
     </p>
-    <p style="margin:0">${emailButton(accountUrl, "Voir mon espace")}</p>
+    <p style="margin:0">${emailButton(accountUrl, "Ouvrir mon espace")}</p>
     `,
   });
-  const sent = await sendMail({ to: input.email, subject, text, html });
+  return sendMail({ to: input.email, subject, text, html });
+}
+
+export async function sendProAccessRequestEmails(input: {
+  email: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  companyName: string;
+  phone?: string | null;
+  siren?: string | null;
+  vatNumber?: string | null;
+  activity?: string | null;
+  volume?: string | null;
+  status: string;
+}) {
+  const greeting = input.firstName?.trim() ? `Bonjour ${input.firstName.trim()},` : "Bonjour,";
+  if (input.status === "pending") {
+    const clientSubject = "Votre demande France Mobilier Pro";
+    await sendMail({
+      to: input.email,
+      subject: clientSubject,
+      text: [
+        greeting,
+        "",
+        "Nous avons bien reçu votre demande d’accès professionnel France Mobilier.",
+        "Votre dossier est actuellement en cours de vérification.",
+        "Vous recevrez un e-mail dès que votre accès professionnel sera activé.",
+        "",
+        store.storeName,
+      ].join("\n"),
+      html: layoutCustomerEmail({
+        preheader: "Votre demande professionnelle est en cours de vérification.",
+        title: clientSubject,
+        body: `
+        <p style="margin:0 0 8px;font-family:Georgia,'Times New Roman',serif;font-size:22px;line-height:1.3;color:${NAVY}">Demande reçue</p>
+        <p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#222">${escapeHtml(greeting)}</p>
+        <p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#222">
+          Nous avons bien reçu votre demande d’accès professionnel France Mobilier.
+        </p>
+        <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#222">
+          Votre dossier est actuellement en cours de vérification. Vous recevrez un e-mail dès que votre accès professionnel sera activé.
+        </p>
+        `,
+      }),
+    });
+  }
+
+  const { b2bConfig } = await import("@/lib/b2b");
+  const adminTo = b2bConfig().salesEmail;
+  const adminUrl = `${store.domain.replace(/\/$/, "")}/admin/professionnels`;
+  const adminLines = [
+    `Nom : ${[input.firstName, input.lastName].filter(Boolean).join(" ") || "—"}`,
+    `Entreprise : ${input.companyName}`,
+    `E-mail : ${input.email}`,
+    `Téléphone : ${input.phone || "—"}`,
+    `SIREN : ${input.siren || "—"}`,
+    `TVA : ${input.vatNumber || "—"}`,
+    `Activité : ${input.activity || "—"}`,
+    `Volume estimé : ${input.volume || "—"}`,
+    `Statut : ${input.status}`,
+    `Date : ${new Date().toLocaleString("fr-FR")}`,
+    adminUrl,
+  ];
   await sendMail({
-    to: store.supportEmail,
-    subject: `Nouvel accès pro — ${input.companyName}`,
-    text: `${input.email} · ${input.companyName} · SIREN ${input.siren}`,
-    html: `<p>${escapeHtml(input.email)} · ${escapeHtml(input.companyName)} · SIREN ${escapeHtml(input.siren)}</p>`,
+    to: adminTo,
+    subject: "Nouvelle demande France Mobilier Pro",
+    text: adminLines.join("\n"),
+    html: `<p>${adminLines.map((line) => escapeHtml(line)).join("<br>")}</p>`,
   });
-  return sent;
 }
 
 export async function sendPasswordResetEmail(input: { email: string; url: string }) {

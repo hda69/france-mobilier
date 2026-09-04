@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useCart } from "@/components/cart-provider";
 import { ProductTrustBar } from "@/components/product-trust-bar";
+import { ProQuoteActions } from "@/components/pro-quote-actions";
 import { store } from "@/config/store";
 import { productHeroImage } from "@/lib/products/presentation";
 import type { Product } from "@/lib/types/commerce";
@@ -42,6 +43,7 @@ export function ProductBuyBox({ product }: { product: Product }) {
         <button type="button" className="btn btn-primary min-h-12 w-full text-base" onClick={add}>
           {added ? "Ajouté au panier" : "Ajouter au panier"}
         </button>
+        <ProQuoteActions product={product} quantity={quantity} />
         <ProductTrustBar />
         <p className="text-xs text-muted">
           Une question ? {store.supportEmail} — {store.supportHoursShort}.

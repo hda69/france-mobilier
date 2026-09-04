@@ -20,8 +20,12 @@ function ProStatus() {
           return;
         }
         if (data.request.status === "approved") setLabel("Accès professionnel activé.");
-        else if (data.request.status === "eligible") {
-          setLabel(`SIREN ${data.request.siren} vérifié. Activation en cours.`);
+        else if (data.request.status === "pending" || data.request.status === "eligible") {
+          setLabel("Votre demande professionnelle est en cours de vérification.");
+        } else if (data.request.status === "suspended") {
+          setLabel("Votre accès professionnel est temporairement indisponible.");
+        } else if (data.request.status === "rejected") {
+          setLabel("Votre demande n’a pas pu être validée. Contactez-nous si besoin.");
         } else setLabel("Demande d’accès pro non retenue.");
       })
       .catch(() => {});
@@ -34,6 +38,14 @@ function ProStatus() {
 export default function ComptePage() {
   const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
+  const [proApproved, setProApproved] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/pro-access")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => setProApproved(data?.request?.status === "approved"))
+      .catch(() => {});
+  }, []);
 
   async function logout() {
     await authClient.signOut();
@@ -67,8 +79,9 @@ export default function ComptePage() {
   return (
     <div className="container-page space-y-8 py-14">
       <div>
-        <AccountNav current="apercu" />
+        <AccountNav current="apercu" proApproved={proApproved} />
         <h1 className="mt-6 text-3xl font-semibold tracking-tight">Mon compte</h1>
+        {proApproved ? <p className="mt-1 text-sm text-navy">Compte professionnel</p> : null}
       </div>
       <div className="grid items-start gap-8 lg:grid-cols-[minmax(20rem,26rem)_minmax(0,1fr)]">
         <div className="rounded-2xl border border-border bg-white p-6">
@@ -77,19 +90,25 @@ export default function ComptePage() {
           <p className="mt-4 text-sm text-muted">E-mail</p>
           <p className="font-medium">{session.user.email}</p>
           <ChangePasswordForm />
-          <p className="mt-6 text-sm leading-relaxed text-muted">
-            Les avis produits sont réservés aux achats vérifiés. Une fois envoyé, un avis n’apparaît
-            en ligne qu’après validation.
-          </p>
-          <ProStatus />
-          <Link href="/compte/entreprise" className="btn btn-primary mt-4 inline-flex w-full">
-            Compte professionnel
-          </Link>
-          <button type="button" onClick={logout} className="btn btn-secondary mt-3 w-full">
-            Se déconnecter
-          </button>
         </div>
-        <AccountOrders signedIn />
+        <div className="min-w-0 space-y-6">
+          <AccountOrders signedIn />
+          <div className="rounded-2xl border border-border bg-white p-6">
+            <p className="text-sm leading-relaxed text-muted">
+              Les avis produits sont réservés aux achats vérifiés. Une fois envoyé, un avis n’apparaît
+              en ligne qu’après validation.
+            </p>
+            <ProStatus />
+            <div className="mt-5 flex flex-wrap gap-3">
+              <Link href="/compte/entreprise" className="btn btn-primary">
+                {proApproved ? "Mon entreprise" : "Compte professionnel"}
+              </Link>
+              <button type="button" onClick={logout} className="btn btn-secondary">
+                Se déconnecter
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

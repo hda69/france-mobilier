@@ -8,14 +8,26 @@ function isNextProductionBuild() {
   return process.env.NEXT_PHASE === "phase-production-build";
 }
 
+function ensureFileDatabaseDir(url: string) {
+  const match = url.match(/^file:(?:\/\/)?(.+)$/);
+  if (!match) return;
+  const filePath = match[1].split("?")[0];
+  if (!filePath || filePath === ":memory:") return;
+  const dir = path.dirname(filePath);
+  if (dir && dir !== "." && !fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+}
+
 function resolveDatabaseUrl() {
   // Next prerenders many pages in parallel workers. A shared file DB deadlocks
   // (`SQLITE_BUSY`) during `next build`; an in-memory DB keeps workers isolated.
   if (isNextProductionBuild()) return ":memory:";
-  if (process.env.DATABASE_URL) return process.env.DATABASE_URL;
-  const dataDir = path.join(process.cwd(), "data");
-  if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
-  return `file:${path.join(dataDir, "maisonora.db")}`;
+  const url = process.env.DATABASE_URL?.trim()
+    ? process.env.DATABASE_URL.trim()
+    : `file:${path.join(process.cwd(), "data", "maisonora.db")}`;
+  ensureFileDatabaseDir(url);
+  return url;
 }
 
 const globalForDb = globalThis as unknown as {
@@ -47,7 +59,7 @@ function isDuplicateColumnError(error: unknown) {
 
 function isBusyError(error: unknown) {
   const message = error instanceof Error ? error.message : String(error);
-  return /SQLITE_BUSY|database is locked/i.test(message);
+  return /SQLITE_BUSY|database is locked|SQLITE_CANTOPEN|Unable to open connection/i.test(message);
 }
 
 async function withBusyRetry<T>(fn: () => Promise<T>, attempts = 8): Promise<T> {
@@ -195,6 +207,60 @@ async function migrateDatabase() {
         unit_price_cents INTEGER NOT NULL
       )`,
       `CREATE INDEX IF NOT EXISTS idx_shop_order_email ON shop_order(email)`,
+      `CREATE TABLE IF NOT EXISTS pro_quote (
+        id TEXT PRIMARY KEY NOT NULL,
+        reference TEXT NOT NULL UNIQUE,
+        user_id TEXT NOT NULL REFERENCES user(id) ON DELETE CASCADE,
+        status TEXT NOT NULL,
+        source TEXT NOT NULL,
+        company_name TEXT,
+        siren TEXT,
+        contact_name TEXT,
+        email TEXT NOT NULL,
+        phone TEXT,
+        desired_date TEXT,
+        message TEXT,
+        amount_cents INTEGER NOT NULL,
+        created_at INTEGER NOT NULL,
+        updated_at INTEGER NOT NULL
+      )`,
+      `CREATE TABLE IF NOT EXISTS pro_quote_item (
+        id TEXT PRIMARY KEY NOT NULL,
+        quote_id TEXT NOT NULL REFERENCES pro_quote(id) ON DELETE CASCADE,
+        product_id TEXT NOT NULL,
+        name TEXT NOT NULL,
+        quantity INTEGER NOT NULL,
+        unit_price_cents INTEGER NOT NULL
+      )`,
+      `CREATE TABLE IF NOT EXISTS pro_invoice_seq (
+        year INTEGER PRIMARY KEY NOT NULL,
+        last_number INTEGER NOT NULL
+      )`,
+      `CREATE TABLE IF NOT EXISTS pro_invoice (
+        id TEXT PRIMARY KEY NOT NULL,
+        number TEXT NOT NULL UNIQUE,
+        order_id TEXT NOT NULL UNIQUE REFERENCES shop_order(id) ON DELETE CASCADE,
+        user_id TEXT REFERENCES user(id) ON DELETE SET NULL,
+        company_name TEXT NOT NULL,
+        siren TEXT,
+        vat_number TEXT,
+        billing_line1 TEXT,
+        postal_code TEXT,
+        city TEXT,
+        country TEXT,
+        amount_cents INTEGER NOT NULL,
+        currency TEXT NOT NULL DEFAULT 'eur',
+        issued_at INTEGER NOT NULL,
+        created_at INTEGER NOT NULL
+      )`,
+      `CREATE TABLE IF NOT EXISTS pro_audit_log (
+        id TEXT PRIMARY KEY NOT NULL,
+        user_id TEXT,
+        actor_email TEXT,
+        action TEXT NOT NULL,
+        detail TEXT,
+        created_at INTEGER NOT NULL
+      )`,
     ],
     "write",
   ));
@@ -213,6 +279,26 @@ async function migrateDatabase() {
     !shopOrderCols.has("siren") ? "ALTER TABLE shop_order ADD COLUMN siren TEXT" : null,
     !shopOrderCols.has("account_type") ? "ALTER TABLE shop_order ADD COLUMN account_type TEXT" : null,
   ].filter((sql): sql is string => Boolean(sql));
+  const proInfo = await client.execute("PRAGMA table_info(pro_access_request)");
+  const proCols = new Set(proInfo.rows.map((row) => String(row.name)));
+  const proExtras = [
+    !proCols.has("first_name") ? "ALTER TABLE pro_access_request ADD COLUMN first_name TEXT" : null,
+    !proCols.has("last_name") ? "ALTER TABLE pro_access_request ADD COLUMN last_name TEXT" : null,
+    !proCols.has("phone") ? "ALTER TABLE pro_access_request ADD COLUMN phone TEXT" : null,
+    !proCols.has("website") ? "ALTER TABLE pro_access_request ADD COLUMN website TEXT" : null,
+    !proCols.has("activity_other") ? "ALTER TABLE pro_access_request ADD COLUMN activity_other TEXT" : null,
+    !proCols.has("expected_order_volume")
+      ? "ALTER TABLE pro_access_request ADD COLUMN expected_order_volume TEXT"
+      : null,
+    !proCols.has("billing_line1") ? "ALTER TABLE pro_access_request ADD COLUMN billing_line1 TEXT" : null,
+    !proCols.has("billing_line2") ? "ALTER TABLE pro_access_request ADD COLUMN billing_line2 TEXT" : null,
+    !proCols.has("postal_code") ? "ALTER TABLE pro_access_request ADD COLUMN postal_code TEXT" : null,
+    !proCols.has("country") ? "ALTER TABLE pro_access_request ADD COLUMN country TEXT" : null,
+    !proCols.has("discount_type") ? "ALTER TABLE pro_access_request ADD COLUMN discount_type TEXT" : null,
+    !proCols.has("discount_value") ? "ALTER TABLE pro_access_request ADD COLUMN discount_value INTEGER" : null,
+    !proCols.has("approved_at") ? "ALTER TABLE pro_access_request ADD COLUMN approved_at INTEGER" : null,
+  ].filter((sql): sql is string => Boolean(sql));
+  extras.push(...proExtras);
   const accountInfo = await client.execute("PRAGMA table_info(account)");
   const accountCols = new Set(accountInfo.rows.map((row) => String(row.name)));
   if (!accountCols.has("issuer")) {
@@ -247,6 +333,9 @@ async function migrateDatabase() {
   }
   await client.execute(
     "CREATE UNIQUE INDEX IF NOT EXISTS idx_shop_order_reference ON shop_order(reference)",
+  );
+  await client.execute(
+    "UPDATE pro_access_request SET status = 'approved', approved_at = COALESCE(approved_at, created_at) WHERE status = 'eligible'",
   );
   migrated = true;
 }

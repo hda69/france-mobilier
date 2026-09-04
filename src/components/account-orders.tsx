@@ -48,7 +48,7 @@ export function AccountOrders({ signedIn }: { signedIn: boolean }) {
   }
 
   return (
-    <section className="min-w-0 space-y-4">
+    <section className="min-w-0 space-y-4" id="commandes">
       <h2 className="text-xl font-semibold tracking-tight">Mes commandes</h2>
       {!signedIn ? (
         <p className="text-sm leading-relaxed text-muted">

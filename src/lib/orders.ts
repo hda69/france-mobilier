@@ -2,6 +2,7 @@ import { and, desc, eq, inArray } from "drizzle-orm";
 import { db, ensureDatabase } from "@/lib/db";
 import { purchase, shopOrder, shopOrderItem, user } from "@/lib/db/schema";
 import { isMailConfigured, sendOrderPaidEmail } from "@/lib/mail";
+import { applyServerDiscount } from "@/lib/b2b";
 import { productHeroImage } from "@/lib/products/presentation";
 import { findProductById } from "@/lib/products/repository";
 import { decryptSecret, encryptSecret, provisionCustomerAccount } from "@/lib/provision-account";
@@ -140,7 +141,10 @@ function toPublic(order: OrderRow, items: ItemRow[]): PublicOrder {
   };
 }
 
-export function priceCheckoutLines(items: CheckoutLine[]) {
+export function priceCheckoutLines(
+  items: CheckoutLine[],
+  discount?: { type: "percentage" | "fixed" | null; value: number | null } | null,
+) {
   if (items.length === 0) {
     throw new Error("PANIER_VIDE");
   }
@@ -164,9 +168,9 @@ export function priceCheckoutLines(items: CheckoutLine[]) {
       unitPriceCents: eurosToCents(product.price),
     });
   }
-  const amountCents = priced.reduce((sum, line) => sum + line.unitPriceCents * line.quantity, 0);
-  if (amountCents < 50) throw new Error("MONTANT_INVALIDE");
-  return { lines: priced, amountCents };
+  const applied = applyServerDiscount(priced, discount);
+  if (applied.amountCents < 50) throw new Error("MONTANT_INVALIDE");
+  return { lines: applied.lines, amountCents: applied.amountCents };
 }
 
 async function uniqueReference() {
@@ -306,6 +310,10 @@ async function sendOrderConfirmationIfNeeded(orderId: string, temporaryPassword?
       temporaryPassword: password,
       companyName: withAccess.companyName,
       siren: withAccess.siren,
+      invoicesUrl:
+        withAccess.accountType === "pro"
+          ? `${getSiteUrl()}/compte/factures`
+          : null,
     });
     if (sent) {
       await db
@@ -354,6 +362,12 @@ export async function markOrderPaid(orderId: string, stripeSessionId: string) {
   }
 
   await linkPurchases(orderId);
+  try {
+    const { ensureProInvoiceForOrder } = await import("@/lib/invoices");
+    await ensureProInvoiceForOrder(orderId);
+  } catch (error) {
+    console.error("[orders] invoice generation failed", error);
+  }
   await sendOrderConfirmationIfNeeded(orderId, temporaryPassword);
   const updated = await db.select().from(shopOrder).where(eq(shopOrder.id, orderId)).limit(1);
   return updated[0] ?? order;

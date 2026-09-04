@@ -106,8 +106,61 @@ export const proAccessRequest = sqliteTable("pro_access_request", {
   vatNumber: text("vat_number"),
   message: text("message"),
   status: text("status").notNull(),
+  firstName: text("first_name"),
+  lastName: text("last_name"),
+  phone: text("phone"),
+  website: text("website"),
+  activityOther: text("activity_other"),
+  expectedOrderVolume: text("expected_order_volume"),
+  billingLine1: text("billing_line1"),
+  billingLine2: text("billing_line2"),
+  postalCode: text("postal_code"),
+  country: text("country"),
+  discountType: text("discount_type"),
+  discountValue: integer("discount_value"),
+  approvedAt: integer("approved_at", { mode: "timestamp_ms" }),
   createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
   updatedAt: integer("updated_at", { mode: "timestamp_ms" }).notNull(),
+});
+
+export const proQuote = sqliteTable("pro_quote", {
+  id: text("id").primaryKey(),
+  reference: text("reference").notNull().unique(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  status: text("status").notNull(),
+  source: text("source").notNull(),
+  companyName: text("company_name"),
+  siren: text("siren"),
+  contactName: text("contact_name"),
+  email: text("email").notNull(),
+  phone: text("phone"),
+  desiredDate: text("desired_date"),
+  message: text("message"),
+  amountCents: integer("amount_cents").notNull(),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
+  updatedAt: integer("updated_at", { mode: "timestamp_ms" }).notNull(),
+});
+
+export const proQuoteItem = sqliteTable("pro_quote_item", {
+  id: text("id").primaryKey(),
+  quoteId: text("quote_id")
+    .notNull()
+    .references(() => proQuote.id, { onDelete: "cascade" }),
+  productId: text("product_id").notNull(),
+  name: text("name").notNull(),
+  quantity: integer("quantity").notNull(),
+  unitPriceCents: integer("unit_price_cents").notNull(),
+});
+
+export const proAuditLog = sqliteTable("pro_audit_log", {
+  id: text("id").primaryKey(),
+  userId: text("user_id"),
+  actorEmail: text("actor_email"),
+  action: text("action").notNull(),
+  detail: text("detail"),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
 });
 
 export const shopOrder = sqliteTable("shop_order", {
@@ -144,4 +197,30 @@ export const shopOrderItem = sqliteTable("shop_order_item", {
   name: text("name").notNull(),
   quantity: integer("quantity").notNull(),
   unitPriceCents: integer("unit_price_cents").notNull(),
+});
+
+export const proInvoiceSeq = sqliteTable("pro_invoice_seq", {
+  year: integer("year").primaryKey(),
+  lastNumber: integer("last_number").notNull(),
+});
+
+export const proInvoice = sqliteTable("pro_invoice", {
+  id: text("id").primaryKey(),
+  number: text("number").notNull().unique(),
+  orderId: text("order_id")
+    .notNull()
+    .unique()
+    .references(() => shopOrder.id, { onDelete: "cascade" }),
+  userId: text("user_id").references(() => user.id, { onDelete: "set null" }),
+  companyName: text("company_name").notNull(),
+  siren: text("siren"),
+  vatNumber: text("vat_number"),
+  billingLine1: text("billing_line1"),
+  postalCode: text("postal_code"),
+  city: text("city"),
+  country: text("country"),
+  amountCents: integer("amount_cents").notNull(),
+  currency: text("currency").notNull().default("eur"),
+  issuedAt: integer("issued_at", { mode: "timestamp_ms" }).notNull(),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
 });

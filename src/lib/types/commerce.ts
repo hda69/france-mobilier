@@ -77,6 +77,8 @@ export type Product = {
   dimensions: string | null;
   shippingMinDays: number | null;
   shippingMaxDays: number | null;
+  professionalEligible?: boolean;
+  quoteEligible?: boolean;
 };
 
 export type OrderStatus =

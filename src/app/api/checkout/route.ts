@@ -24,6 +24,7 @@ import {
 } from "@/lib/payments/stripe";
 import { normalizeZonePhone } from "@/lib/phone";
 import { getProAccessByUserId, isProApproved } from "@/lib/pro-access";
+import { b2bConfig } from "@/lib/b2b";
 import { SHIPPING_COUNTRY_CODES, normalizeShippingPostal } from "@/lib/shipping-zone";
 
 const schema = z
@@ -154,12 +155,16 @@ export async function POST(request: Request) {
   }
 
   try {
-    const { lines, amountCents } = priceCheckoutLines(parsed.data.items);
     await prepareAuth();
     const sessionAuth = await auth.api.getSession({ headers: await headers() });
     const pro =
       sessionAuth?.user?.id ? await getProAccessByUserId(sessionAuth.user.id) : null;
     const proActive = isProApproved(pro);
+    const discount =
+      proActive && b2bConfig().discountsEnabled
+        ? { type: pro?.discountType ?? null, value: pro?.discountValue ?? null }
+        : null;
+    const { lines, amountCents } = priceCheckoutLines(parsed.data.items, discount);
     const companyName = proActive ? pro?.companyName || pro?.legalName || null : null;
     const siren = proActive ? pro?.siren || null : null;
     const orderId = await createPendingOrder({

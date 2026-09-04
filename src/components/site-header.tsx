@@ -15,9 +15,21 @@ const EXPAND_BEFORE = 16;
 export function SiteHeader() {
   const { itemCount } = useCart();
   const { data: session } = authClient.useSession();
+  const [proApproved, setProApproved] = useState(false);
   const [open, setOpen] = useState(false);
   const [compact, setCompact] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    if (!session?.user) {
+      setProApproved(false);
+      return;
+    }
+    fetch("/api/pro-access")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => setProApproved(data?.request?.status === "approved"))
+      .catch(() => {});
+  }, [session?.user]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -105,10 +117,10 @@ export function SiteHeader() {
             </form>
             <div className="flex items-center gap-1">
               <Link
-                href={session?.user ? "/compte/entreprise" : "/pro"}
+                href={session?.user ? (proApproved ? "/compte" : "/compte/entreprise") : "/pro"}
                 className="hidden h-11 items-center px-2 text-sm font-medium text-navy hover:opacity-70 sm:inline-flex"
               >
-                Accès pro
+                {session?.user && proApproved ? "Espace Pro" : "Accès pro"}
               </Link>
               <Link
                 href={session?.user ? "/compte" : "/connexion"}
@@ -174,11 +186,15 @@ export function SiteHeader() {
                     </Link>
                   ))}
                   <Link
-                    href={session?.user ? "/compte/entreprise" : "/pro"}
+                    href={session?.user ? (proApproved ? "/compte" : "/compte/entreprise") : "/pro"}
                     className="rounded-lg px-3 py-3 font-medium hover:bg-cream"
                     onClick={() => setOpen(false)}
                   >
-                    {session?.user ? "Compte professionnel" : "Demander un accès pro"}
+                    {session?.user
+                      ? proApproved
+                        ? "Espace Pro"
+                        : "Compte professionnel"
+                      : "Demander un accès pro"}
                   </Link>
                   <Link
                     href={session?.user ? "/compte" : "/connexion"}
