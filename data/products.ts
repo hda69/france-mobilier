@@ -2,10 +2,10 @@ import type { Product, ProductVariant } from "@/lib/types/commerce";
 
 function metalCoffeeTableVariants(): ProductVariant[] {
   const sizes = [
-    { sizeCm: 25, price: 69, compareAtPrice: 89, weightKg: 2.7 },
-    { sizeCm: 30, price: 79, compareAtPrice: 99, weightKg: 3.2 },
-    { sizeCm: 35, price: 89, compareAtPrice: 119, weightKg: 4.0 },
-    { sizeCm: 40, price: 99, compareAtPrice: 129, weightKg: 4.8 },
+    { sizeCm: 25, price: 109, compareAtPrice: 139, weightKg: 2.7 },
+    { sizeCm: 30, price: 119, compareAtPrice: 149, weightKg: 3.2 },
+    { sizeCm: 35, price: 129, compareAtPrice: 159, weightKg: 4.0 },
+    { sizeCm: 40, price: 139, compareAtPrice: 169, weightKg: 4.8 },
   ] as const;
   const skus = {
     argent: {
@@ -52,8 +52,8 @@ export const products: Product[] = [
       "Table basse cubique en métal, à poser au salon ou à côté d’un canapé. Structure ajourée, étagère ouverte, deux finitions.",
     description:
       "Une table basse cubique en métal, pensée pour un salon ou un angle de canapé. Les tiges parallèles forment une structure légère, avec un plateau et une étagère inférieure pour livres ou objets du quotidien. Deux finitions, argentée et noire, et quatre formats cubes.",
-    price: 99,
-    compareAtPrice: 129,
+    price: 139,
+    compareAtPrice: 169,
     defaultVariantId: "p-012-argent-40",
     variants: metalCoffeeTableVariants(),
     images: [
