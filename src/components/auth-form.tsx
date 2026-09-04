@@ -13,6 +13,23 @@ function safeNext(value: string | null) {
   return value;
 }
 
+function authErrorMessage(
+  error: { code?: string | null; message?: string | null },
+  mode: Mode,
+) {
+  const raw = `${error.code || ""} ${error.message || ""}`.toLowerCase();
+  if (raw.includes("already_exists") || raw.includes("already exists")) {
+    return "Un compte existe déjà avec cet e-mail. Connectez-vous avec le même mot de passe.";
+  }
+  if (raw.includes("invalid_email_or_password") || raw.includes("invalid email or password")) {
+    return "E-mail ou mot de passe incorrect.";
+  }
+  if (raw.includes("password_too_short") || raw.includes("too short")) {
+    return "Le mot de passe doit contenir au moins 8 caractères.";
+  }
+  return error.message || (mode === "login" ? "Identifiants incorrects" : "Inscription impossible");
+}
+
 function AuthFormFields({ mode }: { mode: Mode }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -35,13 +52,13 @@ function AuthFormFields({ mode }: { mode: Mode }) {
           password,
           name: name.trim() || email.split("@")[0],
         });
-        if (result.error) throw new Error(result.error.message || "Inscription impossible");
+        if (result.error) throw new Error(authErrorMessage(result.error, "register"));
       } else {
         const result = await authClient.signIn.email({
           email: email.trim().toLowerCase(),
           password,
         });
-        if (result.error) throw new Error(result.error.message || "Identifiants incorrects");
+        if (result.error) throw new Error(authErrorMessage(result.error, "login"));
       }
       router.push(next);
       router.refresh();

@@ -33,6 +33,7 @@ ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
+# SQLite lives on the Railway volume mounted at /app/data — without it, every deploy wipes accounts.
 ENV DATABASE_URL=file:/app/data/maisonora.db
 RUN addgroup --system --gid 1001 nodejs \
   && adduser --system --uid 1001 nextjs
