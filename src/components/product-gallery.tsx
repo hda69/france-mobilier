@@ -46,11 +46,11 @@ export function ProductGallery({
   );
 
   useEffect(() => {
-    thumbsRef.current[index]?.scrollIntoView({
-      behavior: "smooth",
-      inline: "center",
-      block: "nearest",
-    });
+    const thumb = thumbsRef.current[index];
+    const row = thumb?.parentElement;
+    if (!thumb || !row) return;
+    const left = thumb.offsetLeft - row.clientWidth / 2 + thumb.clientWidth / 2;
+    row.scrollTo({ left: Math.max(0, left), behavior: "smooth" });
   }, [index]);
 
   useEffect(() => {
@@ -155,7 +155,7 @@ export function ProductGallery({
         ) : null}
       </div>
       {hasMany ? (
-        <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
+        <div className="mt-3 flex gap-2 overflow-x-auto p-1.5">
           {images.map((src, imageIndex) => {
             const selected = imageIndex === index;
             return (
@@ -169,10 +169,10 @@ export function ProductGallery({
                 aria-label={`Voir la photo ${imageIndex + 1}`}
                 aria-current={selected ? "true" : undefined}
                 className={`relative aspect-square w-16 shrink-0 overflow-hidden rounded-md bg-white sm:w-[4.5rem] ${
-                  selected ? "ring-2 ring-navy" : "ring-1 ring-border"
+                  selected ? "ring-2 ring-navy ring-offset-2 ring-offset-white" : "ring-1 ring-border"
                 }`}
               >
-                <Image src={src} alt="" fill className="object-cover" sizes="72px" />
+                <Image src={src} alt="" fill className="object-contain" sizes="72px" />
               </button>
             );
           })}

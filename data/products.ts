@@ -87,7 +87,7 @@ function tvStandVariants(): ProductVariant[] {
       color: "noir" as const,
       colorLabel: "Noir",
       swatchClass: "bg-[#1a1a1a]",
-      image: "/products/tv-stand-3.jpg",
+      image: "/products/tv-stand-5.jpg",
     },
   ];
   return colors.flatMap(({ color, colorLabel, swatchClass, image }) =>
@@ -128,12 +128,14 @@ export const products: Product[] = [
       "/products/tv-stand-2.jpg",
       "/products/tv-stand-3.jpg",
       "/products/tv-stand-4.jpg",
+      "/products/tv-stand-5.jpg",
     ],
     imageAssets: [
       { src: "/products/tv-stand.jpg", role: "lifestyle" },
       { src: "/products/tv-stand-2.jpg", role: "product" },
       { src: "/products/tv-stand-3.jpg", role: "product" },
       { src: "/products/tv-stand-4.jpg", role: "product" },
+      { src: "/products/tv-stand-5.jpg", role: "product" },
     ],
     features: [
       "Meuble TV bas, 24 cm de haut",
