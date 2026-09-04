@@ -99,8 +99,138 @@ function tvStandVariants(): ProductVariant[] {
   );
 }
 
+function diningTableVariants(): ProductVariant[] {
+  const sizes = [
+    { sizeCm: 93, extendedCm: 131, price: 449, compareAtPrice: 549 },
+    { sizeCm: 105, extendedCm: 150, price: 529, compareAtPrice: 649 },
+  ] as const;
+  const skus = {
+    bicolore: { 93: "6071092596093", 105: "6071092596094" },
+    noir: { 93: "6071092596096", 105: "6071092596097" },
+  } as const;
+  const colors = [
+    {
+      color: "bicolore" as const,
+      colorLabel: "Bois et noir",
+      swatchClass: "bg-[#5c3d28]",
+      image: "/products/dining-table.jpg",
+    },
+    {
+      color: "noir" as const,
+      colorLabel: "Noir",
+      swatchClass: "bg-[#1a1a1a]",
+      image: "/products/dining-table-3.jpg",
+    },
+  ];
+  return colors.flatMap(({ color, colorLabel, swatchClass, image }) =>
+    sizes.map((size) => ({
+      id: `p-014-${color}-${size.sizeCm}`,
+      color,
+      colorLabel,
+      swatchClass,
+      sizeCm: size.sizeCm,
+      sizeLabel: `${size.sizeCm} → ${size.extendedCm} cm`,
+      price: size.price,
+      compareAtPrice: size.compareAtPrice,
+      supplierVariantId: skus[color][size.sizeCm],
+      image,
+    })),
+  );
+}
+
 /** Store catalog. */
 export const products: Product[] = [
+  {
+    id: "p-014",
+    slug: "table-a-manger-extensible",
+    name: "Table à manger extensible",
+    category: "cuisine",
+    shortDescription:
+      "Table ronde en bois, à allonger en ovale. Piétement central, deux finitions, deux formats.",
+    description:
+      "Une table à manger ronde, pensée pour un quotidien à quatre et les repas un peu plus nombreux. Le plateau s’ouvre en ovale, sans changer de piétement. Deux formats, 93 cm ou 105 cm de diamètre, et deux finitions : plateau bois et base noire, ou noir.",
+    price: 449,
+    compareAtPrice: 549,
+    defaultVariantId: "p-014-bicolore-93",
+    formatsLabel: "Formats",
+    sizesLabel: "Format",
+    variants: diningTableVariants(),
+    images: [
+      "/products/dining-table.jpg",
+      "/products/dining-table-2.jpg",
+      "/products/dining-table-3.jpg",
+      "/products/dining-table-4.jpg",
+    ],
+    imageAssets: [
+      { src: "/products/dining-table.jpg", role: "lifestyle" },
+      { src: "/products/dining-table-2.jpg", role: "product" },
+      { src: "/products/dining-table-3.jpg", role: "lifestyle" },
+      { src: "/products/dining-table-4.jpg", role: "lifestyle" },
+    ],
+    features: [
+      "Plateau rond qui s’allonge en ovale",
+      "Piétement central à quatre pieds",
+      "Deux formats : 93 → 131 cm et 105 → 150 cm",
+      "Fabriquée après commande",
+    ],
+    benefits: ["Ronde ou ovale", "Deux formats", "Deux finitions", "Fabriquée après commande"],
+    highlights: [
+      "Une table ronde pour le quotidien, ovale quand il faut plus de places",
+      "Un piétement central qui laisse de la place pour les jambes",
+      "Deux diamètres pour un appartement ou une salle à manger plus grande",
+      "Deux finitions, bois et noir ou noir",
+    ],
+    dailyUses: [
+      {
+        title: "Le repas du soir",
+        text: "Fermée, la table reste ronde et compacte, pour quatre personnes autour d’un plateau de 93 ou 105 cm.",
+      },
+      {
+        title: "Quand il y a plus de monde",
+        text: "Le plateau s’ouvre en ovale, jusqu’à 131 ou 150 cm, pour allonger la table sans en changer.",
+      },
+      {
+        title: "Dans un petit salon",
+        text: "Le format 93 cm se place facilement ; le 105 cm convient quand la pièce le permet.",
+      },
+    ],
+    faq: [
+      {
+        question: "Quelles sont ses dimensions ?",
+        answer:
+          "Hauteur 75 cm. Deux formats : diamètre 93 cm, allongé 131 cm ; ou diamètre 105 cm, allongé 150 cm. Le schéma représente le format 93 cm, fermé.",
+      },
+      {
+        question: "Quelles couleurs sont proposées ?",
+        answer: "Deux finitions : bois et noir, ou noir.",
+      },
+    ],
+    specifications: {
+      Type: "Table à manger",
+      Forme: "Ronde, ovale une fois allongée",
+      Largeur: "93 cm",
+      Profondeur: "93 cm",
+      Hauteur: "75 cm",
+      Formats: "93 → 131 cm, 105 → 150 cm",
+      Matériaux: "Bois (frêne)",
+      Finitions: "Bois et noir, noir",
+      Places: "4 fermée, 4 à 6 allongée",
+    },
+    measures: {
+      widthCm: 93,
+      depthCm: 93,
+      heightCm: 75,
+    },
+    madeToOrder: true,
+    availabilityStatus: "available",
+    supplierProvider: "buckydrop",
+    supplierProductId: "1045160359153",
+    supplierVariantId: "6071092596093",
+    weight: null,
+    dimensions: "93 → 131 cm ou 105 → 150 cm × 75 cm (h) — schéma du format 93 cm, fermé",
+    shippingMinDays: 14,
+    shippingMaxDays: 14,
+  },
   {
     id: "p-013",
     slug: "meuble-tv",

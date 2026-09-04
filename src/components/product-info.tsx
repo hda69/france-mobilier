@@ -115,7 +115,7 @@ export function ProductInfo({
                       selected ? "border-navy bg-cream text-navy" : "border-border text-muted"
                     }`}
                   >
-                    {option.sizeCm} cm
+                    {option.sizeLabel}
                   </button>
                 );
               })}
