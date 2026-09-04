@@ -35,6 +35,7 @@ function AuthFormFields({ mode }: { mode: Mode }) {
   const searchParams = useSearchParams();
   const next = safeNext(searchParams.get("next"));
   const nextQuery = next !== "/compte" ? `?next=${encodeURIComponent(next)}` : "";
+  const resetDone = searchParams.get("reset") === "1";
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -78,6 +79,11 @@ function AuthFormFields({ mode }: { mode: Mode }) {
         Les avis produits sont réservés aux clients avec un achat vérifié. Identifiant : votre
         e-mail.
       </p>
+      {mode === "login" && resetDone ? (
+        <p className="rounded-xl bg-cream px-4 py-3 text-sm leading-relaxed text-navy">
+          Mot de passe mis à jour. Connectez-vous avec le nouveau mot de passe.
+        </p>
+      ) : null}
       {mode === "register" && (
         <label className="block text-sm">
           <span className="mb-1 block text-muted">Nom Prénom</span>
@@ -111,6 +117,13 @@ function AuthFormFields({ mode }: { mode: Mode }) {
           onChange={(e) => setPassword(e.target.value)}
         />
       </label>
+      {mode === "login" ? (
+        <p className="text-sm">
+          <Link href="/mot-de-passe-oublie" className="text-accent underline-offset-2 hover:underline">
+            Mot de passe oublié ?
+          </Link>
+        </p>
+      ) : null}
       {error && <p className="text-sm text-red-700">{error}</p>}
       <button type="submit" disabled={loading} className="btn btn-primary w-full">
         {loading ? "Patientez…" : mode === "login" ? "Se connecter" : "Créer mon compte"}

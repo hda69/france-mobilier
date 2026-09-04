@@ -310,3 +310,28 @@ export async function sendProAccessActivatedEmail(input: {
   });
   return sent;
 }
+
+export async function sendPasswordResetEmail(input: { email: string; url: string }) {
+  const subject = `Réinitialiser votre mot de passe — ${store.storeName}`;
+  const text = [
+    "Vous avez demandé à réinitialiser le mot de passe de votre compte.",
+    "Ouvrez ce lien pour en choisir un nouveau. Il expire dans une heure.",
+    input.url,
+    "Si vous n’êtes pas à l’origine de cette demande, ignorez cet e-mail.",
+  ].join("\n");
+  const html = layoutCustomerEmail({
+    preheader: "Lien pour choisir un nouveau mot de passe.",
+    title: subject,
+    body: `
+    <p style="margin:0 0 8px;font-family:Georgia,'Times New Roman',serif;font-size:22px;line-height:1.3;color:${NAVY}">Nouveau mot de passe</p>
+    <p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#222">
+      Vous avez demandé à réinitialiser le mot de passe de votre compte ${escapeHtml(store.storeName)}.
+    </p>
+    <p style="margin:0 0 22px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#222">
+      Ce lien expire dans une heure. Si vous n’êtes pas à l’origine de cette demande, ignorez cet e-mail.
+    </p>
+    <p style="margin:0">${emailButton(input.url, "Choisir un nouveau mot de passe")}</p>
+    `,
+  });
+  return sendMail({ to: input.email, subject, text, html });
+}

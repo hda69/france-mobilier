@@ -2,6 +2,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db, ensureDatabase } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
+import { sendPasswordResetEmail } from "@/lib/mail";
 
 const baseURL =
   process.env.BETTER_AUTH_URL ||
@@ -28,6 +29,14 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 8,
+    resetPasswordTokenExpiresIn: 60 * 60,
+    revokeSessionsOnPasswordReset: true,
+    sendResetPassword: async ({ user, url }) => {
+      const sent = await sendPasswordResetEmail({ email: user.email, url });
+      if (!sent) {
+        console.error("[auth] password reset email was not sent");
+      }
+    },
   },
   user: {
     additionalFields: {},
@@ -40,6 +49,8 @@ export const auth = betterAuth({
     baseURL,
     "https://francemobilier.com",
     "https://www.francemobilier.com",
+    "http://localhost:3000",
+    "http://localhost:3001",
   ],
   databaseHooks: {
     user: {

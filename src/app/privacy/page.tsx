@@ -14,6 +14,10 @@ export default function PrivacyPage() {
           <li>contact : nom, e-mail, message ;</li>
           <li>compte client : nom, e-mail, mot de passe hashé ;</li>
           <li>
+            réinitialisation de mot de passe : e-mail contenant un lien temporaire, valable une
+            heure ;
+          </li>
+          <li>
             accès professionnel : SIREN / SIRET, dénomination issue du répertoire Sirene, liés au
             compte — sans pièce d’identité ;
           </li>
