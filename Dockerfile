@@ -40,8 +40,12 @@ RUN addgroup --system --gid 1001 nodejs \
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-RUN mkdir -p /app/data /tmp/next-cache \
+COPY docker-entrypoint.sh /app/docker-entrypoint.sh
+RUN chmod +x /app/docker-entrypoint.sh \
+  && mkdir -p /app/data /tmp/next-cache \
   && chown -R nextjs:nodejs /app /tmp/next-cache
-USER nextjs
+# Stay root: the Railway volume mounted at /app/data is root-owned. USER nextjs
+# caused SQLITE_CANTOPEN (14) on every auth request.
 EXPOSE 3000
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
 CMD ["node", "server.js"]
