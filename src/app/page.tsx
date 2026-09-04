@@ -89,7 +89,7 @@ export default function HomePage() {
               <Link href="/collections/maison" className="btn btn-inverse w-full sm:w-auto">
                 Découvrir nos meubles
               </Link>
-              <Link href="/nouveautes" className="btn w-full border border-white/70 text-white hover:bg-white hover:text-navy sm:w-auto">
+              <Link href="/nouveautes" className="btn btn-on-dark w-full sm:w-auto">
                 Voir les nouveautés
               </Link>
             </div>

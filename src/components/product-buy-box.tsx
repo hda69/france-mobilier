@@ -41,14 +41,14 @@ export function ProductBuyBox({
   return (
     <>
       <div className="space-y-4">
-        <label className="block text-sm text-muted">
+        <label className="flex items-center gap-3 text-sm text-muted">
           Quantité
           <input
             type="number"
             min={1}
             value={quantity}
             onChange={(event) => setQuantity(Math.max(1, Number(event.target.value) || 1))}
-            className="input mt-1 max-w-24"
+            className="input max-w-24"
           />
         </label>
         <button type="button" className="btn btn-primary min-h-12 w-full text-base" onClick={add}>

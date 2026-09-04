@@ -86,12 +86,12 @@ export function QuoteRequestForm({
       {productLabel ? <p className="text-sm font-medium text-navy">{productLabel}</p> : null}
       {catalogPriceLabel ? <p className="text-sm text-muted">Prix catalogue actuel : {catalogPriceLabel}</p> : null}
       {source === "product" ? (
-        <label className="block text-sm">
+        <label className="flex items-center gap-3 text-sm">
           Quantité souhaitée
           <input
             type="number"
             min={1}
-            className="input mt-1 max-w-24"
+            className="input max-w-24"
             value={quantity}
             onChange={(e) => setQuantity(Math.max(1, Number(e.target.value) || 1))}
           />
