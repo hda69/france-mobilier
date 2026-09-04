@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { AccountNav } from "@/components/account-nav";
 import { AccountOrders } from "@/components/account-orders";
 import { ChangePasswordForm } from "@/components/change-password-form";
 import { authClient } from "@/lib/auth-client";
+import { useProApproved } from "@/lib/use-pro-approved";
 
 function ProStatus() {
   const [label, setLabel] = useState<string | null>(null);
@@ -38,14 +38,7 @@ function ProStatus() {
 export default function ComptePage() {
   const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
-  const [proApproved, setProApproved] = useState(false);
-
-  useEffect(() => {
-    fetch("/api/pro-access")
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => setProApproved(data?.request?.status === "approved"))
-      .catch(() => {});
-  }, []);
+  const proApproved = useProApproved();
 
   async function logout() {
     await authClient.signOut();
@@ -54,16 +47,12 @@ export default function ComptePage() {
   }
 
   if (isPending) {
-    return (
-      <div className="container-page py-14">
-        <p className="text-muted">Chargement du compte…</p>
-      </div>
-    );
+    return <p className="text-muted">Chargement du compte…</p>;
   }
 
   if (!session?.user) {
     return (
-      <div className="container-page space-y-8 py-14">
+      <>
         <div>
           <h1 className="text-3xl font-semibold tracking-tight">Mon compte</h1>
           <p className="mt-2 max-w-xl text-muted">
@@ -72,15 +61,14 @@ export default function ComptePage() {
           </p>
         </div>
         <AccountOrders signedIn={false} />
-      </div>
+      </>
     );
   }
 
   return (
-    <div className="container-page space-y-8 py-14">
+    <>
       <div>
-        <AccountNav current="apercu" proApproved={proApproved} />
-        <h1 className="mt-6 text-3xl font-semibold tracking-tight">Mon compte</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">Mon compte</h1>
         {proApproved ? <p className="mt-1 text-sm text-navy">Compte professionnel</p> : null}
       </div>
       <div className="grid items-start gap-8 lg:grid-cols-[minmax(20rem,26rem)_minmax(0,1fr)]">
@@ -110,6 +98,6 @@ export default function ComptePage() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

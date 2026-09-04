@@ -8,6 +8,7 @@ import { navigation, store } from "@/config/store";
 import { useCart } from "@/components/cart-provider";
 import { IconBag, IconHeadset, IconReturn, IconSearch, IconTruck, IconUser } from "@/components/icons";
 import { authClient } from "@/lib/auth-client";
+import { useProApproved } from "@/lib/use-pro-approved";
 
 const SHRINK_AFTER = 80;
 const EXPAND_BEFORE = 16;
@@ -15,21 +16,10 @@ const EXPAND_BEFORE = 16;
 export function SiteHeader() {
   const { itemCount } = useCart();
   const { data: session } = authClient.useSession();
-  const [proApproved, setProApproved] = useState(false);
+  const proApproved = useProApproved();
   const [open, setOpen] = useState(false);
   const [compact, setCompact] = useState(false);
   const router = useRouter();
-
-  useEffect(() => {
-    if (!session?.user) {
-      setProApproved(false);
-      return;
-    }
-    fetch("/api/pro-access")
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => setProApproved(data?.request?.status === "approved"))
-      .catch(() => {});
-  }, [session?.user]);
 
   useEffect(() => {
     const onScroll = () => {

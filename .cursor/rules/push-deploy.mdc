@@ -1,0 +1,16 @@
+---
+description: Après chaque consigne, commit, push GitHub et déploiement Railway sans redemander.
+alwaysApply: true
+---
+
+# Push et déploiement automatiques
+
+Après chaque consigne qui change le site, **sans redemander** :
+
+1. Commit les fichiers concernés (message en anglais, 1–2 phrases sur le pourquoi).
+2. `git push origin HEAD`
+3. `railway up --ci --yes --service web --environment production`
+
+`git push` ne déploie pas tout seul. Il faut le `railway up`.
+
+Ne pas commiter `data/*.db-shm`, `data/*.db-wal`, `.env`, secrets. Ne pas activer Stripe live ni `STORE_CHECKOUT_ENABLED`.
