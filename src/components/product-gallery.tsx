@@ -1,22 +1,68 @@
 "use client";
 
-import { useCallback, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type KeyboardEvent,
+  type PointerEvent,
+} from "react";
 import Image from "next/image";
 import { IconArrow } from "@/components/icons";
 
-export function ProductGallery({ images, name }: { images: string[]; name: string }) {
-  const [index, setIndex] = useState(0);
+const AUTOPLAY_MS = 4500;
+
+export function ProductGallery({
+  images,
+  name,
+  index,
+  onIndexChange,
+  autoplayIndexes,
+}: {
+  images: string[];
+  name: string;
+  index: number;
+  onIndexChange: (index: number) => void;
+  autoplayIndexes?: number[];
+}) {
   const startX = useRef<number | null>(null);
+  const thumbsRef = useRef<Array<HTMLButtonElement | null>>([]);
+  const [paused, setPaused] = useState(false);
   const current = images[index] ?? images[0];
   const hasMany = images.length > 1;
+  const sequence = useMemo(
+    () => (autoplayIndexes?.length ? autoplayIndexes : images.map((_, imageIndex) => imageIndex)),
+    [autoplayIndexes, images],
+  );
 
   const go = useCallback(
     (next: number) => {
       if (images.length === 0) return;
-      setIndex((next + images.length) % images.length);
+      onIndexChange((next + images.length) % images.length);
     },
-    [images.length],
+    [images.length, onIndexChange],
   );
+
+  useEffect(() => {
+    thumbsRef.current[index]?.scrollIntoView({
+      behavior: "smooth",
+      inline: "center",
+      block: "nearest",
+    });
+  }, [index]);
+
+  useEffect(() => {
+    if (!hasMany || paused || sequence.length < 2) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = window.setInterval(() => {
+      const position = sequence.indexOf(index);
+      const next = sequence[(position >= 0 ? position + 1 : 0) % sequence.length];
+      onIndexChange(next);
+    }, AUTOPLAY_MS);
+    return () => window.clearInterval(timer);
+  }, [hasMany, index, onIndexChange, paused, sequence]);
 
   function onPointerDown(event: PointerEvent<HTMLDivElement>) {
     startX.current = event.clientX;
@@ -50,22 +96,34 @@ export function ProductGallery({ images, name }: { images: string[]; name: strin
         className="group relative aspect-square overflow-hidden rounded-[var(--radius)] bg-white"
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
+        onPointerEnter={() => setPaused(true)}
+        onPointerLeave={() => setPaused(false)}
+        onFocus={() => setPaused(true)}
+        onBlur={() => setPaused(false)}
         onKeyDown={onKeyDown}
         tabIndex={hasMany ? 0 : undefined}
         role={hasMany ? "region" : undefined}
         aria-roledescription={hasMany ? "carrousel" : undefined}
         aria-label={hasMany ? `Photos de ${name}` : undefined}
       >
-        <Image
-          key={current}
-          src={current}
-          alt={`${name} — photo ${index + 1}`}
-          fill
-          className="object-cover select-none transition-transform duration-500 md:group-hover:scale-[1.06]"
-          priority={index === 0}
-          sizes="(max-width:768px) 100vw, 50vw"
-          draggable={false}
-        />
+        <div
+          className="flex h-full transition-transform duration-500 ease-out motion-reduce:transition-none"
+          style={{ transform: `translateX(-${index * 100}%)` }}
+        >
+          {images.map((src, imageIndex) => (
+            <div key={`${src}-${imageIndex}`} className="relative aspect-square min-w-full shrink-0 basis-full overflow-hidden">
+              <Image
+                src={src}
+                alt={`${name} — photo ${imageIndex + 1}`}
+                fill
+                className="object-cover select-none transition-transform duration-500 md:group-hover:scale-[1.06]"
+                priority={imageIndex === 0}
+                sizes="(max-width:768px) 100vw, 50vw"
+                draggable={false}
+              />
+            </div>
+          ))}
+        </div>
         {hasMany ? (
           <>
             <button
@@ -102,9 +160,12 @@ export function ProductGallery({ images, name }: { images: string[]; name: strin
             const selected = imageIndex === index;
             return (
               <button
-                key={src}
+                key={`${src}-${imageIndex}`}
+                ref={(node) => {
+                  thumbsRef.current[imageIndex] = node;
+                }}
                 type="button"
-                onClick={() => setIndex(imageIndex)}
+                onClick={() => onIndexChange(imageIndex)}
                 aria-label={`Voir la photo ${imageIndex + 1}`}
                 aria-current={selected ? "true" : undefined}
                 className={`relative aspect-square w-16 shrink-0 overflow-hidden rounded-md bg-white sm:w-[4.5rem] ${

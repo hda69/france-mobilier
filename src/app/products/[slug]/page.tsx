@@ -4,9 +4,8 @@ import { notFound } from "next/navigation";
 import { ProductDailyUse } from "@/components/product-daily-use";
 import { ProductDimensions } from "@/components/product-dimensions";
 import { ProductFAQ } from "@/components/product-faq";
-import { ProductGallery } from "@/components/product-gallery";
 import { ProductHighlights } from "@/components/product-highlights";
-import { ProductInfo } from "@/components/product-info";
+import { ProductMedia } from "@/components/product-media";
 import { ProductRecommendations } from "@/components/product-recommendations";
 import { ProductReviews } from "@/components/product-reviews";
 import { ProductShippingReturns } from "@/components/product-shipping-returns";
@@ -147,10 +146,7 @@ export default async function ProductPage({ params }: Props) {
           <span className="text-foreground">{product.name}</span>
         </nav>
 
-        <div className="grid gap-10 md:grid-cols-2 md:gap-14">
-          <ProductGallery images={gallery} name={product.name} />
-          <ProductInfo product={product} />
-        </div>
+        <ProductMedia product={product} images={gallery} />
       </div>
 
       <ProductHighlights items={highlights} />

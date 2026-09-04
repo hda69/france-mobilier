@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { NotifyForm } from "@/components/notify-form";
 import { ProductBenefits } from "@/components/product-benefits";
 import { ProductBuyBox } from "@/components/product-buy-box";
@@ -15,14 +14,21 @@ import {
 import { preparationLabel, productBenefits } from "@/lib/products/presentation";
 import type { Product, ProductVariant } from "@/lib/types/commerce";
 
-export function ProductInfo({ product }: { product: Product }) {
+export function ProductInfo({
+  product,
+  variantId,
+  onVariantIdChange,
+}: {
+  product: Product;
+  variantId: string | undefined;
+  onVariantIdChange: (id: string) => void;
+}) {
   const outOfStock = product.availabilityStatus === "out_of_stock";
   const prep = preparationLabel(product);
   const benefits = productBenefits(product);
   const variants = product.variants ?? [];
   const colors = uniqueVariantColors(product);
   const sizes = uniqueVariantSizes(product);
-  const [variantId, setVariantId] = useState(product.defaultVariantId ?? variants[0]?.id);
   const variant = findProductVariant(product, variantId);
   const price = variant?.price ?? product.price;
   const compareAtPrice = variant?.compareAtPrice ?? product.compareAtPrice;
@@ -34,14 +40,14 @@ export function ProductInfo({ product }: { product: Product }) {
     const next =
       variants.find((row) => row.color === color && row.sizeCm === selectedSize) ??
       variants.find((row) => row.color === color);
-    if (next) setVariantId(next.id);
+    if (next) onVariantIdChange(next.id);
   }
 
   function selectSize(sizeCm: number) {
     const next =
       variants.find((row) => row.sizeCm === sizeCm && row.color === selectedColor) ??
       variants.find((row) => row.sizeCm === sizeCm);
-    if (next) setVariantId(next.id);
+    if (next) onVariantIdChange(next.id);
   }
 
   return (
