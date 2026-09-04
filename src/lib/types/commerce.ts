@@ -46,12 +46,13 @@ export type ProductMeasures = {
   crossbarFromFloorCm?: number;
 };
 
-export type ProductColor = "argent" | "noir";
+export type ProductColor = string;
 
 export type ProductVariant = {
   id: string;
   color: ProductColor;
   colorLabel: string;
+  swatchClass?: string;
   sizeCm: number;
   sizeLabel: string;
   price: number;
@@ -72,6 +73,8 @@ export type Product = {
   compareAtPrice: number | null;
   variants?: ProductVariant[];
   defaultVariantId?: string;
+  formatsLabel?: string;
+  sizesLabel?: string;
   images: string[];
   /** Metadata for gallery assets. Does not replace `images` order; used to flag supplier files. */
   imageAssets?: ProductImageAsset[];

@@ -19,7 +19,7 @@ export function ProductDimensions({ product }: { product: Product }) {
           <div className="space-y-6">
             {sizes.length > 1 ? (
               <div>
-                <p className="text-sm text-muted">Formats cubes</p>
+                <p className="text-sm text-muted">{product.formatsLabel ?? "Formats"}</p>
                 <dl className="mt-3 grid gap-3 sm:grid-cols-2">
                   {sizes.map((size) => (
                     <div key={size.sizeCm} className="rounded-xl border border-border bg-white px-4 py-3">
@@ -31,8 +31,10 @@ export function ProductDimensions({ product }: { product: Product }) {
                     </div>
                   ))}
                 </dl>
-                {showDiagram ? (
-                  <p className="mt-3 text-sm text-muted">Le schéma représente le format 40 cm.</p>
+                {showDiagram && measures.widthCm != null ? (
+                  <p className="mt-3 text-sm text-muted">
+                    Le schéma représente le format {measures.widthCm} cm.
+                  </p>
                 ) : null}
               </div>
             ) : (

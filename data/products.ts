@@ -22,14 +22,25 @@ function metalCoffeeTableVariants(): ProductVariant[] {
     },
   } as const;
   const colors = [
-    { color: "argent" as const, colorLabel: "Argenté", image: "/products/coffee-table-metal-4.jpg" },
-    { color: "noir" as const, colorLabel: "Noir", image: "/products/coffee-table-metal-3.jpg" },
+    {
+      color: "argent" as const,
+      colorLabel: "Argenté",
+      swatchClass: "bg-[#c5c8cc] ring-1 ring-black/10",
+      image: "/products/coffee-table-metal-4.jpg",
+    },
+    {
+      color: "noir" as const,
+      colorLabel: "Noir",
+      swatchClass: "bg-[#1a1a1a]",
+      image: "/products/coffee-table-metal-3.jpg",
+    },
   ];
-  return colors.flatMap(({ color, colorLabel, image }) =>
+  return colors.flatMap(({ color, colorLabel, swatchClass, image }) =>
     sizes.map((size) => ({
       id: `p-012-${color}-${size.sizeCm}`,
       color,
       colorLabel,
+      swatchClass,
       sizeCm: size.sizeCm,
       sizeLabel: `${size.sizeCm} × ${size.sizeCm} × ${size.sizeCm} cm`,
       price: size.price,
@@ -41,8 +52,152 @@ function metalCoffeeTableVariants(): ProductVariant[] {
   );
 }
 
+function tvStandVariants(): ProductVariant[] {
+  const sizes = [
+    { sizeCm: 160, price: 249, compareAtPrice: 299 },
+    { sizeCm: 200, price: 289, compareAtPrice: 349 },
+    { sizeCm: 240, price: 329, compareAtPrice: 399 },
+  ] as const;
+  const skus = {
+    noyer: { 160: "6283791890961", 200: "6283791890962", 240: "6283791890963" },
+    "noyer-noir": { 160: "6283791890967", 200: "6283791890968", 240: "6283791890969" },
+    naturel: { 160: "6283791890952", 200: "6283791890953", 240: "6283791890954" },
+    noir: { 160: "6283791890973", 200: "6283791890974", 240: "6283791890975" },
+  } as const;
+  const colors = [
+    {
+      color: "noyer" as const,
+      colorLabel: "Noyer",
+      swatchClass: "bg-[#6b4226]",
+      image: "/products/tv-stand-2.jpg",
+    },
+    {
+      color: "noyer-noir" as const,
+      colorLabel: "Noyer et noir",
+      swatchClass: "bg-[#2a211c]",
+      image: "/products/tv-stand-3.jpg",
+    },
+    {
+      color: "naturel" as const,
+      colorLabel: "Bois naturel",
+      swatchClass: "bg-[#e8dcc8] ring-1 ring-black/10",
+      image: "/products/tv-stand-4.jpg",
+    },
+    {
+      color: "noir" as const,
+      colorLabel: "Noir",
+      swatchClass: "bg-[#1a1a1a]",
+      image: "/products/tv-stand-3.jpg",
+    },
+  ];
+  return colors.flatMap(({ color, colorLabel, swatchClass, image }) =>
+    sizes.map((size) => ({
+      id: `p-013-${color}-${size.sizeCm}`,
+      color,
+      colorLabel,
+      swatchClass,
+      sizeCm: size.sizeCm,
+      sizeLabel: `${size.sizeCm} × 24 × 24 cm`,
+      price: size.price,
+      compareAtPrice: size.compareAtPrice,
+      supplierVariantId: skus[color][size.sizeCm],
+      image,
+    })),
+  );
+}
+
 /** Store catalog. */
 export const products: Product[] = [
+  {
+    id: "p-013",
+    slug: "meuble-tv",
+    name: "Meuble TV en bois",
+    category: "maison",
+    shortDescription:
+      "Meuble TV bas en bois, à poser au sol sous un écran. Quatre compartiments, trois longueurs, plusieurs finitions.",
+    description:
+      "Un meuble TV bas, pensé pour rester discret sous un écran mural. La façade se compose de deux tiroirs aux extrémités et de deux portes abattantes au centre, sans poignée apparente. Trois longueurs, de 160 à 240 cm, et quatre finitions.",
+    price: 289,
+    compareAtPrice: 349,
+    defaultVariantId: "p-013-noyer-200",
+    formatsLabel: "Longueurs",
+    sizesLabel: "Longueur",
+    variants: tvStandVariants(),
+    images: [
+      "/products/tv-stand.jpg",
+      "/products/tv-stand-2.jpg",
+      "/products/tv-stand-3.jpg",
+      "/products/tv-stand-4.jpg",
+    ],
+    imageAssets: [
+      { src: "/products/tv-stand.jpg", role: "lifestyle" },
+      { src: "/products/tv-stand-2.jpg", role: "product" },
+      { src: "/products/tv-stand-3.jpg", role: "product" },
+      { src: "/products/tv-stand-4.jpg", role: "product" },
+    ],
+    features: [
+      "Meuble TV bas, 24 cm de haut",
+      "Deux tiroirs et deux portes abattantes",
+      "Longueurs 160, 200 et 240 cm",
+      "Fabriqué après commande",
+    ],
+    benefits: ["Format bas", "Rangement fermé", "Trois longueurs", "Fabriqué après commande"],
+    highlights: [
+      "Un volume bas qui reste discret sous l’écran",
+      "Deux tiroirs et deux portes pour ranger télécommandes et boîtiers",
+      "Une façade sans poignée apparente",
+      "Trois longueurs pour s’aligner sur le meuble ou le mur",
+    ],
+    dailyUses: [
+      {
+        title: "Sous l’écran",
+        text: "Le format bas se place au sol, sous un téléviseur mural, sans occuper la hauteur du salon.",
+      },
+      {
+        title: "Ranger sans encombrer le salon",
+        text: "Tiroirs et portes abattantes ferment le rangement, pour un salon moins chargé.",
+      },
+      {
+        title: "Choisir la longueur",
+        text: "Le meuble existe en 160, 200 et 240 cm, pour s’aligner sur la largeur de l’écran ou du mur.",
+      },
+    ],
+    faq: [
+      {
+        question: "Quelles sont ses dimensions ?",
+        answer:
+          "Le meuble mesure 24 cm de haut et 24 cm de profondeur. Trois longueurs : 160 cm, 200 cm et 240 cm. Le schéma représente le format 200 cm.",
+      },
+      {
+        question: "Quelles couleurs sont proposées ?",
+        answer: "Quatre finitions : noyer, noyer et noir, bois naturel, noir.",
+      },
+    ],
+    specifications: {
+      Type: "Meuble TV",
+      Largeur: "200 cm",
+      Profondeur: "24 cm",
+      Hauteur: "24 cm",
+      Longueurs: "160, 200 et 240 cm",
+      Matériaux: "Bois",
+      Finitions: "Noyer, noyer et noir, bois naturel, noir",
+      Rangement: "2 tiroirs, 2 portes abattantes",
+    },
+    measures: {
+      widthCm: 200,
+      depthCm: 24,
+      heightCm: 24,
+    },
+    madeToOrder: true,
+    availabilityStatus: "available",
+    supplierProvider: "buckydrop",
+    supplierProductId: "990949234197",
+    supplierVariantId: "6283791890962",
+    weight: null,
+    dimensions: "160, 200 ou 240 × 24 × 24 cm (l × p × h) — schéma du format 200 cm",
+    shippingMinDays: 14,
+    shippingMaxDays: 14,
+  },
   {
     id: "p-012",
     slug: "table-basse-metal",
@@ -55,6 +210,7 @@ export const products: Product[] = [
     price: 139,
     compareAtPrice: 169,
     defaultVariantId: "p-012-argent-40",
+    formatsLabel: "Formats cubes",
     variants: metalCoffeeTableVariants(),
     images: [
       "/products/coffee-table-metal.jpg",

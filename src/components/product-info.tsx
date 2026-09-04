@@ -83,7 +83,8 @@ export function ProductInfo({ product }: { product: Product }) {
                   >
                     <span
                       className={`h-4 w-4 rounded-full ${
-                        option.color === "noir" ? "bg-[#1a1a1a]" : "bg-[#c5c8cc] ring-1 ring-black/10"
+                        option.swatchClass ??
+                        (option.color === "noir" ? "bg-[#1a1a1a]" : "bg-[#c5c8cc] ring-1 ring-black/10")
                       }`}
                       aria-hidden
                     />
@@ -94,7 +95,7 @@ export function ProductInfo({ product }: { product: Product }) {
             </div>
           </fieldset>
           <fieldset>
-            <legend className="text-sm text-muted">Taille</legend>
+            <legend className="text-sm text-muted">{product.sizesLabel ?? "Taille"}</legend>
             <div className="mt-2 flex flex-wrap gap-2">
               {sizes.map((option) => {
                 const selected = option.sizeCm === selectedSize;
