@@ -80,11 +80,12 @@ function AuthFormFields({ mode }: { mode: Mode }) {
       </p>
       {mode === "register" && (
         <label className="block text-sm">
-          <span className="mb-1 block text-muted">Nom</span>
+          <span className="mb-1 block text-muted">Nom Prénom</span>
           <input
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
+            autoComplete="name"
             className="input"
           />
         </label>
