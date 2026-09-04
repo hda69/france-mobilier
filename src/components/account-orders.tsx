@@ -48,7 +48,7 @@ export function AccountOrders({ signedIn }: { signedIn: boolean }) {
   }
 
   return (
-    <section className="space-y-4">
+    <section className="min-w-0 space-y-4">
       <h2 className="text-xl font-semibold tracking-tight">Mes commandes</h2>
       {!signedIn ? (
         <p className="text-sm leading-relaxed text-muted">
@@ -91,7 +91,7 @@ export function AccountOrders({ signedIn }: { signedIn: boolean }) {
         <p className="text-sm text-muted">Chargement des commandes…</p>
       )}
 
-      <form className="max-w-lg space-y-3 rounded-2xl border border-border bg-white p-4 sm:p-5" onSubmit={onLookup}>
+      <form className="space-y-3 rounded-2xl border border-border bg-white p-4 sm:p-5" onSubmit={onLookup}>
         <p className="text-sm font-medium text-navy">Retrouver une commande</p>
         <label className="block text-sm">
           E-mail

@@ -66,27 +66,31 @@ export default function ComptePage() {
 
   return (
     <div className="container-page space-y-8 py-14">
-      <AccountNav current="apercu" />
-      <h1 className="text-3xl font-semibold tracking-tight">Mon compte</h1>
-      <div className="max-w-lg rounded-2xl border border-border bg-white p-6">
-        <p className="text-sm text-muted">Nom</p>
-        <p className="font-medium">{session.user.name}</p>
-        <p className="mt-4 text-sm text-muted">E-mail</p>
-        <p className="font-medium">{session.user.email}</p>
-        <ChangePasswordForm />
-        <p className="mt-6 text-sm leading-relaxed text-muted">
-          Les avis produits sont réservés aux achats vérifiés. Une fois envoyé, un avis n’apparaît
-          en ligne qu’après validation.
-        </p>
-        <ProStatus />
-        <Link href="/compte/entreprise" className="btn btn-primary mt-4 inline-flex w-full">
-          Compte professionnel
-        </Link>
-        <button type="button" onClick={logout} className="btn btn-secondary mt-3 w-full">
-          Se déconnecter
-        </button>
+      <div>
+        <AccountNav current="apercu" />
+        <h1 className="mt-6 text-3xl font-semibold tracking-tight">Mon compte</h1>
       </div>
-      <AccountOrders signedIn />
+      <div className="grid items-start gap-8 lg:grid-cols-[minmax(20rem,26rem)_minmax(0,1fr)]">
+        <div className="rounded-2xl border border-border bg-white p-6">
+          <p className="text-sm text-muted">Nom</p>
+          <p className="font-medium">{session.user.name}</p>
+          <p className="mt-4 text-sm text-muted">E-mail</p>
+          <p className="font-medium">{session.user.email}</p>
+          <ChangePasswordForm />
+          <p className="mt-6 text-sm leading-relaxed text-muted">
+            Les avis produits sont réservés aux achats vérifiés. Une fois envoyé, un avis n’apparaît
+            en ligne qu’après validation.
+          </p>
+          <ProStatus />
+          <Link href="/compte/entreprise" className="btn btn-primary mt-4 inline-flex w-full">
+            Compte professionnel
+          </Link>
+          <button type="button" onClick={logout} className="btn btn-secondary mt-3 w-full">
+            Se déconnecter
+          </button>
+        </div>
+        <AccountOrders signedIn />
+      </div>
     </div>
   );
 }
