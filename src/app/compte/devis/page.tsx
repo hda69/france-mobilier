@@ -56,7 +56,11 @@ export default function CompteDevisPage() {
           {items.length > 0 ? (
             <QuoteRequestForm
               source="account"
-              items={items.map((item) => ({ productId: item.productId, quantity: item.quantity }))}
+              items={items.map((item) => ({
+                productId: item.productId,
+                variantId: item.variantId,
+                quantity: item.quantity,
+              }))}
             />
           ) : (
             <p className="text-sm text-muted">

@@ -1,6 +1,6 @@
 import { products as catalog } from "@/data/products";
 import { collections } from "@/config/store";
-import type { Product } from "@/lib/types/commerce";
+import type { Product, ProductVariant } from "@/lib/types/commerce";
 
 export function listProducts(): Product[] {
   return catalog;
@@ -14,6 +14,40 @@ export function findProductBySlug(slug: string): Product | null {
 
 export function findProductById(id: string): Product | null {
   return catalog.find((p) => p.id === id) ?? null;
+}
+
+export function cartLineKey(productId: string, variantId?: string | null) {
+  return variantId ? `${productId}::${variantId}` : productId;
+}
+
+export function findProductVariant(
+  product: Product,
+  variantId?: string | null,
+): ProductVariant | undefined {
+  const variants = product.variants;
+  if (!variants?.length) return undefined;
+  if (variantId) return variants.find((variant) => variant.id === variantId);
+  return variants.find((variant) => variant.id === product.defaultVariantId) ?? variants[0];
+}
+
+export function variantLineName(product: Product, variant: ProductVariant) {
+  return `${product.name} — ${variant.colorLabel}, ${variant.sizeLabel}`;
+}
+
+export function uniqueVariantSizes(product: Product): ProductVariant[] {
+  const seen = new Map<number, ProductVariant>();
+  for (const variant of product.variants ?? []) {
+    if (!seen.has(variant.sizeCm)) seen.set(variant.sizeCm, variant);
+  }
+  return [...seen.values()].sort((a, b) => a.sizeCm - b.sizeCm);
+}
+
+export function uniqueVariantColors(product: Product): ProductVariant[] {
+  const seen = new Map<string, ProductVariant>();
+  for (const variant of product.variants ?? []) {
+    if (!seen.has(variant.color)) seen.set(variant.color, variant);
+  }
+  return [...seen.values()];
 }
 
 export const getProductBySlug = findProductBySlug;

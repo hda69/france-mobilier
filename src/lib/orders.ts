@@ -4,7 +4,7 @@ import { purchase, shopOrder, shopOrderItem, user } from "@/lib/db/schema";
 import { isMailConfigured, sendOrderPaidEmail } from "@/lib/mail";
 import { applyServerDiscount } from "@/lib/b2b";
 import { productHeroImage } from "@/lib/products/presentation";
-import { findProductById } from "@/lib/products/repository";
+import { findProductById, findProductVariant, variantLineName } from "@/lib/products/repository";
 import { decryptSecret, encryptSecret, provisionCustomerAccount } from "@/lib/provision-account";
 import {
   eurosToCents,
@@ -16,7 +16,7 @@ import {
 
 export const ORDER_ACCESS_COOKIE = "fm_order_access";
 
-export type CheckoutLine = { productId: string; quantity: number };
+export type CheckoutLine = { productId: string; quantity: number; variantId?: string };
 
 export type CheckoutCustomer = {
   name: string;
@@ -159,13 +159,18 @@ export function priceCheckoutLines(
     if (product.availabilityStatus !== "available") {
       throw new Error("PRODUIT_INDISPONIBLE");
     }
+    const hasVariants = Boolean(product.variants?.length);
+    const variant = hasVariants ? findProductVariant(product, item.variantId) : undefined;
+    if (hasVariants && (!item.variantId || !variant)) {
+      throw new Error("VARIANTE_INTROUVABLE");
+    }
     priced.push({
       productId: product.id,
-      name: product.name,
+      name: variant ? variantLineName(product, variant) : product.name,
       slug: product.slug,
-      image: productHeroImage(product) || null,
+      image: variant?.image ?? productHeroImage(product) ?? null,
       quantity,
-      unitPriceCents: eurosToCents(product.price),
+      unitPriceCents: eurosToCents(variant?.price ?? product.price),
     });
   }
   const applied = applyServerDiscount(priced, discount);

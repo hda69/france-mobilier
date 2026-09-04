@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useCart } from "@/components/cart-provider";
 import { productHeroImage } from "@/lib/products/presentation";
+import { findProductVariant, variantLineName } from "@/lib/products/repository";
 import type { Product } from "@/lib/types/commerce";
 
 export function AddToCartButton({
@@ -14,6 +15,7 @@ export function AddToCartButton({
 }) {
   const { addItem } = useCart();
   const [added, setAdded] = useState(false);
+  const variant = findProductVariant(product, product.defaultVariantId);
 
   return (
     <button
@@ -23,9 +25,10 @@ export function AddToCartButton({
         addItem({
           productId: product.id,
           slug: product.slug,
-          name: product.name,
-          price: product.price,
-          image: productHeroImage(product),
+          name: variant ? variantLineName(product, variant) : product.name,
+          price: variant?.price ?? product.price,
+          image: variant?.image ?? productHeroImage(product),
+          variantId: variant?.id,
         });
         setAdded(true);
       }}

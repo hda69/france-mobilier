@@ -6,21 +6,32 @@ import { ProductTrustBar } from "@/components/product-trust-bar";
 import { ProQuoteActions } from "@/components/pro-quote-actions";
 import { store } from "@/config/store";
 import { productHeroImage } from "@/lib/products/presentation";
-import type { Product } from "@/lib/types/commerce";
+import { variantLineName } from "@/lib/products/repository";
+import type { Product, ProductVariant } from "@/lib/types/commerce";
 
-export function ProductBuyBox({ product }: { product: Product }) {
+export function ProductBuyBox({
+  product,
+  variant,
+}: {
+  product: Product;
+  variant?: ProductVariant;
+}) {
   const { addItem } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
+  const price = variant?.price ?? product.price;
+  const image = variant?.image ?? productHeroImage(product);
+  const name = variant ? variantLineName(product, variant) : product.name;
 
   function add() {
     addItem(
       {
         productId: product.id,
         slug: product.slug,
-        name: product.name,
-        price: product.price,
-        image: productHeroImage(product),
+        name,
+        price,
+        image,
+        variantId: variant?.id,
       },
       quantity,
     );
@@ -43,7 +54,7 @@ export function ProductBuyBox({ product }: { product: Product }) {
         <button type="button" className="btn btn-primary min-h-12 w-full text-base" onClick={add}>
           {added ? "Ajouté au panier" : "Ajouter au panier"}
         </button>
-        <ProQuoteActions product={product} quantity={quantity} />
+        <ProQuoteActions product={product} variant={variant} quantity={quantity} />
         <ProductTrustBar />
         <p className="text-xs text-muted">
           Une question ? {store.supportEmail} — {store.supportHoursShort}.

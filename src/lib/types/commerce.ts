@@ -46,6 +46,21 @@ export type ProductMeasures = {
   crossbarFromFloorCm?: number;
 };
 
+export type ProductColor = "argent" | "noir";
+
+export type ProductVariant = {
+  id: string;
+  color: ProductColor;
+  colorLabel: string;
+  sizeCm: number;
+  sizeLabel: string;
+  price: number;
+  compareAtPrice: number | null;
+  supplierVariantId: string | null;
+  weightKg?: number;
+  image?: string;
+};
+
 export type Product = {
   id: string;
   slug: string;
@@ -55,6 +70,8 @@ export type Product = {
   description: string;
   price: number;
   compareAtPrice: number | null;
+  variants?: ProductVariant[];
+  defaultVariantId?: string;
   images: string[];
   /** Metadata for gallery assets. Does not replace `images` order; used to flag supplier files. */
   imageAssets?: ProductImageAsset[];
@@ -154,4 +171,5 @@ export type CartItem = {
   price: number;
   image: string;
   quantity: number;
+  variantId?: string;
 };

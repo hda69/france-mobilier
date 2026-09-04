@@ -3,7 +3,7 @@ import { db, ensureDatabase } from "@/lib/db";
 import { proQuote, proQuoteItem } from "@/lib/db/schema";
 import { writeProAudit } from "@/lib/pro-access";
 import { eurosToCents } from "@/lib/payments/stripe";
-import { findProductById } from "@/lib/products/repository";
+import { findProductById, findProductVariant, variantLineName } from "@/lib/products/repository";
 import { isQuoteEligible } from "@/lib/b2b";
 
 export type QuoteStatus =
@@ -15,7 +15,7 @@ export type QuoteStatus =
   | "rejected"
   | "expired";
 
-export type QuoteLineInput = { productId: string; quantity: number };
+export type QuoteLineInput = { productId: string; quantity: number; variantId?: string };
 
 const REF_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
@@ -43,11 +43,16 @@ export async function createQuoteRequest(input: {
     if (!product) throw new Error("PRODUIT_INTROUVABLE");
     if (!isQuoteEligible(product)) throw new Error("PRODUIT_NON_ELIGIBLE");
     const quantity = Math.max(1, Math.min(200, Math.floor(item.quantity)));
+    const hasVariants = Boolean(product.variants?.length);
+    const variant = hasVariants ? findProductVariant(product, item.variantId) : undefined;
+    if (hasVariants && (!item.variantId || !variant)) {
+      throw new Error("VARIANTE_INTROUVABLE");
+    }
     return {
       productId: product.id,
-      name: product.name,
+      name: variant ? variantLineName(product, variant) : product.name,
       quantity,
-      unitPriceCents: eurosToCents(product.price),
+      unitPriceCents: eurosToCents(variant?.price ?? product.price),
     };
   });
   const amountCents = priced.reduce((sum, line) => sum + line.unitPriceCents * line.quantity, 0);

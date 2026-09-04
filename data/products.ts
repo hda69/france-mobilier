@@ -1,7 +1,137 @@
-import type { Product } from "@/lib/types/commerce";
+import type { Product, ProductVariant } from "@/lib/types/commerce";
+
+function metalCoffeeTableVariants(): ProductVariant[] {
+  const sizes = [
+    { sizeCm: 25, price: 69, compareAtPrice: 89, weightKg: 2.7 },
+    { sizeCm: 30, price: 79, compareAtPrice: 99, weightKg: 3.2 },
+    { sizeCm: 35, price: 89, compareAtPrice: 119, weightKg: 4.0 },
+    { sizeCm: 40, price: 99, compareAtPrice: 129, weightKg: 4.8 },
+  ] as const;
+  const skus = {
+    argent: {
+      25: "6254584230634",
+      30: "6254584230640",
+      35: "6254584230646",
+      40: "6254584230652",
+    },
+    noir: {
+      25: "6254584230635",
+      30: "6254584230641",
+      35: "6254584230647",
+      40: "6254584230653",
+    },
+  } as const;
+  const colors = [
+    { color: "argent" as const, colorLabel: "Argenté", image: "/products/coffee-table-metal-4.jpg" },
+    { color: "noir" as const, colorLabel: "Noir", image: "/products/coffee-table-metal-3.jpg" },
+  ];
+  return colors.flatMap(({ color, colorLabel, image }) =>
+    sizes.map((size) => ({
+      id: `p-012-${color}-${size.sizeCm}`,
+      color,
+      colorLabel,
+      sizeCm: size.sizeCm,
+      sizeLabel: `${size.sizeCm} × ${size.sizeCm} × ${size.sizeCm} cm`,
+      price: size.price,
+      compareAtPrice: size.compareAtPrice,
+      weightKg: size.weightKg,
+      supplierVariantId: skus[color][size.sizeCm],
+      image,
+    })),
+  );
+}
 
 /** Store catalog. */
 export const products: Product[] = [
+  {
+    id: "p-012",
+    slug: "table-basse-metal",
+    name: "Table basse en métal",
+    category: "maison",
+    shortDescription:
+      "Table basse cubique en métal, à poser au salon ou à côté d’un canapé. Structure ajourée, étagère ouverte, deux finitions.",
+    description:
+      "Une table basse cubique en métal, pensée pour un salon ou un angle de canapé. Les tiges parallèles forment une structure légère, avec un plateau et une étagère inférieure pour livres ou objets du quotidien. Deux finitions, argentée et noire, et quatre formats cubes.",
+    price: 99,
+    compareAtPrice: 129,
+    defaultVariantId: "p-012-argent-40",
+    variants: metalCoffeeTableVariants(),
+    images: [
+      "/products/coffee-table-metal.jpg",
+      "/products/coffee-table-metal-2.jpg",
+      "/products/coffee-table-metal-4.jpg",
+      "/products/coffee-table-metal-3.jpg",
+    ],
+    imageAssets: [
+      { src: "/products/coffee-table-metal.jpg", role: "lifestyle" },
+      { src: "/products/coffee-table-metal-2.jpg", role: "lifestyle" },
+      { src: "/products/coffee-table-metal-4.jpg", role: "product" },
+      { src: "/products/coffee-table-metal-3.jpg", role: "product" },
+    ],
+    features: [
+      "Structure cubique en métal",
+      "Étagère inférieure ouverte",
+      "Quatre formats : 25, 30, 35 et 40 cm",
+      "Finitions argentée et noire",
+    ],
+    benefits: ["Format cube", "Rangement ouvert", "Métal argenté ou noir", "Fabriquée après commande"],
+    highlights: [
+      "Un cube métallique facile à glisser contre un canapé",
+      "Une étagère ouverte pour garder livres et objets à portée de main",
+      "Une structure ajourée qui reste visuellement légère",
+      "Quatre tailles pour s’adapter à l’espace disponible",
+    ],
+    dailyUses: [
+      {
+        title: "À côté du canapé",
+        text: "Le format cube se place contre un accoudoir, pour une tasse, une télécommande ou un livre.",
+      },
+      {
+        title: "Un volume de rangement sans caisson fermé",
+        text: "L’étagère inférieure accueille magazines ou ouvrages, sans alourdir le salon d’un meuble plein.",
+      },
+      {
+        title: "Choisir le format selon la pièce",
+        text: "Le cube existe en 25, 30, 35 et 40 cm de côté, pour un bout de canapé ou une petite table basse.",
+      },
+    ],
+    faq: [
+      {
+        question: "Quelles sont ses dimensions ?",
+        answer:
+          "La table est un cube. Quatre formats : 25 × 25 × 25 cm, 30 × 30 × 30 cm, 35 × 35 × 35 cm et 40 × 40 × 40 cm. Le schéma ci-dessous représente le format 40 cm.",
+      },
+      {
+        question: "Quelles couleurs sont proposées ?",
+        answer: "Deux finitions : argentée et noire.",
+      },
+    ],
+    specifications: {
+      Type: "Table basse",
+      Forme: "Cube",
+      Formats: "25, 30, 35 et 40 cm de côté",
+      Largeur: "40 cm",
+      Profondeur: "40 cm",
+      Hauteur: "40 cm",
+      Matériaux: "Métal / acier",
+      Finitions: "Argenté, noir",
+      Rangement: "Étagère inférieure ouverte",
+    },
+    measures: {
+      widthCm: 40,
+      depthCm: 40,
+      heightCm: 40,
+    },
+    madeToOrder: true,
+    availabilityStatus: "available",
+    supplierProvider: "buckydrop",
+    supplierProductId: "891439657364",
+    supplierVariantId: "6254584230652",
+    weight: 4.8,
+    dimensions: "Cubes 25, 30, 35 et 40 cm de côté — schéma du format 40 × 40 × 40 cm",
+    shippingMinDays: 14,
+    shippingMaxDays: 14,
+  },
   {
     id: "p-011",
     slug: "table-de-chevet",

@@ -11,12 +11,13 @@ import {
   type ReactNode,
 } from "react";
 import type { CartItem } from "@/lib/types/commerce";
+import { cartLineKey } from "@/lib/products/repository";
 
 type CartContextValue = {
   items: CartItem[];
   addItem: (item: Omit<CartItem, "quantity">, quantity?: number) => void;
-  removeItem: (productId: string) => void;
-  setQuantity: (productId: string, quantity: number) => void;
+  removeItem: (productId: string, variantId?: string | null) => void;
+  setQuantity: (productId: string, quantity: number, variantId?: string | null) => void;
   clear: () => void;
   itemCount: number;
   subtotal: number;
@@ -54,10 +55,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const addItem = useCallback((item: Omit<CartItem, "quantity">, quantity = 1) => {
     setItems((current) => {
-      const existing = current.find((row) => row.productId === item.productId);
+      const key = cartLineKey(item.productId, item.variantId);
+      const existing = current.find((row) => cartLineKey(row.productId, row.variantId) === key);
       if (existing) {
         return current.map((row) =>
-          row.productId === item.productId
+          cartLineKey(row.productId, row.variantId) === key
             ? { ...row, quantity: row.quantity + quantity }
             : row,
         );
@@ -66,14 +68,18 @@ export function CartProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  const removeItem = useCallback((productId: string) => {
-    setItems((current) => current.filter((row) => row.productId !== productId));
+  const removeItem = useCallback((productId: string, variantId?: string | null) => {
+    const key = cartLineKey(productId, variantId);
+    setItems((current) => current.filter((row) => cartLineKey(row.productId, row.variantId) !== key));
   }, []);
 
-  const setQuantity = useCallback((productId: string, quantity: number) => {
+  const setQuantity = useCallback((productId: string, quantity: number, variantId?: string | null) => {
+    const key = cartLineKey(productId, variantId);
     setItems((current) =>
       current
-        .map((row) => (row.productId === productId ? { ...row, quantity } : row))
+        .map((row) =>
+          cartLineKey(row.productId, row.variantId) === key ? { ...row, quantity } : row,
+        )
         .filter((row) => row.quantity > 0),
     );
   }, []);

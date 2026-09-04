@@ -8,7 +8,13 @@ import { getProAccessByUserId, isProApproved } from "@/lib/pro-access";
 const schema = z.object({
   source: z.enum(["product", "cart", "account"]),
   items: z
-    .array(z.object({ productId: z.string().min(1), quantity: z.number().int().min(1).max(200) }))
+    .array(
+      z.object({
+        productId: z.string().min(1),
+        variantId: z.string().min(1).optional(),
+        quantity: z.number().int().min(1).max(200),
+      }),
+    )
     .min(1)
     .max(40),
   desiredDate: z.string().trim().max(40).optional(),
@@ -54,7 +60,7 @@ export async function POST(request: Request) {
     const map: Record<string, string> = {
       DEVIS_VIDE: "Ajoutez au moins un produit.",
       PRODUIT_INTROUVABLE: "Un produit n’est plus disponible.",
-      PRODUIT_NON_ELIGIBLE: "Ce produit n’est pas éligible au devis.",
+      VARIANTE_INTROUVABLE: "Une variante n’est plus disponible.",
     };
     return NextResponse.json({ error: map[code] || "Demande impossible." }, { status: 400 });
   }

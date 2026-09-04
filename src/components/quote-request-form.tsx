@@ -11,7 +11,7 @@ export function QuoteRequestForm({
   catalogPriceLabel,
 }: {
   source: "product" | "cart" | "account";
-  items: { productId: string; quantity: number }[];
+  items: { productId: string; quantity: number; variantId?: string }[];
   productLabel?: string;
   catalogPriceLabel?: string;
 }) {
@@ -31,7 +31,7 @@ export function QuoteRequestForm({
     try {
       const payloadItems =
         source === "product" && items[0]
-          ? [{ productId: items[0].productId, quantity }]
+          ? [{ productId: items[0].productId, variantId: items[0].variantId, quantity }]
           : items;
       const res = await fetch("/api/quotes", {
         method: "POST",

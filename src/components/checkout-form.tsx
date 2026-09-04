@@ -64,7 +64,11 @@ export function CheckoutForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          items: items.map((item) => ({ productId: item.productId, quantity: item.quantity })),
+          items: items.map((item) => ({
+            productId: item.productId,
+            variantId: item.variantId,
+            quantity: item.quantity,
+          })),
           name: String(form.get("name") || ""),
           email: String(form.get("email") || ""),
           line1: String(form.get("line1") || ""),
@@ -185,7 +189,7 @@ export function CheckoutForm() {
         <h2 className="text-lg font-medium">Récapitulatif</h2>
         <ul className="space-y-2 text-sm">
           {items.map((item) => (
-            <li key={item.productId} className="flex justify-between gap-3">
+            <li key={`${item.productId}-${item.variantId ?? "default"}`} className="flex justify-between gap-3">
               <span className="min-w-0 break-words">
                 {item.name} × {item.quantity}
               </span>

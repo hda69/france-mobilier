@@ -33,6 +33,7 @@ const schema = z
       .array(
         z.object({
           productId: z.string().min(1),
+          variantId: z.string().min(1).optional(),
           quantity: z.number().int().min(1).max(20),
         }),
       )
@@ -254,6 +255,7 @@ export async function POST(request: Request) {
       QUANTITE_INVALIDE: "Quantité invalide.",
       PRODUIT_INTROUVABLE: "Un article du panier n’est plus disponible.",
       PRODUIT_INDISPONIBLE: "Un article du panier n’est plus en vente.",
+      VARIANTE_INTROUVABLE: "Une variante du panier n’est plus disponible.",
       MONTANT_INVALIDE: "Le montant de la commande est invalide.",
     };
     return NextResponse.json(

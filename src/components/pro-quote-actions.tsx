@@ -4,18 +4,20 @@ import { useEffect, useState } from "react";
 import { QuoteRequestForm } from "@/components/quote-request-form";
 import { authClient } from "@/lib/auth-client";
 import { DEFAULT_QUOTE_THRESHOLD_EUROS } from "@/lib/b2b";
-import { formatPrice } from "@/lib/products/repository";
-import type { Product } from "@/lib/types/commerce";
+import { formatPrice, variantLineName } from "@/lib/products/repository";
+import type { Product, ProductVariant } from "@/lib/types/commerce";
 
 export function ProQuoteActions({
   product,
+  variant,
   quantity,
   cartItems,
   cartTotalEuros,
 }: {
   product?: Product;
+  variant?: ProductVariant;
   quantity?: number;
-  cartItems?: { productId: string; quantity: number }[];
+  cartItems?: { productId: string; quantity: number; variantId?: string }[];
   cartTotalEuros?: number;
 }) {
   const { data: session } = authClient.useSession();
@@ -33,9 +35,10 @@ export function ProQuoteActions({
   if (!approved) return null;
 
   const items = product
-    ? [{ productId: product.id, quantity: quantity || 1 }]
+    ? [{ productId: product.id, variantId: variant?.id, quantity: quantity || 1 }]
     : cartItems || [];
   if (!items.length) return null;
+  const catalogPrice = variant?.price ?? product?.price;
 
   return (
     <div className="space-y-3">
@@ -50,8 +53,8 @@ export function ProQuoteActions({
       <QuoteRequestForm
         source={product ? "product" : "cart"}
         items={items}
-        productLabel={product?.name}
-        catalogPriceLabel={product ? formatPrice(product.price) : undefined}
+        productLabel={product ? (variant ? variantLineName(product, variant) : product.name) : undefined}
+        catalogPriceLabel={catalogPrice != null ? formatPrice(catalogPrice) : undefined}
       />
     </div>
   );

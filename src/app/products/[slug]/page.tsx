@@ -65,6 +65,10 @@ export default async function ProductPage({ params }: Props) {
   const hero = productHeroImage(product);
   const highlights = productHighlights(product);
 
+  const variants = product.variants ?? [];
+  const prices = variants.map((variant) => variant.price);
+  const lowPrice = prices.length ? Math.min(...prices) : product.price;
+  const highPrice = prices.length ? Math.max(...prices) : product.price;
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -72,16 +76,30 @@ export default async function ProductPage({ params }: Props) {
     description: product.description,
     image: [hero, ...gallery.filter((src) => src !== hero)].map((src) => `${store.domain}${src}`),
     brand: { "@type": "Brand", name: store.storeName },
-    offers: {
-      "@type": "Offer",
-      url: `${store.domain}/products/${product.slug}`,
-      priceCurrency: "EUR",
-      price: product.price,
-      availability:
-        product.availabilityStatus === "out_of_stock"
-          ? "https://schema.org/OutOfStock"
-          : "https://schema.org/InStock",
-    },
+    offers:
+      variants.length > 1
+        ? {
+            "@type": "AggregateOffer",
+            url: `${store.domain}/products/${product.slug}`,
+            priceCurrency: "EUR",
+            lowPrice,
+            highPrice,
+            offerCount: variants.length,
+            availability:
+              product.availabilityStatus === "out_of_stock"
+                ? "https://schema.org/OutOfStock"
+                : "https://schema.org/InStock",
+          }
+        : {
+            "@type": "Offer",
+            url: `${store.domain}/products/${product.slug}`,
+            priceCurrency: "EUR",
+            price: product.price,
+            availability:
+              product.availabilityStatus === "out_of_stock"
+                ? "https://schema.org/OutOfStock"
+                : "https://schema.org/InStock",
+          },
     ...(reviews.length > 0
       ? {
           aggregateRating: {

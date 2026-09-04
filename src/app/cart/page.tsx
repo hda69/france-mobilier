@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/components/cart-provider";
-import { formatPrice } from "@/lib/products/repository";
+import { cartLineKey, formatPrice } from "@/lib/products/repository";
 import { ProQuoteActions } from "@/components/pro-quote-actions";
 import { SHIPPING_OFFERED_SENTENCE } from "@/lib/shipping-zone";
 
@@ -38,7 +38,7 @@ export default function CartPage() {
           <ul className="space-y-4">
             {items.map((item) => (
               <li
-                key={item.productId}
+                key={cartLineKey(item.productId, item.variantId)}
                 className="flex gap-3 rounded-2xl border border-border bg-card p-3 sm:gap-4 sm:p-4"
               >
                 <div className="relative h-24 w-20 shrink-0 overflow-hidden rounded-xl bg-[#f3efe8]">
@@ -57,14 +57,16 @@ export default function CartPage() {
                         min={1}
                         inputMode="numeric"
                         value={item.quantity}
-                        onChange={(e) => setQuantity(item.productId, Number(e.target.value))}
+                        onChange={(e) =>
+                          setQuantity(item.productId, Number(e.target.value), item.variantId)
+                        }
                         className="input w-16 min-h-11 px-2 py-2 text-center"
                       />
                     </label>
                     <button
                       type="button"
                       className="min-h-11 px-1 text-sm text-muted underline"
-                      onClick={() => removeItem(item.productId)}
+                      onClick={() => removeItem(item.productId, item.variantId)}
                     >
                       Retirer
                     </button>
@@ -84,7 +86,11 @@ export default function CartPage() {
             </Link>
             <div className="mt-4">
               <ProQuoteActions
-                cartItems={items.map((item) => ({ productId: item.productId, quantity: item.quantity }))}
+                cartItems={items.map((item) => ({
+                  productId: item.productId,
+                  variantId: item.variantId,
+                  quantity: item.quantity,
+                }))}
                 cartTotalEuros={subtotal}
               />
             </div>
