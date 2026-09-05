@@ -99,6 +99,36 @@ function tvStandVariants(): ProductVariant[] {
   );
 }
 
+function kidsVanityVariants(): ProductVariant[] {
+  return [
+    {
+      id: "p-016-naturel-coiffeuse",
+      color: "naturel",
+      colorLabel: "Bois naturel",
+      swatchClass: "bg-[#e8dcc8] ring-1 ring-black/10",
+      sizeCm: 49,
+      sizeLabel: "Coiffeuse",
+      price: 159,
+      compareAtPrice: 199,
+      weightKg: 10,
+      supplierVariantId: "6053271111924",
+    },
+    {
+      id: "p-016-naturel-ensemble",
+      color: "naturel",
+      colorLabel: "Bois naturel",
+      swatchClass: "bg-[#e8dcc8] ring-1 ring-black/10",
+      sizeCm: 75,
+      sizeLabel: "Coiffeuse + tabouret",
+      price: 199,
+      compareAtPrice: 249,
+      weightKg: 13,
+      supplierVariantId: "6053271111925",
+      image: "/products/kids-vanity.jpg",
+    },
+  ];
+}
+
 function entryCabinetVariants(): ProductVariant[] {
   const sizes = [
     { sizeCm: 60, price: 199, compareAtPrice: 249 },
@@ -187,6 +217,112 @@ function diningTableVariants(): ProductVariant[] {
 
 /** Store catalog. */
 export const products: Product[] = [
+  {
+    id: "p-016",
+    slug: "coiffeuse-enfant",
+    name: "Meuble coiffeuse pour enfant",
+    alternateNames: [
+      "Coiffeuse enfant",
+      "Coiffeuse pour enfant",
+      "Coiffeuse enfant en bois",
+    ],
+    category: "maison",
+    shortDescription:
+      "Petite coiffeuse en bois massif, à hauteur d’enfant : un tiroir, un miroir encadré. Seule, ou avec le tabouret assorti.",
+    description:
+      "Une coiffeuse à hauteur d’enfant, en bois massif clair. Le miroir est encadré de bois, avec deux oreilles d’ours. Un tiroir sous le plateau. On la choisit seule, ou avec le tabouret rond assorti.",
+    price: 199,
+    compareAtPrice: 249,
+    defaultVariantId: "p-016-naturel-ensemble",
+    formatsLabel: "Compositions",
+    sizesLabel: "Composition",
+    variants: kidsVanityVariants(),
+    images: [
+      "/products/kids-vanity.jpg",
+      "/products/kids-vanity-2.jpg",
+      "/products/kids-vanity-3.jpg",
+      "/products/kids-vanity-4.jpg",
+      "/products/kids-vanity-5.jpg",
+    ],
+    imageAssets: [
+      { src: "/products/kids-vanity.jpg", role: "lifestyle" },
+      { src: "/products/kids-vanity-2.jpg", role: "product" },
+      { src: "/products/kids-vanity-3.jpg", role: "lifestyle" },
+      { src: "/products/kids-vanity-4.jpg", role: "lifestyle" },
+      { src: "/products/kids-vanity-5.jpg", role: "lifestyle" },
+    ],
+    features: [
+      "Bois massif, finition naturelle",
+      "Miroir encadré, oreilles d’ours",
+      "Un tiroir",
+      "Coiffeuse seule ou avec tabouret",
+      "Fabriquée après commande",
+    ],
+    benefits: ["À hauteur d’enfant", "Un tiroir", "Miroir encadré", "Tabouret en option"],
+    highlights: [
+      "Une coiffeuse basse, à la taille d’un enfant",
+      "Un miroir encadré de bois, avec deux oreilles d’ours",
+      "Un tiroir pour les petits objets",
+      "Seule, ou avec le tabouret assorti",
+    ],
+    dailyUses: [
+      {
+        title: "Le matin",
+        text: "On s’assoit pour se coiffer, le plateau à 51 cm du sol.",
+      },
+      {
+        title: "Dans la chambre",
+        text: "49 cm de large, elle se glisse contre un mur, près du lit.",
+      },
+      {
+        title: "Avec le tabouret",
+        text: "Le tabouret rond, 26 × 26 cm, se range sous le plateau.",
+      },
+    ],
+    faq: [
+      {
+        question: "Quelles sont ses dimensions ?",
+        answer:
+          "Coiffeuse : 49 × 32 × 97 cm (l × p × h, miroir compris). Plateau à 51 cm du sol. Tabouret : 26 × 26 cm.",
+      },
+      {
+        question: "Le tabouret est-il inclus ?",
+        answer:
+          "Au choix : la coiffeuse seule, ou l’ensemble avec le tabouret assorti. Le tabouret n’est pas vendu séparément.",
+      },
+      {
+        question: "Quelles couleurs sont proposées ?",
+        answer: "Une finition : bois naturel.",
+      },
+    ],
+    specifications: {
+      Type: "Coiffeuse enfant",
+      Largeur: "49 cm",
+      Profondeur: "32 cm",
+      Hauteur: "97 cm",
+      Plateau: "51 cm",
+      Tabouret: "26 × 26 cm",
+      Matériaux: "Bois massif",
+      Finition: "Bois naturel",
+      Rangement: "1 tiroir",
+      Miroir: "Encadré, oreilles d’ours",
+      Compositions: "Coiffeuse, ou coiffeuse + tabouret",
+    },
+    measures: {
+      widthCm: 49,
+      depthCm: 32,
+      heightCm: 97,
+    },
+    madeToOrder: true,
+    availabilityStatus: "available",
+    supplierProvider: "buckydrop",
+    supplierProductId: "957431111547",
+    supplierVariantId: "6053271111925",
+    weight: null,
+    dimensions: "49 × 32 × 97 cm (l × p × h) — tabouret 26 × 26 cm",
+    shippingMinDays: 14,
+    shippingMaxDays: null,
+  },
   {
     id: "p-015",
     slug: "meuble-entree",
