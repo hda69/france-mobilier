@@ -99,6 +99,53 @@ function tvStandVariants(): ProductVariant[] {
   );
 }
 
+function entryCabinetVariants(): ProductVariant[] {
+  const sizes = [
+    { sizeCm: 60, price: 199, compareAtPrice: 249 },
+    { sizeCm: 80, price: 239, compareAtPrice: 289 },
+    { sizeCm: 100, price: 279, compareAtPrice: 339 },
+  ] as const;
+  const skus = {
+    cerisier: { 60: "5090427646704", 80: "4588157958666", 100: "4588157958668" },
+    noyer: { 60: "5090427646703", 80: "4588157958667", 100: "4588157958669" },
+    naturel: { 60: "5090427646702", 80: "5090427646700", 100: "5090427646701" },
+  } as const;
+  const colors = [
+    {
+      color: "cerisier" as const,
+      colorLabel: "Cerisier",
+      swatchClass: "bg-[#c4784a]",
+      image: "/products/shoe-bench-2.jpg",
+    },
+    {
+      color: "noyer" as const,
+      colorLabel: "Noyer",
+      swatchClass: "bg-[#3d2a1c]",
+      image: "/products/shoe-bench-4.jpg",
+    },
+    {
+      color: "naturel" as const,
+      colorLabel: "Bois naturel",
+      swatchClass: "bg-[#e8dcc8] ring-1 ring-black/10",
+      image: "/products/shoe-bench-5.jpg",
+    },
+  ];
+  return colors.flatMap(({ color, colorLabel, swatchClass, image }) =>
+    sizes.map((size) => ({
+      id: `p-015-${color}-${size.sizeCm}`,
+      color,
+      colorLabel,
+      swatchClass,
+      sizeCm: size.sizeCm,
+      sizeLabel: `${size.sizeCm} × 45 cm`,
+      price: size.price,
+      compareAtPrice: size.compareAtPrice,
+      supplierVariantId: skus[color][size.sizeCm],
+      image,
+    })),
+  );
+}
+
 function diningTableVariants(): ProductVariant[] {
   const sizes = [
     { sizeCm: 93, extendedCm: 131, price: 449, compareAtPrice: 549 },
@@ -140,6 +187,97 @@ function diningTableVariants(): ProductVariant[] {
 
 /** Store catalog. */
 export const products: Product[] = [
+  {
+    id: "p-015",
+    slug: "meuble-entree",
+    name: "Meuble d’entrée en bois",
+    category: "rangement",
+    shortDescription:
+      "Meuble bas d’entrée en pin massif, à s’asseoir pour changer de chaussures. Portes coulissantes à lattes, trois longueurs, trois finitions.",
+    description:
+      "Un meuble bas pour l’entrée : on s’y asseoit pour changer de chaussures, on y range les paires du quotidien derrière deux portes coulissantes à lattes. Pin massif, coins arrondis, trois longueurs et trois finitions.",
+    price: 239,
+    compareAtPrice: 289,
+    defaultVariantId: "p-015-cerisier-80",
+    formatsLabel: "Longueurs",
+    sizesLabel: "Longueur",
+    variants: entryCabinetVariants(),
+    images: [
+      "/products/shoe-bench.jpg",
+      "/products/shoe-bench-2.jpg",
+      "/products/shoe-bench-3.jpg",
+      "/products/shoe-bench-4.jpg",
+      "/products/shoe-bench-5.jpg",
+    ],
+    imageAssets: [
+      { src: "/products/shoe-bench.jpg", role: "lifestyle" },
+      { src: "/products/shoe-bench-2.jpg", role: "product" },
+      { src: "/products/shoe-bench-3.jpg", role: "lifestyle" },
+      { src: "/products/shoe-bench-4.jpg", role: "lifestyle" },
+      { src: "/products/shoe-bench-5.jpg", role: "product" },
+    ],
+    features: [
+      "Portes coulissantes à lattes",
+      "Pin massif, coins arrondis",
+      "Trois longueurs : 60, 80 et 100 cm",
+      "Fabriqué après commande",
+    ],
+    benefits: ["Assise d’entrée", "Rangement à chaussures", "Trois longueurs", "Trois finitions"],
+    highlights: [
+      "Un meuble bas pour s’asseoir en rentrant, sans encombrer le couloir",
+      "Deux portes coulissantes à lattes, pour cacher les chaussures",
+      "Une étagère intérieure que l’on règle selon la hauteur des paires",
+      "Trois longueurs et trois finitions, du cerisier au noyer",
+    ],
+    dailyUses: [
+      {
+        title: "En rentrant",
+        text: "On s’assoit pour changer de chaussures, à 45 cm du sol, et on range les paires derrière les portes.",
+      },
+      {
+        title: "Dans un couloir étroit",
+        text: "Le format 60 cm se glisse près de la porte ; le 80 ou le 100 cm sert aussi de petit banc d’appoint.",
+      },
+      {
+        title: "Quand les chaussures s’accumulent",
+        text: "L’étagère intérieure se déplace, pour des baskets d’un côté et des pantoufles de l’autre.",
+      },
+    ],
+    faq: [
+      {
+        question: "Quelles sont ses dimensions ?",
+        answer:
+          "Hauteur 45 cm. Trois longueurs : 60, 80 ou 100 cm. La profondeur n’est pas indiquée par le fabricant.",
+      },
+      {
+        question: "Quelles couleurs sont proposées ?",
+        answer: "Trois finitions : cerisier, noyer, ou bois naturel plus clair.",
+      },
+    ],
+    specifications: {
+      Type: "Meuble d’entrée",
+      Largeur: "80 cm",
+      Hauteur: "45 cm",
+      Longueurs: "60, 80 ou 100 cm",
+      Matériaux: "Pin massif",
+      Finitions: "Cerisier, noyer, bois naturel",
+      Portes: "2 coulissantes à lattes",
+      Intérieur: "Étagère réglable, deux niveaux",
+    },
+    measures: {
+      widthCm: 80,
+      heightCm: 45,
+    },
+    madeToOrder: true,
+    availabilityStatus: "available",
+    supplierProvider: "buckydrop",
+    supplierProductId: "624156933861",
+    supplierVariantId: "4588157958666",
+    weight: null,
+    dimensions: "60, 80 ou 100 × 45 cm (l × h) — schéma du format 80 × 45 cm",
+    shippingMinDays: 14,
+    shippingMaxDays: null,
+  },
   {
     id: "p-014",
     slug: "table-a-manger-extensible",
