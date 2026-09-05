@@ -66,6 +66,8 @@ export type Product = {
   id: string;
   slug: string;
   name: string;
+  /** Extra names for JSON-LD `alternateName` (search variants, not a second page). */
+  alternateNames?: string[];
   category: ProductCategory;
   shortDescription: string;
   description: string;

@@ -72,6 +72,7 @@ export default async function ProductPage({ params }: Props) {
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.name,
+    ...(product.alternateNames?.length ? { alternateName: product.alternateNames } : {}),
     description: product.description,
     image: [hero, ...gallery.filter((src) => src !== hero)].map((src) => `${store.domain}${src}`),
     brand: { "@type": "Brand", name: store.storeName },

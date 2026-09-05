@@ -190,12 +190,13 @@ export const products: Product[] = [
   {
     id: "p-015",
     slug: "meuble-entree",
-    name: "Meuble d’entrée en bois",
+    name: "Meuble d’entrée à chaussures",
+    alternateNames: ["Meuble à chaussures", "Meuble d’entrée en bois", "Banc d’entrée"],
     category: "rangement",
     shortDescription:
-      "Meuble bas d’entrée en pin massif, à s’asseoir pour changer de chaussures. Portes coulissantes à lattes, trois longueurs, trois finitions.",
+      "Meuble d’entrée et meuble à chaussures en pin massif : on s’y asseoit pour changer de paires, on les range derrière les portes coulissantes à lattes.",
     description:
-      "Un meuble bas pour l’entrée : on s’y asseoit pour changer de chaussures, on y range les paires du quotidien derrière deux portes coulissantes à lattes. Pin massif, coins arrondis, trois longueurs et trois finitions.",
+      "Un meuble d’entrée qui sert aussi de meuble à chaussures. On s’y asseoit en rentrant, on range les paires du quotidien derrière deux portes coulissantes à lattes. Pin massif, coins arrondis, trois longueurs et trois finitions.",
     price: 239,
     compareAtPrice: 289,
     defaultVariantId: "p-015-cerisier-80",
@@ -253,9 +254,14 @@ export const products: Product[] = [
         question: "Quelles couleurs sont proposées ?",
         answer: "Trois finitions : cerisier, noyer, ou bois naturel plus clair.",
       },
+      {
+        question: "Est-ce un meuble d’entrée ou un meuble à chaussures ?",
+        answer:
+          "Les deux. C’est un meuble bas d’entrée, assez haut pour s’asseoir, et un meuble à chaussures : les paires se rangent derrière les portes coulissantes.",
+      },
     ],
     specifications: {
-      Type: "Meuble d’entrée",
+      Type: "Meuble d’entrée / meuble à chaussures",
       Largeur: "80 cm",
       Hauteur: "45 cm",
       Longueurs: "60, 80 ou 100 cm",
