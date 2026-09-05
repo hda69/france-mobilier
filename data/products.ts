@@ -229,7 +229,7 @@ export const products: Product[] = [
     weight: null,
     dimensions: "93 → 131 cm ou 105 → 150 cm × 75 cm (h) — schéma du format 93 cm, fermé",
     shippingMinDays: 14,
-    shippingMaxDays: 14,
+    shippingMaxDays: null,
   },
   {
     id: "p-013",
@@ -321,7 +321,7 @@ export const products: Product[] = [
     weight: null,
     dimensions: "160, 200 ou 240 × 24 × 24 cm (l × p × h) — schéma du format 200 cm",
     shippingMinDays: 14,
-    shippingMaxDays: 14,
+    shippingMaxDays: null,
   },
   {
     id: "p-012",
@@ -411,7 +411,7 @@ export const products: Product[] = [
     weight: 4.8,
     dimensions: "Cubes 25, 30, 35 et 40 cm de côté — schéma du format 40 × 40 × 40 cm",
     shippingMinDays: 14,
-    shippingMaxDays: 14,
+    shippingMaxDays: null,
   },
   {
     id: "p-011",
@@ -496,7 +496,7 @@ export const products: Product[] = [
     weight: null,
     dimensions: "50 × 45 cm (l × h) — caisson 20 cm, pieds 25 cm, traverse à 13 cm du sol",
     shippingMinDays: 14,
-    shippingMaxDays: 14,
+    shippingMaxDays: null,
   },
   {
     id: "p-001",

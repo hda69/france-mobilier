@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { preparationLabel } from "@/lib/products/presentation";
+import { deliveryLabel } from "@/lib/products/presentation";
 import { SHIPPING_OFFERED_SENTENCE, SHIPPING_ZONE_LABEL } from "@/lib/shipping-zone";
 import type { Product } from "@/lib/types/commerce";
 
 export function ProductShippingReturns({ product }: { product: Product }) {
-  const prep = preparationLabel(product);
+  const delivery = deliveryLabel(product);
 
   return (
     <section className="section">
@@ -21,16 +21,12 @@ export function ProductShippingReturns({ product }: { product: Product }) {
               Livraison offerte. Pour la Suisse, des droits ou taxes d’importation peuvent être demandés à la
               réception ; ils ne sont pas inclus dans le prix payé sur le site.
             </p>
-            {product.madeToOrder && prep ? (
+            {delivery ? (
               <p>
-                <span className="font-medium text-navy">Préparation. </span>
-                Article fabriqué après commande. Préparation estimée : {prep}. Le délai de transport s’ajoute
-                ensuite ; la date de réception n’est pas connue à l’avance.
-              </p>
-            ) : prep ? (
-              <p>
-                <span className="font-medium text-navy">Préparation. </span>
-                Délai estimé : {prep}.
+                <span className="font-medium text-navy">Livraison. </span>
+                {product.madeToOrder
+                  ? `Article fabriqué après commande. Délai généralement ${delivery}. La date de réception n’est pas connue à l’avance.`
+                  : `Délai généralement ${delivery}.`}
               </p>
             ) : (
               <p>

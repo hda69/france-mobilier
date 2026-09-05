@@ -96,12 +96,12 @@ export function productHighlights(product: Product): string[] {
   return (product.highlights ?? []).slice(0, 4);
 }
 
-export function preparationLabel(product: Product): string | null {
+export function deliveryLabel(product: Product): string | null {
   const min = product.shippingMinDays;
+  if (!min) return null;
   const max = product.shippingMaxDays;
-  if (!min || !max) return null;
-  if (min === max) return `environ ${min} jours`;
-  return `${min}–${max} jours`;
+  if (max && max > min) return `${min}–${max} jours`;
+  return `à partir de ${min} jours`;
 }
 
 export function specificationRows(product: Product): [string, string][] {
@@ -132,11 +132,13 @@ export function productFaqItems(product: Product): ProductFaqItem[] {
     add("Quelles sont ses dimensions ?", product.dimensions);
   }
 
-  const prep = preparationLabel(product);
-  if (product.madeToOrder && prep) {
+  const delivery = deliveryLabel(product);
+  if (delivery) {
     add(
-      "Quel est le délai de préparation ?",
-      `Chaque article est fabriqué après commande. La préparation est estimée à ${prep}. Le délai de transport s’ajoute ensuite.`,
+      "Quel est le délai de livraison ?",
+      product.madeToOrder
+        ? `L’article est fabriqué après commande. Le délai de livraison est généralement ${delivery}. La date de réception n’est pas connue à l’avance.`
+        : `Le délai de livraison est généralement ${delivery}.`,
     );
   }
 

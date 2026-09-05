@@ -11,7 +11,7 @@ import {
   uniqueVariantColors,
   uniqueVariantSizes,
 } from "@/lib/products/repository";
-import { preparationLabel, productBenefits } from "@/lib/products/presentation";
+import { deliveryLabel, productBenefits } from "@/lib/products/presentation";
 import type { Product, ProductVariant } from "@/lib/types/commerce";
 
 export function ProductInfo({
@@ -24,7 +24,7 @@ export function ProductInfo({
   onVariantIdChange: (id: string) => void;
 }) {
   const outOfStock = product.availabilityStatus === "out_of_stock";
-  const prep = preparationLabel(product);
+  const delivery = deliveryLabel(product);
   const benefits = productBenefits(product);
   const variants = product.variants ?? [];
   const colors = uniqueVariantColors(product);
@@ -61,13 +61,13 @@ export function ProductInfo({
         <p className="mt-1 text-sm text-muted">Prix TTC</p>
       </div>
       <p className="max-w-[40rem] leading-relaxed text-muted">{product.shortDescription}</p>
-      {product.madeToOrder && prep ? (
+      {product.madeToOrder ? (
         <div className="max-w-[40rem] text-sm leading-relaxed text-muted">
           <p className="font-medium text-navy">Fabriqué à la commande</p>
-          <p>Préparation estimée : {prep}.</p>
+          {delivery ? <p>Livraison {delivery}.</p> : null}
         </div>
-      ) : prep ? (
-        <p className="text-sm text-muted">Préparation estimée : {prep}.</p>
+      ) : delivery ? (
+        <p className="text-sm text-muted">Livraison {delivery}.</p>
       ) : null}
       <ProductBenefits items={benefits} />
       {variants.length > 0 ? (
