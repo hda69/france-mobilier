@@ -99,6 +99,77 @@ function tvStandVariants(): ProductVariant[] {
   );
 }
 
+function cubbyCabinetVariants(): ProductVariant[] {
+  const sizes = [
+    { sizeCm: 60, cubes: 4, price: 79, compareAtPrice: 99 },
+    { sizeCm: 90, cubes: 6, price: 99, compareAtPrice: 129 },
+    { sizeCm: 120, cubes: 8, price: 119, compareAtPrice: 149 },
+    { sizeCm: 150, cubes: 10, price: 139, compareAtPrice: 169 },
+    { sizeCm: 180, cubes: 12, price: 159, compareAtPrice: 199 },
+    { sizeCm: 210, cubes: 14, price: 179, compareAtPrice: 219 },
+  ] as const;
+  const skus = {
+    blanc: {
+      60: "5919667011727",
+      90: "5919667011730",
+      120: "5919667011733",
+      150: "5919667011736",
+      180: "5919667011739",
+      210: "5919667011742",
+    },
+    naturel: {
+      60: "5919667011728",
+      90: "5919667011731",
+      120: "5919667011734",
+      150: "5919667011737",
+      180: "5919667011740",
+      210: "5919667011743",
+    },
+    noyer: {
+      60: "5919667011729",
+      90: "5919667011732",
+      120: "5919667011735",
+      150: "5919667011738",
+      180: "5919667011741",
+      210: "5919667011744",
+    },
+  } as const;
+  const colors = [
+    {
+      color: "blanc" as const,
+      colorLabel: "Blanc chaud",
+      swatchClass: "bg-[#f3efe8] ring-1 ring-black/10",
+      image: "/products/cubby.jpg",
+    },
+    {
+      color: "naturel" as const,
+      colorLabel: "Bois clair",
+      swatchClass: "bg-[#d4b896] ring-1 ring-black/10",
+      image: "/products/cubby-4.jpg",
+    },
+    {
+      color: "noyer" as const,
+      colorLabel: "Noyer",
+      swatchClass: "bg-[#4a3428]",
+      image: "/products/cubby-5.jpg",
+    },
+  ];
+  return colors.flatMap(({ color, colorLabel, swatchClass, image }) =>
+    sizes.map((size) => ({
+      id: `p-017-${color}-${size.sizeCm}`,
+      color,
+      colorLabel,
+      swatchClass,
+      sizeCm: size.sizeCm,
+      sizeLabel: `${size.cubes} casiers · ${size.sizeCm} cm`,
+      price: size.price,
+      compareAtPrice: size.compareAtPrice,
+      supplierVariantId: skus[color][size.sizeCm],
+      image,
+    })),
+  );
+}
+
 function kidsVanityVariants(): ProductVariant[] {
   return [
     {
@@ -217,6 +288,109 @@ function diningTableVariants(): ProductVariant[] {
 
 /** Store catalog. */
 export const products: Product[] = [
+  {
+    id: "p-017",
+    slug: "meuble-casiers",
+    name: "Meuble à casiers",
+    alternateNames: [
+      "Bibliothèque à casiers",
+      "Meuble de rangement ouvert",
+      "Étagère à casiers",
+    ],
+    category: "rangement",
+    shortDescription:
+      "Meuble bas à casiers ouverts, peu profond. Trois finitions, six longueurs, à glisser contre un mur.",
+    description:
+      "Un meuble bas à casiers ouverts, en panneau de fibres. Deux rangées, 20 cm de profondeur, 60 cm de haut. On le choisit en blanc chaud, bois clair ou noyer, de 4 à 14 casiers.",
+    price: 99,
+    compareAtPrice: 129,
+    defaultVariantId: "p-017-blanc-90",
+    formatsLabel: "Longueurs",
+    sizesLabel: "Format",
+    variants: cubbyCabinetVariants(),
+    images: [
+      "/products/cubby.jpg",
+      "/products/cubby-2.jpg",
+      "/products/cubby-3.jpg",
+      "/products/cubby-4.jpg",
+      "/products/cubby-5.jpg",
+    ],
+    imageAssets: [
+      { src: "/products/cubby.jpg", role: "lifestyle" },
+      { src: "/products/cubby-2.jpg", role: "lifestyle" },
+      { src: "/products/cubby-3.jpg", role: "lifestyle" },
+      { src: "/products/cubby-4.jpg", role: "lifestyle" },
+      { src: "/products/cubby-5.jpg", role: "lifestyle" },
+    ],
+    features: [
+      "Casiers ouverts, deux rangées",
+      "Profondeur 20 cm",
+      "Six longueurs : 60 à 210 cm",
+      "À monter",
+      "Fabriqué après commande",
+    ],
+    benefits: ["Casiers ouverts", "20 cm de profondeur", "Six longueurs", "Trois finitions"],
+    highlights: [
+      "Un meuble bas, à hauteur de main, pour livres et objets du quotidien",
+      "20 cm de profondeur, pour se glisser contre un mur ou dans un couloir",
+      "De 4 à 14 casiers, selon la longueur du mur",
+      "Trois finitions : blanc chaud, bois clair, noyer",
+    ],
+    dailyUses: [
+      {
+        title: "Le long d’un mur",
+        text: "20 cm de profondeur, il se place sans avancer dans la pièce.",
+      },
+      {
+        title: "Dans une chambre",
+        text: "Le format 60 ou 90 cm range livres et petites boîtes, à hauteur d’enfant.",
+      },
+      {
+        title: "Quand le mur est plus long",
+        text: "On allonge jusqu’à 210 cm, ou on aligne deux meubles côte à côte.",
+      },
+    ],
+    faq: [
+      {
+        question: "Quelles sont ses dimensions ?",
+        answer:
+          "Hauteur 60 cm, profondeur 20 cm. Six longueurs : 60 cm (4 casiers), 90 cm (6), 120 cm (8), 150 cm (10), 180 cm (12) ou 210 cm (14). Le schéma représente le format 90 cm.",
+      },
+      {
+        question: "Quelles couleurs sont proposées ?",
+        answer: "Trois finitions : blanc chaud, bois clair, ou noyer.",
+      },
+      {
+        question: "Faut-il le monter ?",
+        answer: "Oui. Le meuble est livré à monter.",
+      },
+    ],
+    specifications: {
+      Type: "Meuble à casiers",
+      Largeur: "90 cm",
+      Profondeur: "20 cm",
+      Hauteur: "60 cm",
+      Longueurs: "60, 90, 120, 150, 180 ou 210 cm",
+      Casiers: "4 à 14, deux rangées",
+      Matériaux: "Panneau de fibres (MDF)",
+      Finitions: "Blanc chaud, bois clair, noyer",
+      Montage: "À monter",
+    },
+    measures: {
+      widthCm: 90,
+      depthCm: 20,
+      heightCm: 60,
+    },
+    madeToOrder: true,
+    availabilityStatus: "available",
+    supplierProvider: "buckydrop",
+    supplierProductId: "898594704951",
+    supplierVariantId: "5919667011730",
+    weight: null,
+    dimensions: "60 à 210 × 20 × 60 cm (l × p × h) — schéma du format 90 × 20 × 60 cm",
+    shippingMinDays: 14,
+    shippingMaxDays: null,
+  },
   {
     id: "p-016",
     slug: "coiffeuse-enfant",
