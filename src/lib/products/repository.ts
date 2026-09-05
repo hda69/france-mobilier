@@ -2,6 +2,10 @@ import { products as catalog } from "@/data/products";
 import { collections } from "@/config/store";
 import type { Product, ProductVariant } from "@/lib/types/commerce";
 
+function foldSearch(value: string) {
+  return value.toLowerCase().replace(/['’ʻʼ`]/g, "'");
+}
+
 export function listProducts(): Product[] {
   return catalog;
 }
@@ -116,14 +120,19 @@ export function filterAndSortProducts(
     result = result.filter((p) => p.category === options.category);
   }
   if (options.q) {
-    const q = options.q.toLowerCase();
-    result = result.filter(
-      (p) =>
-        p.name.toLowerCase().includes(q) ||
-        p.shortDescription.toLowerCase().includes(q) ||
-        p.description.toLowerCase().includes(q) ||
-        p.features.some((feature) => feature.toLowerCase().includes(q)),
-    );
+    const q = foldSearch(options.q);
+    result = result.filter((p) => {
+      const haystack = [
+        p.name,
+        p.shortDescription,
+        p.description,
+        ...(p.alternateNames ?? []),
+        ...p.features,
+      ]
+        .map(foldSearch)
+        .join(" ");
+      return haystack.includes(q);
+    });
   }
   switch (options.sort) {
     case "price-asc":

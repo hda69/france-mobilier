@@ -190,8 +190,13 @@ export const products: Product[] = [
   {
     id: "p-015",
     slug: "meuble-entree",
-    name: "Meuble d’entrée à chaussures",
-    alternateNames: ["Meuble à chaussures", "Meuble d’entrée en bois", "Banc d’entrée"],
+    name: "Meuble d’entrée / Meuble à chaussures",
+    alternateNames: [
+      "Meuble d’entrée",
+      "Meuble à chaussures",
+      "Meuble d’entrée en bois",
+      "Banc d’entrée",
+    ],
     category: "rangement",
     shortDescription:
       "Meuble d’entrée et meuble à chaussures en pin massif : on s’y asseoit pour changer de paires, on les range derrière les portes coulissantes à lattes.",
