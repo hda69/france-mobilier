@@ -55,7 +55,8 @@ export default function TermsPage() {
           <h2 className="text-xl font-semibold text-navy">5. Commande et paiement</h2>
           <p className="mt-3">
             La commande est ferme après confirmation du paiement. Le paiement est traité par Stripe
-            (carte bancaire, Apple Pay ou Google Pay selon l’appareil). Aucun compte n’est exigé
+            (carte bancaire, Apple Pay, Google Pay et les autres moyens proposés selon l’appareil).
+            Aucun compte n’est exigé
             avant l’achat ; un accès client peut être ouvert après paiement.
           </p>
         </section>
