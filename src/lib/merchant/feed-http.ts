@@ -4,7 +4,7 @@ import { businessChecks, returnChecks } from "@/lib/merchant/readiness";
 
 export function googleMerchantFeedResponse() {
   const status = merchantFeedStatus();
-  if (status.blocked) {
+  if (status.blocked || status.offerCount === 0) {
     return NextResponse.json(
       {
         status: "BLOCKED",

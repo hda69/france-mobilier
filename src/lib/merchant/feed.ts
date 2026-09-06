@@ -106,6 +106,6 @@ export function merchantFeedStatus() {
     enabled: merchantFeedEnabled(),
     businessReady: ready,
     offerCount: offers.length,
-    blocked: !merchantFeedEnabled() || !ready,
+    blocked: !merchantFeedEnabled() || !ready || offers.length === 0,
   };
 }

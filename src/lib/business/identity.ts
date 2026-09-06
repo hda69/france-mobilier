@@ -27,8 +27,19 @@ function envValue(name: string) {
   return process.env[name]?.trim() || "";
 }
 
+function streetLineOnly(raw: string, postal: string, city: string) {
+  let street = raw.trim();
+  if (postal && street.includes(postal)) {
+    street = street.slice(0, street.indexOf(postal)).replace(/[,\s]+$/, "").trim();
+  } else if (city && new RegExp(`,\\s*${city}\\s*$`, "i").test(street)) {
+    street = street.replace(new RegExp(`,\\s*${city}\\s*$`, "i"), "").trim();
+  }
+  return street;
+}
+
 export function getBusinessIdentity(): BusinessIdentity {
-  const street = envValue("BUSINESS_STREET_ADDRESS") || store.companyAddress || "";
+  const rawStreet = envValue("BUSINESS_STREET_ADDRESS") || store.companyAddress || "";
+  const street = rawStreet ? streetLineOnly(rawStreet, store.companyPostalCode, store.companyCity) : "";
   const phone = envValue("BUSINESS_PHONE") || store.phone || "";
   return {
     storeName: store.storeName,
