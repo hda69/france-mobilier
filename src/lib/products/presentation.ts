@@ -4,6 +4,7 @@ import type {
   ProductImageAsset,
   ProductMeasures,
 } from "@/lib/types/commerce";
+import { deliveryCustomerLabel } from "@/lib/merchant/delivery";
 import { SHIPPING_ZONE_LABEL } from "@/lib/shipping-zone";
 
 const PARSED_DIMENSION_KEYS = /^(largeur|hauteur|profondeur|pieds|caisson|traverse|hauteur des pieds|hauteur utile)$/i;
@@ -97,11 +98,7 @@ export function productHighlights(product: Product): string[] {
 }
 
 export function deliveryLabel(product: Product): string | null {
-  const min = product.shippingMinDays;
-  if (!min) return null;
-  const max = product.shippingMaxDays;
-  if (max && max > min) return `${min}–${max} jours`;
-  return `à partir de ${min} jours`;
+  return deliveryCustomerLabel(product);
 }
 
 export function specificationRows(product: Product): [string, string][] {

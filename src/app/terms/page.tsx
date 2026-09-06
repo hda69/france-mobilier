@@ -1,28 +1,129 @@
 import type { Metadata } from "next";
-import { store } from "@/config/store";
+import Link from "next/link";
+import { formatPublicAddress, getBusinessIdentity } from "@/lib/business/identity";
+import { getReturnPolicy, getShippingPolicy } from "@/lib/business/policies";
 import { SHIPPING_OFFERED_SENTENCE } from "@/lib/shipping-zone";
 
-export const metadata: Metadata = { title: "Conditions générales" };
+export const metadata: Metadata = {
+  title: "Conditions générales de vente",
+};
 
 export default function TermsPage() {
+  const identity = getBusinessIdentity();
+  const returns = getReturnPolicy();
+  const shipping = getShippingPolicy();
+  const address = formatPublicAddress(identity);
+
   return (
     <div className="container-page max-w-3xl py-10 md:py-14">
       <h1 className="text-3xl font-semibold tracking-tight">Conditions générales de vente</h1>
-      <div className="mt-6 space-y-4 text-sm leading-relaxed text-muted">
-        <p>
-          Les présentes conditions s’appliquent aux ventes conclues sur {store.storeName} (
-          {store.domain.replace("https://", "")}), édité par {store.companyName}.
-        </p>
-        <p>
-          Les prix sont indiqués en euros TTC. La commande est ferme après confirmation du
-          paiement. {SHIPPING_OFFERED_SENTENCE} Pour la Suisse, des droits ou taxes d’importation
-          peuvent s’appliquer à la réception.
-        </p>
-        <p>
-          Conformément au code de la consommation, le client dispose d’un délai de 14 jours à
-          compter de la réception pour se rétracter, lorsque ce droit s’applique.
-        </p>
-        <p>Contact : {store.supportEmail}</p>
+      <div className="mt-6 space-y-8 text-sm leading-relaxed text-muted">
+        <section>
+          <h2 className="text-xl font-semibold text-navy">1. Identité du vendeur</h2>
+          <p className="mt-3">{identity.relationship}</p>
+          <p className="mt-2">
+            {identity.legalName}, {identity.legalForm}. {identity.registration}.
+            {address ? ` Siège : ${address}.` : ""} Contact : {identity.email}
+            {identity.phone ? ` — ${identity.phone}` : ""}.
+          </p>
+        </section>
+        <section>
+          <h2 className="text-xl font-semibold text-navy">2. Objet</h2>
+          <p className="mt-3">
+            Les présentes conditions s’appliquent aux ventes de meubles et accessoires conclues sur{" "}
+            {identity.storeName} ({identity.domain}) auprès des consommateurs.
+          </p>
+        </section>
+        <section>
+          <h2 className="text-xl font-semibold text-navy">3. Produits</h2>
+          <p className="mt-3">
+            Les caractéristiques essentielles figurent sur la fiche produit. Un meuble « fabriqué à
+            la commande » est un modèle standard dont la fabrication est lancée après paiement, sauf
+            mention contraire de personnalisation.
+          </p>
+        </section>
+        <section>
+          <h2 className="text-xl font-semibold text-navy">4. Prix</h2>
+          <p className="mt-3">
+            Les prix sont indiqués en euros TTC. Le montant dû est celui affiché au moment du
+            paiement. Les éventuelles conditions professionnelles ne remplacent pas le prix public.
+          </p>
+        </section>
+        <section>
+          <h2 className="text-xl font-semibold text-navy">5. Commande et paiement</h2>
+          <p className="mt-3">
+            La commande est ferme après confirmation du paiement. Le paiement est traité par Stripe
+            (carte bancaire, Apple Pay ou Google Pay selon l’appareil). Aucun compte n’est exigé
+            avant l’achat ; un accès client peut être ouvert après paiement.
+          </p>
+        </section>
+        <section>
+          <h2 className="text-xl font-semibold text-navy">6. Disponibilité</h2>
+          <p className="mt-3">
+            Seuls les produits marqués disponibles peuvent être commandés. Un article « bientôt
+            disponible » ne peut pas être acheté.
+          </p>
+        </section>
+        <section>
+          <h2 className="text-xl font-semibold text-navy">7. Préparation et livraison</h2>
+          <p className="mt-3">
+            {SHIPPING_OFFERED_SENTENCE} Coût : {shipping.shippingCostEur.toFixed(2)} €. Les délais
+            estimés figurent sur la fiche produit. Un suivi est communiqué après l’expédition. Pour
+            la Suisse, des droits ou taxes d’importation peuvent s’appliquer à la réception.
+          </p>
+        </section>
+        <section>
+          <h2 className="text-xl font-semibold text-navy">8. Réception</h2>
+          <p className="mt-3">
+            Vérifiez le colis à la réception. En cas de dommage visible, signalez-le au transporteur
+            si possible et contactez-nous avec des photos.
+          </p>
+        </section>
+        <section>
+          <h2 className="text-xl font-semibold text-navy">9. Rétractation, retours et remboursements</h2>
+          <p className="mt-3">
+            Droit de rétractation de {returns.returnWindowDays} jours à compter de la réception,
+            lorsque le droit français de la consommation s’applique. La procédure, les cas
+            d’exclusion légale et le remboursement sont décrits sur la page{" "}
+            <Link href="/returns" className="text-navy underline-offset-4 hover:underline">
+              Retours et remboursements
+            </Link>
+            .
+          </p>
+        </section>
+        <section>
+          <h2 className="text-xl font-semibold text-navy">10. Produits endommagés et garanties</h2>
+          <p className="mt-3">
+            Garantie légale de conformité ({returns.legalConformityYears} ans) et garantie des vices
+            cachés, indépendamment de tout geste commercial. Contact : {identity.email}.
+          </p>
+        </section>
+        <section>
+          <h2 className="text-xl font-semibold text-navy">11. Service client</h2>
+          <p className="mt-3">
+            {identity.email}
+            {identity.phone ? ` — ${identity.phone}` : ""}. {identity.hours}.
+          </p>
+        </section>
+        <section>
+          <h2 className="text-xl font-semibold text-navy">12. Données personnelles</h2>
+          <p className="mt-3">
+            Le traitement des données est décrit dans la{" "}
+            <Link href="/privacy" className="text-navy underline-offset-4 hover:underline">
+              politique de confidentialité
+            </Link>
+            .
+          </p>
+        </section>
+        <section>
+          <h2 className="text-xl font-semibold text-navy">13. Litiges</h2>
+          <p className="mt-3">
+            En cas de différend, contactez d’abord {identity.email}. Conformément à l’article
+            L.612-1 du code de la consommation, vous pouvez recourir gratuitement à un médiateur de
+            la consommation. Le médiateur n’est pas encore désigné ; son identité sera publiée dès
+            qu’il le sera.
+          </p>
+        </section>
       </div>
     </div>
   );

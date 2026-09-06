@@ -172,6 +172,10 @@ export default async function AdminPage() {
         <Link href="/admin/mots-cles" className="text-navy underline-offset-2 hover:underline">
           Volumes de recherche (Keyword Planner)
         </Link>
+        {" · "}
+        <Link href="/admin/merchant-readiness" className="text-navy underline-offset-2 hover:underline">
+          Merchant readiness
+        </Link>
       </p>
 
       {admin ? (

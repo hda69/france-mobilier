@@ -11,6 +11,8 @@ import { ProductReviews } from "@/components/product-reviews";
 import { ProductShippingReturns } from "@/components/product-shipping-returns";
 import { ProductSpecifications } from "@/components/product-specifications";
 import { store } from "@/config/store";
+import { schemaAvailability } from "@/lib/merchant/delivery";
+import { getPublicPrice } from "@/lib/merchant/price";
 import {
   collectionSlugForProductPage,
   findCollectionProducts,
@@ -26,7 +28,10 @@ import {
 } from "@/lib/products/presentation";
 import { listApprovedReviews } from "@/lib/reviews";
 
-type Props = { params: Promise<{ slug: string }> };
+type Props = {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ variant?: string }>;
+};
 
 export const revalidate = 300;
 export const dynamicParams = true;
@@ -53,8 +58,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function ProductPage({ params }: Props) {
+export default async function ProductPage({ params, searchParams }: Props) {
   const { slug } = await params;
+  const { variant: variantParam } = await searchParams;
   const product = findProductBySlug(slug);
   if (!product) notFound();
   const collectionProducts = findCollectionProducts(product);
@@ -69,9 +75,12 @@ export default async function ProductPage({ params }: Props) {
   const highlights = productHighlights(product);
 
   const variants = product.variants ?? [];
-  const prices = variants.map((variant) => variant.price);
-  const lowPrice = prices.length ? Math.min(...prices) : product.price;
-  const highPrice = prices.length ? Math.max(...prices) : product.price;
+  const publicPrices = (variants.length ? variants : [null]).map((variant) =>
+    getPublicPrice(product, variant),
+  );
+  const lowPrice = Math.min(...publicPrices.map((row) => row.amount));
+  const highPrice = Math.max(...publicPrices.map((row) => row.amount));
+  const availability = schemaAvailability(product);
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -79,34 +88,29 @@ export default async function ProductPage({ params }: Props) {
     ...(product.alternateNames?.length ? { alternateName: product.alternateNames } : {}),
     description: product.description,
     image: [hero, ...gallery.filter((src) => src !== hero)].map((src) => `${store.domain}${src}`),
-    brand: { "@type": "Brand", name: store.storeName },
+    ...(product.brand ? { brand: { "@type": "Brand", name: product.brand } } : {}),
     offers:
       variants.length > 1
-        ? {
-            "@type": "AggregateOffer",
-            url: `${store.domain}/products/${product.slug}`,
-            priceCurrency: "EUR",
-            lowPrice,
-            highPrice,
-            offerCount: variants.length,
-            availability:
-              product.availabilityStatus === "available"
-                ? "https://schema.org/InStock"
-                : product.availabilityStatus === "coming_soon"
-                  ? "https://schema.org/PreOrder"
-                  : "https://schema.org/OutOfStock",
-          }
+        ? variants.map((variant) => {
+            const price = getPublicPrice(product, variant);
+            return {
+              "@type": "Offer",
+              url: `${store.domain}/products/${product.slug}?variant=${encodeURIComponent(variant.id)}`,
+              priceCurrency: "EUR",
+              price: price.amount,
+              availability,
+              itemCondition: "https://schema.org/NewCondition",
+            };
+          })
         : {
             "@type": "Offer",
             url: `${store.domain}/products/${product.slug}`,
             priceCurrency: "EUR",
-            price: product.price,
-            availability:
-              product.availabilityStatus === "available"
-                ? "https://schema.org/InStock"
-                : product.availabilityStatus === "coming_soon"
-                  ? "https://schema.org/PreOrder"
-                  : "https://schema.org/OutOfStock",
+            price: getPublicPrice(product).amount,
+            lowPrice,
+            highPrice,
+            availability,
+            itemCondition: "https://schema.org/NewCondition",
           },
     ...(reviews.length > 0
       ? {
@@ -155,7 +159,7 @@ export default async function ProductPage({ params }: Props) {
           <span className="text-foreground">{product.name}</span>
         </nav>
 
-        <ProductMedia product={product} images={gallery} />
+        <ProductMedia product={product} images={gallery} initialVariantId={variantParam} />
       </div>
 
       <ProductHighlights items={highlights} />

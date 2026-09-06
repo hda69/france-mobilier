@@ -127,6 +127,21 @@ export type Product = {
   specifications: Record<string, string>;
   measures?: ProductMeasures;
   madeToOrder?: boolean;
+  /** Truly customized for one customer — not the same as made-to-order. */
+  customizedForCustomer?: boolean;
+  returnEligible?: boolean;
+  handlingMinBusinessDays?: number;
+  handlingMaxBusinessDays?: number;
+  transitMinBusinessDays?: number;
+  transitMaxBusinessDays?: number;
+  brand?: string;
+  gtin?: string;
+  mpn?: string;
+  identifierExists?: boolean;
+  merchantTitle?: string;
+  merchantDescription?: string;
+  merchantTitleSource?: "human" | "ai" | "mixed";
+  merchantDescriptionSource?: "human" | "ai" | "mixed";
   availabilityStatus: AvailabilityStatus;
   supplierProvider: "buckydrop" | "manual" | null;
   supplierProductId: string | null;

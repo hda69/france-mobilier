@@ -1,6 +1,6 @@
 export const catalogFlags = {
-  /** When true, hide coming-soon items if the collection already has sellable products. */
-  hideUnavailableProducts: false,
+  /** Merchant launch: hide coming-soon items from public collections when sellable items exist. */
+  hideUnavailableProducts: true,
   lowDepthMaxCm: 30,
   narrowWidthMaxCm: 80,
 } as const;

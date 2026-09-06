@@ -5,6 +5,7 @@ import { CookieConsent } from "@/components/cookie-consent";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { store } from "@/config/store";
+import { organizationJsonLd } from "@/lib/business/identity";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -54,20 +55,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const orgJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: store.storeName,
-    url: store.domain,
-    email: store.supportEmail,
-    logo: `${store.domain}${store.logoPath}`,
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: store.companyCity,
-      postalCode: store.companyPostalCode,
-      addressCountry: store.country,
-    },
-  };
+  const orgJsonLd = organizationJsonLd();
   const websiteJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",

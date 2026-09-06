@@ -5,6 +5,12 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: process.cwd(),
   },
+  async redirects() {
+    return [
+      { source: "/collections/maison", destination: "/collections/meubles", permanent: true },
+      { source: "/collections/rangement", destination: "/collections/entree-rangement", permanent: true },
+    ];
+  },
   images: {
     unoptimized: true,
     dangerouslyAllowSVG: true,

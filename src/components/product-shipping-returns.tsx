@@ -53,7 +53,7 @@ export function ProductShippingReturns({ product }: { product: Product }) {
               </Link>
               {" · "}
               <Link href="/returns" className="text-navy underline-offset-4 hover:underline">
-                Retours
+                Retours et remboursements
               </Link>
             </p>
           </div>

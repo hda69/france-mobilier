@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { store } from "@/config/store";
 import { collections } from "@/config/store";
+import { isSellable } from "@/lib/products/merchandising";
 import { listProducts } from "@/lib/products/repository";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -12,13 +13,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/faq",
     "/contact",
     "/nouveautes",
-    "/cart",
     "/legal",
     "/privacy",
     "/terms",
     "/returns",
     "/shipping",
-    "/recherche",
     "/guides",
     "/guides/meuble-chaussures-entree-etroite",
     "/guides/amenager-un-studio",
@@ -29,15 +28,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(),
   }));
 
-  const collectionRoutes = collections.map((c) => ({
-    url: `${base}/collections/${c.slug}`,
-    lastModified: new Date(),
-  }));
+  const collectionRoutes = collections
+    .filter((collection) => collection.slug !== "maison" && collection.slug !== "rangement")
+    .map((c) => ({
+      url: `${base}/collections/${c.slug}`,
+      lastModified: new Date(),
+    }));
 
-  const productRoutes = listProducts().map((p) => ({
-    url: `${base}/products/${p.slug}`,
-    lastModified: new Date(),
-  }));
+  const productRoutes = listProducts()
+    .filter(isSellable)
+    .map((p) => ({
+      url: `${base}/products/${p.slug}`,
+      lastModified: new Date(),
+    }));
 
   return [...staticRoutes, ...collectionRoutes, ...productRoutes];
 }

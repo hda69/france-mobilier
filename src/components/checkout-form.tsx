@@ -47,7 +47,7 @@ export function CheckoutForm() {
     return (
       <div className="rounded-2xl border border-border bg-card p-8">
         <p className="text-muted">Votre panier est vide.</p>
-        <Link href="/collections/maison" className="btn btn-primary mt-6 inline-flex">
+        <Link href="/collections/meubles" className="btn btn-primary mt-6 inline-flex">
           Voir la sélection
         </Link>
       </div>
@@ -197,11 +197,28 @@ export function CheckoutForm() {
             </li>
           ))}
         </ul>
+        <p className="flex justify-between text-sm text-muted">
+          <span>Livraison</span>
+          <span>0,00 €</span>
+        </p>
         <p className="flex justify-between border-t border-border pt-3 font-medium">
           <span>Total TTC</span>
           <span>{formatPrice(subtotal)}</span>
         </p>
         <p className="text-sm text-muted">{SHIPPING_OFFERED_SENTENCE}</p>
+        <p className="text-xs text-muted">
+          <Link href="/shipping" className="underline-offset-4 hover:underline">
+            Livraison
+          </Link>
+          {" · "}
+          <Link href="/returns" className="underline-offset-4 hover:underline">
+            Retours et remboursements
+          </Link>
+          {" · "}
+          <Link href="/terms" className="underline-offset-4 hover:underline">
+            CGV
+          </Link>
+        </p>
         {error ? <p className="text-sm text-red-700">{error}</p> : null}
         <button type="submit" disabled={loading} className="btn btn-primary w-full">
           {loading ? "Ouverture de Stripe…" : `Payer ${formatPrice(subtotal)}`}

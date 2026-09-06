@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { store } from "@/config/store";
+import { getBusinessIdentity } from "@/lib/business/identity";
 import { SHIPPING_OFFERED_SENTENCE } from "@/lib/shipping-zone";
 
 export const metadata: Metadata = {
@@ -19,12 +20,13 @@ const chapters = [
     text: "France Mobilier n’est pas un entrepôt sans fin. Chaque référence entre dans le catalogue parce qu’elle sert un geste du quotidien : ranger, s’asseoir, travailler, accueillir un animal sans encombrer. On privilégie des formes claires, des dimensions lisibles, des usages évidents.",
   },
   {
-    title: "Une boutique éditée à Lyon",
-    text: `${store.storeName} est éditée à ${store.companyCity} par ${store.companyName}. La sélection se fait depuis cette ville : on y voit, comme ailleurs, des appartements où chaque mètre compte. ${SHIPPING_OFFERED_SENTENCE} Prix TTC, SAV du lundi au vendredi.`,
+    title: "Une boutique réelle",
+    text: `${store.storeName} est une boutique en ligne exploitée par ${store.companyName}. La sélection se fait depuis ${store.companyCity} : on y voit, comme ailleurs, des appartements où chaque mètre compte. ${SHIPPING_OFFERED_SENTENCE} Prix TTC.`,
   },
 ];
 
 export default function AboutPage() {
+  const identity = getBusinessIdentity();
   return (
     <div>
       <section className="container-page grid items-center gap-10 py-12 md:grid-cols-2 md:py-16">
@@ -47,7 +49,7 @@ export default function AboutPage() {
               moins d’espace perdu, plus de confort, des solutions faciles à intégrer.
             </p>
             <p>
-              La boutique est éditée à {store.companyCity}. On y trouve des meubles pour le salon,
+              {identity.relationship} On y trouve des meubles pour le salon,
               la chambre, l’entrée et le bureau — une sélection courte, pas un catalogue sans fin.
             </p>
           </div>
@@ -106,9 +108,8 @@ export default function AboutPage() {
               n’apporte qu’un effet de style.
             </p>
             <p className="mt-4 leading-relaxed text-muted">
-              {store.storeName} reste une boutique en ligne, éditée à {store.companyCity} par{" "}
-              {store.companyName}. {SHIPPING_OFFERED_SENTENCE} Rétractation sous 14
-              jours lorsque le droit le prévoit, SAV du lundi au vendredi.
+              {identity.relationship} {SHIPPING_OFFERED_SENTENCE} Rétractation sous 14
+              jours lorsque le droit le prévoit, SAV {identity.hoursShort}.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href="/collections/meubles" className="btn btn-primary w-full sm:w-auto">

@@ -25,7 +25,7 @@ export default function NewArrivalsPage() {
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
-      <Link href="/collections/maison" className="btn btn-secondary mt-10 inline-flex w-full sm:w-auto">
+      <Link href="/collections/meubles" className="btn btn-secondary mt-10 inline-flex w-full sm:w-auto">
         Voir toutes les collections
       </Link>
     </div>

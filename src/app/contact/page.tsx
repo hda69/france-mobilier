@@ -1,36 +1,15 @@
-"use client";
+import type { Metadata } from "next";
+import { ContactForm } from "@/components/contact-form";
+import { formatPublicAddress, getBusinessIdentity } from "@/lib/business/identity";
 
-import { useState } from "react";
-import { store } from "@/config/store";
+export const metadata: Metadata = {
+  title: "Contact",
+  description: "Contacter France Mobilier : e-mail, formulaire et coordonnées de l’entreprise.",
+};
 
 export default function ContactPage() {
-  const [status, setStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
-
-  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const data = new FormData(form);
-    setStatus("loading");
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: data.get("name"),
-          email: data.get("email"),
-          message: data.get("message"),
-        }),
-      });
-      if (res.ok) {
-        form.reset();
-        setStatus("ok");
-      } else {
-        setStatus("error");
-      }
-    } catch {
-      setStatus("error");
-    }
-  }
+  const identity = getBusinessIdentity();
+  const address = formatPublicAddress(identity);
 
   return (
     <div className="container-page py-10 md:py-14">
@@ -39,47 +18,24 @@ export default function ContactPage() {
         Une question sur une commande, un produit ou la livraison ? Écrivez-nous.
       </p>
       <div className="mt-8 grid gap-8 md:grid-cols-2">
-        <form onSubmit={onSubmit} className="space-y-4 rounded-2xl border border-border bg-card p-6">
-          <label className="block text-sm">
-            Nom
-            <input name="name" required autoComplete="name" className="input mt-1" />
-          </label>
-          <label className="block text-sm">
-            Email
-            <input
-              name="email"
-              type="email"
-              required
-              autoComplete="email"
-              className="input mt-1"
-            />
-          </label>
-          <label className="block text-sm">
-            Message
-            <textarea
-              name="message"
-              required
-              minLength={10}
-              rows={5}
-              className="input mt-1"
-            />
-          </label>
-          <button type="submit" className="btn btn-primary w-full sm:w-auto" disabled={status === "loading"}>
-            {status === "loading" ? "Envoi…" : "Envoyer"}
-          </button>
-          {status === "ok" && (
-            <p className="text-sm text-accent">Message reçu. Nous répondrons dès que possible.</p>
-          )}
-          {status === "error" && (
-            <p className="text-sm text-red-700">Envoi impossible pour le moment. Réessayez plus tard.</p>
-          )}
-        </form>
+        <ContactForm />
         <div className="rounded-2xl border border-border bg-card p-6 text-sm text-muted">
-          <p className="font-medium text-foreground">Coordonnées</p>
-          <p className="mt-3">{store.storeName}</p>
-          <p>{store.supportEmail}</p>
-          <p className="mt-3">SAV : {store.supportHours}.</p>
-          {store.phone ? <p className="mt-3">{store.phone}</p> : null}
+          <p className="font-medium text-foreground">{identity.storeName}</p>
+          <p className="mt-2">{identity.relationship}</p>
+          {address ? <p className="mt-3">{address}</p> : null}
+          <p className="mt-3">
+            <a href={`mailto:${identity.email}`} className="text-navy underline-offset-4 hover:underline">
+              {identity.email}
+            </a>
+          </p>
+          {identity.phone ? (
+            <p className="mt-2">
+              <a href={`tel:${identity.phone.replace(/\s+/g, "")}`} className="text-navy underline-offset-4 hover:underline">
+                {identity.phone}
+              </a>
+            </p>
+          ) : null}
+          <p className="mt-3">SAV : {identity.hours}.</p>
         </div>
       </div>
     </div>

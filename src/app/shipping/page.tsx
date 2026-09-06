@@ -1,28 +1,50 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SHIPPING_OFFERED_SENTENCE, SHIPPING_ZONE_LABEL } from "@/lib/shipping-zone";
+import { getShippingPolicy } from "@/lib/business/policies";
+import { SHIPPING_OFFERED_SENTENCE } from "@/lib/shipping-zone";
 
-export const metadata: Metadata = { title: "Livraison" };
+export const metadata: Metadata = {
+  title: "Livraison",
+  description: "Zones, coût, suivi et délais de livraison France Mobilier.",
+};
 
 export default function ShippingPage() {
+  const shipping = getShippingPolicy();
+
   return (
     <div className="container-page max-w-3xl py-10 md:py-14">
       <h1 className="text-3xl font-semibold tracking-tight">Livraison</h1>
-      <div className="mt-6 space-y-4 text-sm leading-relaxed text-muted">
-        <p>
-          {SHIPPING_OFFERED_SENTENCE} Les délais estimés figurent sur chaque fiche produit. Un
-          numéro de suivi est communiqué après l’expédition.
-        </p>
-        <p>
-          Zone desservie : {SHIPPING_ZONE_LABEL}. Pas de livraison vers les DOM-TOM ni hors de cette
-          zone.
-        </p>
-        <p>
-          Pour la Suisse, hors Union européenne, des droits ou taxes d’importation peuvent être
-          demandés à la réception. Ils ne sont pas inclus dans le prix payé sur le site.
-        </p>
+      <div className="mt-6 space-y-6 text-sm leading-relaxed text-muted">
+        <section>
+          <h2 className="text-xl font-semibold text-navy">Zones</h2>
+          <p className="mt-3">
+            {SHIPPING_OFFERED_SENTENCE} Pas de livraison vers les DOM-TOM ni hors de cette zone.
+          </p>
+        </section>
+        <section>
+          <h2 className="text-xl font-semibold text-navy">Coût</h2>
+          <p className="mt-3">
+            Livraison offerte : {shipping.shippingCostEur.toFixed(2)} €. Pour la Suisse, des droits
+            ou taxes d’importation peuvent être demandés à la réception. Ils ne sont pas inclus dans
+            le prix payé sur le site.
+          </p>
+        </section>
+        <section>
+          <h2 className="text-xl font-semibold text-navy">Préparation et acheminement</h2>
+          <p className="mt-3">
+            Les délais figurent sur chaque fiche produit. Lorsqu’un meuble est fabriqué après
+            commande, le délai indiqué est un délai global après paiement. Nous n’affichons pas de
+            date de réception fixe si elle n’est pas établie.
+          </p>
+        </section>
+        <section>
+          <h2 className="text-xl font-semibold text-navy">Suivi</h2>
+          <p className="mt-3">
+            Un numéro de suivi est communiqué par e-mail après l’expédition.
+          </p>
+        </section>
       </div>
-      <Link href="/collections/maison" className="btn btn-secondary mt-8 inline-flex">
+      <Link href="/collections/meubles" className="btn btn-secondary mt-8 inline-flex">
         Voir la sélection
       </Link>
     </div>

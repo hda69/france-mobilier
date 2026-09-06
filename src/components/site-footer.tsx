@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { store } from "@/config/store";
 import { CookieManageButton } from "@/components/cookie-manage-button";
+import { getBusinessIdentity } from "@/lib/business/identity";
 
 const groups = [
   {
@@ -19,7 +20,7 @@ const groups = [
     title: "Aide",
     links: [
       { href: "/shipping", label: "Livraison" },
-      { href: "/returns", label: "Retours" },
+      { href: "/returns", label: "Retours et remboursements" },
       { href: "/contact", label: "Contact" },
       { href: "/faq", label: "FAQ" },
       { href: "/guides", label: "Conseils" },
@@ -44,6 +45,7 @@ const groups = [
 ];
 
 export function SiteFooter() {
+  const identity = getBusinessIdentity();
   return (
     <footer className="mt-10 bg-navy text-white pb-[env(safe-area-inset-bottom)]">
       <div className="container-page grid gap-8 py-10 sm:grid-cols-2 lg:grid-cols-5 lg:gap-10 lg:py-14">
@@ -58,10 +60,10 @@ export function SiteFooter() {
             />
           </Link>
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/75">
-            Le mobilier qui simplifie votre intérieur. Une sélection courte pour les logements
-            d’aujourd’hui.
+            {identity.relationship} Une sélection courte pour les logements d’aujourd’hui.
           </p>
-          <p className="mt-4 text-sm text-white/75">{store.supportEmail}</p>
+          <p className="mt-4 text-sm text-white/75">{identity.email}</p>
+          {identity.phone ? <p className="mt-1 text-sm text-white/75">{identity.phone}</p> : null}
         </div>
         {groups.map((group) => (
           <div key={group.title}>

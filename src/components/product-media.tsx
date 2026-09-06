@@ -6,9 +6,23 @@ import { ProductInfo } from "@/components/product-info";
 import { findProductVariant, uniqueVariantColors } from "@/lib/products/repository";
 import type { Product } from "@/lib/types/commerce";
 
-export function ProductMedia({ product, images }: { product: Product; images: string[] }) {
+export function ProductMedia({
+  product,
+  images,
+  initialVariantId,
+}: {
+  product: Product;
+  images: string[];
+  initialVariantId?: string;
+}) {
   const variants = product.variants ?? [];
-  const [variantId, setVariantId] = useState(product.defaultVariantId ?? variants[0]?.id);
+  const initial =
+    (initialVariantId && variants.some((variant) => variant.id === initialVariantId)
+      ? initialVariantId
+      : undefined) ??
+    product.defaultVariantId ??
+    variants[0]?.id;
+  const [variantId, setVariantId] = useState(initial);
   const [index, setIndex] = useState(0);
   const variant = findProductVariant(product, variantId);
 
@@ -27,6 +41,9 @@ export function ProductMedia({ product, images }: { product: Product; images: st
   const handleVariantIdChange = useCallback(
     (nextId: string) => {
       setVariantId(nextId);
+      const url = new URL(window.location.href);
+      url.searchParams.set("variant", nextId);
+      window.history.replaceState(null, "", `${url.pathname}${url.search}`);
       const next = findProductVariant(product, nextId);
       if (!next?.image) return;
       const imageIndex = images.indexOf(next.image);

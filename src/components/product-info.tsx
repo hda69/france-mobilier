@@ -54,7 +54,11 @@ export function ProductInfo({
     <div className="space-y-5">
       {product.availabilityStatus !== "available" ? (
         <p className="badge">{availabilityLabel(product.availabilityStatus)}</p>
-      ) : null}
+      ) : (
+        <p className="text-sm font-medium text-navy">
+          {product.madeToOrder ? "Disponible à la commande" : "Disponible"}
+        </p>
+      )}
       <h1 className="display text-[1.75rem] text-navy md:text-4xl">{product.name}</h1>
       <div>
         <ProductPrice product={product} price={price} compareAtPrice={compareAtPrice} size="pdp" />
