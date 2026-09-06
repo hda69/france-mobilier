@@ -57,7 +57,7 @@ const guarantees = [
 ];
 
 export default function HomePage() {
-  const products = listProducts();
+  const products = listProducts().filter((product) => product.availabilityStatus === "available");
   const nouveautes = products.slice(0, 4);
   const essentiels = [...products].sort((a, b) => a.price - b.price).slice(0, 4);
 

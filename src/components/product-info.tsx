@@ -23,7 +23,7 @@ export function ProductInfo({
   variantId: string | undefined;
   onVariantIdChange: (id: string) => void;
 }) {
-  const outOfStock = product.availabilityStatus === "out_of_stock";
+  const unavailable = product.availabilityStatus !== "available";
   const delivery = deliveryLabel(product);
   const benefits = productBenefits(product);
   const variants = product.variants ?? [];
@@ -123,9 +123,13 @@ export function ProductInfo({
           </fieldset>
         </div>
       ) : null}
-      {outOfStock ? (
+      {unavailable ? (
         <>
-          <NotifyForm productName={product.name} productSlug={product.slug} />
+          <NotifyForm
+            productName={product.name}
+            productSlug={product.slug}
+            comingSoon={product.availabilityStatus === "coming_soon"}
+          />
           <ProductTrustBar />
         </>
       ) : (

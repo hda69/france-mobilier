@@ -86,9 +86,11 @@ export default async function ProductPage({ params }: Props) {
             highPrice,
             offerCount: variants.length,
             availability:
-              product.availabilityStatus === "out_of_stock"
-                ? "https://schema.org/OutOfStock"
-                : "https://schema.org/InStock",
+              product.availabilityStatus === "available"
+                ? "https://schema.org/InStock"
+                : product.availabilityStatus === "coming_soon"
+                  ? "https://schema.org/PreOrder"
+                  : "https://schema.org/OutOfStock",
           }
         : {
             "@type": "Offer",
@@ -96,9 +98,11 @@ export default async function ProductPage({ params }: Props) {
             priceCurrency: "EUR",
             price: product.price,
             availability:
-              product.availabilityStatus === "out_of_stock"
-                ? "https://schema.org/OutOfStock"
-                : "https://schema.org/InStock",
+              product.availabilityStatus === "available"
+                ? "https://schema.org/InStock"
+                : product.availabilityStatus === "coming_soon"
+                  ? "https://schema.org/PreOrder"
+                  : "https://schema.org/OutOfStock",
           },
     ...(reviews.length > 0
       ? {

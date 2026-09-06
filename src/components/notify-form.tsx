@@ -5,9 +5,11 @@ import { useId, useState } from "react";
 export function NotifyForm({
   productName,
   productSlug,
+  comingSoon = false,
 }: {
   productName: string;
   productSlug: string;
+  comingSoon?: boolean;
 }) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
@@ -31,7 +33,9 @@ export function NotifyForm({
   return (
     <form className="space-y-3 rounded-2xl border border-border bg-card p-5" onSubmit={onSubmit}>
       <p className="text-sm font-medium leading-relaxed">
-        Cet article est indisponible. Prévenez-moi lorsque {productName} sera de nouveau en stock.
+        {comingSoon
+          ? `Cet article arrive bientôt. Prévenez-moi lorsque ${productName} sera disponible.`
+          : `Cet article est indisponible. Prévenez-moi lorsque ${productName} sera de nouveau en stock.`}
       </p>
       {status === "ok" ? (
         <p className="text-sm text-accent">Demande enregistrée.</p>

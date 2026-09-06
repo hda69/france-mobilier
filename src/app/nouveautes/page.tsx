@@ -10,7 +10,9 @@ export const metadata: Metadata = {
 };
 
 export default function NewArrivalsPage() {
-  const products = listProducts().slice(0, 8);
+  const products = listProducts()
+    .filter((product) => product.availabilityStatus === "available")
+    .slice(0, 8);
   return (
     <div className="container-page py-10 md:py-14">
       <p className="eyebrow">Catalogue</p>

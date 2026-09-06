@@ -83,6 +83,7 @@ function relatedScore(base: Product, other: Product): number {
 
 export function findRelatedProducts(product: Product, limit = 4): Product[] {
   return catalog
+    .filter((candidate) => candidate.availabilityStatus === "available")
     .map((candidate) => ({ candidate, score: relatedScore(product, candidate) }))
     .filter((row) => row.score >= 0)
     .sort((a, b) => b.score - a.score)
