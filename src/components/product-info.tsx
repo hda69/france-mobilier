@@ -68,10 +68,10 @@ export function ProductInfo({
       {product.madeToOrder ? (
         <div className="max-w-[40rem] text-sm leading-relaxed text-muted">
           <p className="font-medium text-navy">Fabriqué à la commande</p>
-          {delivery ? <p>Livraison {delivery}.</p> : null}
+          {delivery ? <p>Livraison : {delivery}.</p> : null}
         </div>
       ) : delivery ? (
-        <p className="text-sm text-muted">Livraison {delivery}.</p>
+        <p className="text-sm text-muted">Livraison : {delivery}.</p>
       ) : null}
       <ProductBenefits items={benefits} />
       {variants.length > 0 ? (

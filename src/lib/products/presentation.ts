@@ -134,8 +134,8 @@ export function productFaqItems(product: Product): ProductFaqItem[] {
     add(
       "Quel est le délai de livraison ?",
       product.madeToOrder
-        ? `L’article est fabriqué après commande. Le délai de livraison est généralement ${delivery}. La date de réception n’est pas connue à l’avance.`
-        : `Le délai de livraison est généralement ${delivery}.`,
+        ? `L’article est fabriqué après commande. ${delivery.charAt(0).toUpperCase()}${delivery.slice(1)}. La date de réception n’est pas connue à l’avance.`
+        : `${delivery.charAt(0).toUpperCase()}${delivery.slice(1)}.`,
     );
   }
 

@@ -1,4 +1,5 @@
 import { catalogFlags } from "@/lib/catalog/flags";
+import { deliveryCustomerLabel } from "@/lib/merchant/delivery";
 import { getProductMeasures } from "@/lib/products/presentation";
 import type { Product, ProductRoom, ProductTypeSlug } from "@/lib/types/commerce";
 
@@ -99,15 +100,9 @@ export function productCardMeta(product: Product): string | null {
 
 export function cardDeliveryLabel(product: Product): string | null {
   if (!isSellable(product)) return null;
-  if (product.madeToOrder && product.shippingMinDays) {
-    const max = product.shippingMaxDays;
-    const delay =
-      max && max > product.shippingMinDays
-        ? `${product.shippingMinDays}–${max} j`
-        : `env. ${product.shippingMinDays} j`;
-    return `Fabriqué à la commande — ${delay}`;
-  }
-  return null;
+  const delay = deliveryCustomerLabel(product);
+  if (product.madeToOrder && delay) return `Fabriqué à la commande — ${delay}`;
+  return delay;
 }
 
 export function sortSellableFirst(products: Product[]) {

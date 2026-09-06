@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getShippingPolicy } from "@/lib/business/policies";
+import { getDefaultDeliveryProfile } from "@/lib/merchant/delivery";
 import { SHIPPING_OFFERED_SENTENCE } from "@/lib/shipping-zone";
 
 export const metadata: Metadata = {
@@ -10,6 +11,7 @@ export const metadata: Metadata = {
 
 export default function ShippingPage() {
   const shipping = getShippingPolicy();
+  const delivery = getDefaultDeliveryProfile();
 
   return (
     <div className="container-page max-w-3xl py-10 md:py-14">
@@ -32,9 +34,10 @@ export default function ShippingPage() {
         <section>
           <h2 className="text-xl font-semibold text-navy">Préparation et acheminement</h2>
           <p className="mt-3">
-            Les délais figurent sur chaque fiche produit. Lorsqu’un meuble est fabriqué après
-            commande, le délai indiqué est un délai global après paiement. Nous n’affichons pas de
-            date de réception fixe si elle n’est pas établie.
+            Préparation : 1 semaine ({delivery.handlingMinBusinessDays} jours ouvrés) après
+            paiement. Acheminement : {delivery.transitMinBusinessDays} jours ouvrés après
+            expédition. Lorsqu’un meuble est fabriqué après commande, ces délais commencent à la
+            commande. Nous n’affichons pas de date de réception fixe.
           </p>
         </section>
         <section>

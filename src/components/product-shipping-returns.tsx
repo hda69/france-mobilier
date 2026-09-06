@@ -25,8 +25,8 @@ export function ProductShippingReturns({ product }: { product: Product }) {
               <p>
                 <span className="font-medium text-navy">Livraison. </span>
                 {product.madeToOrder
-                  ? `Article fabriqué après commande. Délai généralement ${delivery}. La date de réception n’est pas connue à l’avance.`
-                  : `Délai généralement ${delivery}.`}
+                  ? `Article fabriqué après commande. ${delivery.charAt(0).toUpperCase()}${delivery.slice(1)}. La date de réception n’est pas connue à l’avance.`
+                  : `${delivery.charAt(0).toUpperCase()}${delivery.slice(1)}.`}
               </p>
             ) : (
               <p>

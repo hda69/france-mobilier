@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { formatPublicAddress, getBusinessIdentity } from "@/lib/business/identity";
 import { getReturnPolicy, getShippingPolicy } from "@/lib/business/policies";
+import { getDefaultDeliveryProfile } from "@/lib/merchant/delivery";
 import { SHIPPING_OFFERED_SENTENCE } from "@/lib/shipping-zone";
 
 export const metadata: Metadata = {
@@ -12,6 +13,7 @@ export default function TermsPage() {
   const identity = getBusinessIdentity();
   const returns = getReturnPolicy();
   const shipping = getShippingPolicy();
+  const delivery = getDefaultDeliveryProfile();
   const address = formatPublicAddress(identity);
 
   return (
@@ -67,9 +69,11 @@ export default function TermsPage() {
         <section>
           <h2 className="text-xl font-semibold text-navy">7. Préparation et livraison</h2>
           <p className="mt-3">
-            {SHIPPING_OFFERED_SENTENCE} Coût : {shipping.shippingCostEur.toFixed(2)} €. Les délais
-            estimés figurent sur la fiche produit. Un suivi est communiqué après l’expédition. Pour
-            la Suisse, des droits ou taxes d’importation peuvent s’appliquer à la réception.
+            {SHIPPING_OFFERED_SENTENCE} Coût : {shipping.shippingCostEur.toFixed(2)} €. Préparation :
+            1 semaine ({delivery.handlingMinBusinessDays} jours ouvrés). Acheminement :{" "}
+            {delivery.transitMinBusinessDays} jours ouvrés après expédition. Un suivi est communiqué
+            après l’expédition. Pour la Suisse, des droits ou taxes d’importation peuvent s’appliquer
+            à la réception.
           </p>
         </section>
         <section>

@@ -1,6 +1,11 @@
 import { formatPublicAddress, getBusinessIdentity } from "@/lib/business/identity";
 import { getReturnPolicy, getShippingPolicy, merchantFeedEnabled, merchantLaunchMode } from "@/lib/business/policies";
-import { feedAvailability, getDeliveryEstimate, schemaAvailability } from "@/lib/merchant/delivery";
+import {
+  feedAvailability,
+  getDefaultDeliveryProfile,
+  getDeliveryEstimate,
+  schemaAvailability,
+} from "@/lib/merchant/delivery";
 import { merchantOffers, offerHasStructuredShipping, offerIdentifiers, offerPurchasable } from "@/lib/merchant/offers";
 import { getPublicPrice, isMerchantSaleEligible } from "@/lib/merchant/price";
 import { isCheckoutEnabled, stripeMode } from "@/lib/payments/stripe";
@@ -91,6 +96,7 @@ export function returnChecks(): MerchantCheck[] {
 
 export function shippingChecks(): MerchantCheck[] {
   const shipping = getShippingPolicy();
+  const profile = getDefaultDeliveryProfile();
   return [
     check("SHIPPING_ZONE", "PASS", "Zones site", shipping.zoneLabel),
     check("SHIPPING_FR_COST", "PASS", "Frais France", `${shipping.shippingCostEur.toFixed(2)} EUR`),
@@ -102,9 +108,9 @@ export function shippingChecks(): MerchantCheck[] {
     ),
     check(
       "HANDLING_TRANSIT_SPLIT",
-      "WARNING",
+      "PASS",
       "Délais structurés",
-      "Les fiches indiquent un délai global (souvent à partir de 14 jours). handling/transit séparés manquent encore.",
+      `Préparation ${profile.handlingMinBusinessDays} j ouvrés (1 semaine), acheminement ${profile.transitMinBusinessDays} j ouvrés`,
     ),
   ];
 }

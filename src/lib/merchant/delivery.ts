@@ -13,19 +13,53 @@ export type DeliveryEstimate = {
   structured: boolean;
 };
 
+function envInt(name: string) {
+  const raw = process.env[name]?.trim();
+  if (!raw) return null;
+  const value = Number(raw);
+  return Number.isInteger(value) && value >= 0 ? value : null;
+}
+
+/** Shop policy: 1 working week to prepare, then 7 business days in transit. */
+export function getDefaultDeliveryProfile() {
+  const handlingMin = envInt("HANDLING_MIN_BUSINESS_DAYS") ?? 5;
+  const transitMin = envInt("TRANSIT_MIN_BUSINESS_DAYS") ?? 7;
+  return {
+    handlingMinBusinessDays: handlingMin,
+    handlingMaxBusinessDays: envInt("HANDLING_MAX_BUSINESS_DAYS") ?? handlingMin,
+    transitMinBusinessDays: transitMin,
+    transitMaxBusinessDays: envInt("TRANSIT_MAX_BUSINESS_DAYS") ?? transitMin,
+  };
+}
+
+function usesShopDeliveryProfile(product: Product) {
+  return (
+    product.availabilityStatus === "available" ||
+    product.handlingMinBusinessDays != null ||
+    product.transitMinBusinessDays != null
+  );
+}
+
 export function getDeliveryEstimate(product: Product): DeliveryEstimate {
-  const handlingMin = product.handlingMinBusinessDays ?? null;
+  const defaults = getDefaultDeliveryProfile();
+  const applyDefaults = usesShopDeliveryProfile(product);
+  const handlingMin = product.handlingMinBusinessDays ?? (applyDefaults ? defaults.handlingMinBusinessDays : null);
   const handlingMax = product.handlingMaxBusinessDays ?? handlingMin;
-  const transitMin = product.transitMinBusinessDays ?? null;
+  const transitMin = product.transitMinBusinessDays ?? (applyDefaults ? defaults.transitMinBusinessDays : null);
   const transitMax = product.transitMaxBusinessDays ?? transitMin;
   const structured = handlingMin != null && transitMin != null;
+  const overallMin = structured ? handlingMin + transitMin : product.shippingMinDays;
+  const overallMax =
+    structured && handlingMax != null && transitMax != null
+      ? handlingMax + transitMax
+      : product.shippingMaxDays;
   return {
     handlingMinBusinessDays: handlingMin,
     handlingMaxBusinessDays: handlingMax,
     transitMinBusinessDays: transitMin,
     transitMaxBusinessDays: transitMax,
-    overallMinDays: product.shippingMinDays,
-    overallMaxDays: product.shippingMaxDays,
+    overallMinDays: overallMin,
+    overallMaxDays: overallMax,
     madeToOrder: Boolean(product.madeToOrder),
     customizedForCustomer: Boolean(product.customizedForCustomer),
     returnEligible: product.customizedForCustomer ? false : product.returnEligible !== false,
@@ -33,20 +67,18 @@ export function getDeliveryEstimate(product: Product): DeliveryEstimate {
   };
 }
 
+function businessDaysPhrase(min: number, max: number | null) {
+  if (max != null && max > min) return `${min}–${max} jours ouvrés`;
+  if (min === 5) return "1 semaine (5 jours ouvrés)";
+  return `${min} jours ouvrés`;
+}
+
 export function deliveryCustomerLabel(product: Product): string | null {
   const estimate = getDeliveryEstimate(product);
   if (estimate.structured && estimate.handlingMinBusinessDays != null && estimate.transitMinBusinessDays != null) {
-    const prep =
-      estimate.handlingMaxBusinessDays != null &&
-      estimate.handlingMaxBusinessDays > estimate.handlingMinBusinessDays
-        ? `${estimate.handlingMinBusinessDays}–${estimate.handlingMaxBusinessDays}`
-        : `${estimate.handlingMinBusinessDays}`;
-    const transit =
-      estimate.transitMaxBusinessDays != null &&
-      estimate.transitMaxBusinessDays > estimate.transitMinBusinessDays
-        ? `${estimate.transitMinBusinessDays}–${estimate.transitMaxBusinessDays}`
-        : `${estimate.transitMinBusinessDays}`;
-    return `préparation ${prep} j ouvrés, acheminement ${transit} j ouvrés`;
+    const prep = businessDaysPhrase(estimate.handlingMinBusinessDays, estimate.handlingMaxBusinessDays);
+    const transit = businessDaysPhrase(estimate.transitMinBusinessDays, estimate.transitMaxBusinessDays);
+    return `préparation ${prep}, acheminement ${transit}`;
   }
   const min = estimate.overallMinDays;
   if (!min) return null;
