@@ -26,6 +26,12 @@ export const PRODUCT_TYPE_LABELS: Record<ProductTypeSlug, string> = {
   chariot: "Chariots",
   rangement: "Rangements",
   "meuble-litiere": "Meubles pour animaux",
+  buffet: "Buffets",
+  console: "Consoles",
+  commode: "Commodes",
+  armoire: "Armoires",
+  caisson: "Caissons",
+  banc: "Bancs",
 };
 
 export function isSellable(product: Product) {

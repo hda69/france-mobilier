@@ -25,7 +25,13 @@ export type ProductTypeSlug =
   | "organiseur"
   | "chariot"
   | "rangement"
-  | "meuble-litiere";
+  | "meuble-litiere"
+  | "buffet"
+  | "console"
+  | "commode"
+  | "armoire"
+  | "caisson"
+  | "banc";
 
 export type ProductImageIssue =
   | "chinese_text"
