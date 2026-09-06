@@ -4,4 +4,10 @@
  * Note: runtime imports use `@/config/store` → `./config/store.ts` (project root).
  */
 
-export { store, navigation, secondaryNavigation, collections } from "../../config/store";
+export {
+  store,
+  navigation,
+  navigationGroups,
+  secondaryNavigation,
+  collections,
+} from "../../config/store";

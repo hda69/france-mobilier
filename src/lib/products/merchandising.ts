@@ -48,12 +48,20 @@ export function isNarrow(product: Product) {
   return width != null && width <= catalogFlags.narrowWidthMaxCm;
 }
 
+export function isWallMounted(product: Product) {
+  const fixation = product.specifications?.Fixation;
+  if (typeof fixation === "string" && /mural/i.test(fixation)) return true;
+  const text = [product.slug, product.name, ...(product.features ?? [])].join(" ");
+  return /mural/i.test(text);
+}
+
 export function isSmallSpaceProduct(product: Product) {
   return Boolean(
     product.smallSpaceFriendly ||
       product.extensible ||
       product.modular ||
-      isLowDepth(product),
+      isLowDepth(product) ||
+      isWallMounted(product),
   );
 }
 

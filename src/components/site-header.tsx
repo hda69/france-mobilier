@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { navigation, secondaryNavigation, store } from "@/config/store";
+import { navigationGroups, secondaryNavigation, store } from "@/config/store";
 import { useCart } from "@/components/cart-provider";
 import { IconBag, IconHeadset, IconReturn, IconSearch, IconTruck, IconUser } from "@/components/icons";
 import { authClient } from "@/lib/auth-client";
@@ -84,11 +84,45 @@ export function SiteHeader() {
               />
             </Link>
             <nav className="hidden items-center gap-5 text-[14px] text-navy xl:flex xl:gap-6 xl:text-[15px]">
-              {navigation.map((item) => (
-                <Link key={item.href} href={item.href} className="relative whitespace-nowrap py-1 hover:opacity-70">
-                  {item.label}
-                </Link>
-              ))}
+              {navigationGroups.map((item) =>
+                "children" in item && item.children?.length ? (
+                  <div key={item.href} className="group relative">
+                    <Link
+                      href={item.href}
+                      className="relative inline-flex items-center whitespace-nowrap py-3 hover:opacity-70"
+                    >
+                      {item.label}
+                    </Link>
+                    <div className="invisible absolute left-1/2 top-full z-50 w-56 -translate-x-1/2 pt-1 opacity-0 transition group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                      <div className="rounded-xl border border-border bg-white p-2 shadow-[var(--shadow)]">
+                        <Link
+                          href={item.href}
+                          className="block rounded-lg px-3 py-2 text-sm font-medium hover:bg-cream"
+                        >
+                          Toute la sélection
+                        </Link>
+                        {item.children.map((child) => (
+                          <Link
+                            key={child.href}
+                            href={child.href}
+                            className="block rounded-lg px-3 py-2 text-sm text-muted hover:bg-cream hover:text-navy"
+                          >
+                            {child.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="relative whitespace-nowrap py-3 hover:opacity-70"
+                  >
+                    {item.label}
+                  </Link>
+                ),
+              )}
             </nav>
             <form onSubmit={onSearch} className="hidden max-w-xs flex-1 md:block">
               <label className="sr-only" htmlFor="header-search">
@@ -165,15 +199,30 @@ export function SiteHeader() {
                   </div>
                 </form>
                 <nav className="grid gap-1 text-navy">
-                  {navigation.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className="rounded-lg px-3 py-3 hover:bg-cream"
-                      onClick={() => setOpen(false)}
-                    >
-                      {item.label}
-                    </Link>
+                  {navigationGroups.map((item) => (
+                    <div key={item.href}>
+                      <Link
+                        href={item.href}
+                        className="block rounded-lg px-3 py-3 hover:bg-cream"
+                        onClick={() => setOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                      {"children" in item && item.children?.length ? (
+                        <div className="mb-1 ml-3 border-l border-border pl-3">
+                          {item.children.map((child) => (
+                            <Link
+                              key={child.href}
+                              href={child.href}
+                              className="block rounded-lg px-3 py-2 text-sm text-muted hover:bg-cream hover:text-navy"
+                              onClick={() => setOpen(false)}
+                            >
+                              {child.label}
+                            </Link>
+                          ))}
+                        </div>
+                      ) : null}
+                    </div>
                   ))}
                   <p className="px-3 pt-3 text-xs uppercase tracking-[0.12em] text-muted">Plus</p>
                   {secondaryNavigation.map((item) => (

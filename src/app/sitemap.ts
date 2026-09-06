@@ -23,6 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/guides/meuble-chaussures-entree-etroite",
     "/guides/amenager-un-studio",
     "/guides/profondeur-table-de-chevet",
+    "/guides/quelle-table-petit-salon",
   ].map((path) => ({
     url: `${base}${path || "/"}`,
     lastModified: new Date(),

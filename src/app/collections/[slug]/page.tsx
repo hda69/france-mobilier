@@ -10,7 +10,7 @@ import {
   getCollection,
   listCollectionProducts,
 } from "@/lib/products/repository";
-import { isLowDepth, isNarrow } from "@/lib/products/merchandising";
+import { isLowDepth, isNarrow, isWallMounted } from "@/lib/products/merchandising";
 import type { Product } from "@/lib/types/commerce";
 
 type Props = {
@@ -25,6 +25,8 @@ type Props = {
     maxDepth?: string;
     maxWidth?: string;
     maxHeight?: string;
+    maxPrice?: string;
+    availability?: string;
   }>;
 };
 
@@ -73,6 +75,9 @@ export default async function CollectionPage({ params, searchParams }: Props) {
       query.color ||
       query.maxDepth ||
       query.maxWidth ||
+      query.maxHeight ||
+      query.maxPrice ||
+      query.availability ||
       query.sort,
   );
   const showSmallSpaceSections = slug === "petits-espaces" && !hasActiveFilters;
@@ -119,6 +124,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
             <Section title="Meubles étroits" products={listed.filter(isNarrow)} />
             <Section title="Faible profondeur" products={listed.filter(isLowDepth)} />
             <Section title="Mobilier extensible" products={listed.filter((product) => product.extensible)} />
+            <Section title="Rangements muraux" products={listed.filter(isWallMounted)} />
             <Section title="Mobilier multifonction" products={listed.filter((product) => product.extensible || product.modular)} />
             <Section title="Studio & appartement" products={listed.filter((product) => Boolean(product.smallSpaceFriendly))} />
           </>

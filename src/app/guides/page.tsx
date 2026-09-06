@@ -25,6 +25,11 @@ const guides = [
     title: "Comment aménager un studio sans le surcharger ?",
     text: "Extensible, peu profond, multifonction : ce qui justifie vraiment sa place.",
   },
+  {
+    href: "/guides/quelle-table-petit-salon",
+    title: "Quelle table pour un petit salon ?",
+    text: "Table basse ou extensible : ce qui laisse encore circuler.",
+  },
 ];
 
 export default function GuidesPage() {
@@ -36,7 +41,7 @@ export default function GuidesPage() {
         Des articles utiles, liés à des meubles que nous vendons réellement. Pas de contenu pour
         remplir les pages.
       </p>
-      <div className="mt-10 grid gap-4 md:grid-cols-3">
+      <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {guides.map((guide) => (
           <Link
             key={guide.href}

@@ -170,6 +170,7 @@ export type ProductFilterOptions = {
   maxDepth?: string;
   maxWidth?: string;
   maxHeight?: string;
+  maxPrice?: string;
   availability?: string;
 };
 
@@ -215,6 +216,10 @@ export function filterAndSortProducts(items: Product[], options: ProductFilterOp
       const height = getProductMeasures(p).heightCm;
       return height != null && height <= maxHeight;
     });
+  }
+  const maxPrice = parseCmFilter(options.maxPrice);
+  if (maxPrice != null) {
+    result = result.filter((p) => p.price <= maxPrice);
   }
   if (options.availability === "available") {
     result = result.filter(isSellable);

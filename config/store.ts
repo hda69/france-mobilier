@@ -39,14 +39,50 @@ export const store = {
   },
 } as const;
 
-export const navigation = [
+export const navigationGroups = [
   { href: "/nouveautes", label: "Nouveautés" },
-  { href: "/collections/salon", label: "Salon" },
-  { href: "/collections/chambre", label: "Chambre" },
-  { href: "/collections/entree-rangement", label: "Entrée & rangement" },
-  { href: "/collections/bureau", label: "Bureau" },
+  {
+    href: "/collections/salon",
+    label: "Salon",
+    children: [
+      { href: "/collections/tables-basses", label: "Tables basses" },
+      { href: "/collections/meubles-tv", label: "Meubles TV" },
+      { href: "/collections/tables-a-manger", label: "Tables à manger" },
+      { href: "/collections/buffets", label: "Buffets" },
+      { href: "/collections/consoles", label: "Consoles" },
+    ],
+  },
+  {
+    href: "/collections/chambre",
+    label: "Chambre",
+    children: [
+      { href: "/collections/tables-de-chevet", label: "Tables de chevet" },
+      { href: "/collections/coiffeuses", label: "Coiffeuses" },
+      { href: "/collections/commodes", label: "Commodes" },
+      { href: "/collections/armoires", label: "Armoires" },
+    ],
+  },
+  {
+    href: "/collections/entree-rangement",
+    label: "Entrée & rangement",
+    children: [
+      { href: "/collections/meubles-chaussures", label: "Meubles à chaussures" },
+      { href: "/collections/casiers", label: "Casiers" },
+      { href: "/collections/consoles", label: "Consoles" },
+    ],
+  },
+  {
+    href: "/collections/bureau",
+    label: "Bureau",
+    children: [
+      { href: "/collections/bureaux", label: "Bureaux" },
+      { href: "/collections/caissons", label: "Caissons" },
+    ],
+  },
   { href: "/collections/petits-espaces", label: "Petits espaces" },
 ] as const;
+
+export const navigation = navigationGroups.map(({ href, label }) => ({ href, label }));
 
 export const secondaryNavigation = [
   { href: "/collections/meubles", label: "Tous les meubles" },
@@ -174,6 +210,20 @@ export const collections = [
     name: "Armoires",
     description: "Des armoires étroites pour les chambres d’appartement.",
     productTypes: ["armoire"] as const,
+    secondary: true,
+  },
+  {
+    slug: "bureaux",
+    name: "Bureaux",
+    description: "Des bureaux compacts pour travailler chez soi sans encombrer la pièce.",
+    productTypes: ["bureau"] as const,
+    secondary: true,
+  },
+  {
+    slug: "caissons",
+    name: "Caissons",
+    description: "Des caissons pour ranger à côté du bureau, sans occuper tout le sol.",
+    productTypes: ["caisson"] as const,
     secondary: true,
   },
   {
