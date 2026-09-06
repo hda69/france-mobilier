@@ -180,9 +180,9 @@ export function CheckoutForm() {
           </p>
         ) : null}
         <p className="text-sm text-muted">
-          Paiement par carte, Apple Pay ou Google Pay sur la page Stripe (selon l’appareil). Pas
-          besoin de créer un compte avant : s’il n’existe pas encore, un accès est ouvert après le
-          paiement, identifiant = votre e-mail.
+          Paiement par carte, Apple Pay, Google Pay et les autres moyens proposés par Stripe selon
+          votre appareil et votre pays. Pas besoin de créer un compte avant : s’il n’existe pas
+          encore, un accès est ouvert après le paiement, identifiant = votre e-mail.
         </p>
       </div>
       <aside className="h-fit space-y-4 rounded-2xl border border-border bg-card p-4 sm:p-6">

@@ -8,7 +8,7 @@ const items = [
   },
   {
     title: "Paiement sécurisé",
-    text: "Carte bancaire, Apple Pay et Google Pay.",
+    text: "Carte bancaire, Apple Pay, Google Pay et autres moyens selon l’appareil.",
     icon: IconLock,
   },
   {

@@ -199,7 +199,6 @@ export async function POST(request: Request) {
         ...(companyName ? { companyName } : {}),
         ...(siren ? { siren } : {}),
       },
-      payment_method_types: ["card"],
       success_url: `${siteUrl}/commande/confirmation?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${siteUrl}/checkout`,
       ...(proActive && companyName && siren
