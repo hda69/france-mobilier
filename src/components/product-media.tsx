@@ -51,15 +51,19 @@ export function ProductMedia({ product, images }: { product: Product; images: st
   );
 
   return (
-    <div className="grid gap-10 md:grid-cols-2 md:gap-14">
-      <ProductGallery
-        images={images}
-        name={product.name}
-        index={index}
-        onIndexChange={handleIndexChange}
-        autoplayIndexes={autoplayIndexes}
-      />
-      <ProductInfo product={product} variantId={variantId} onVariantIdChange={handleVariantIdChange} />
+    <div className="grid min-w-0 gap-10 md:grid-cols-2 md:gap-14">
+      <div className="min-w-0 max-w-full">
+        <ProductGallery
+          images={images}
+          name={product.name}
+          index={index}
+          onIndexChange={handleIndexChange}
+          autoplayIndexes={autoplayIndexes}
+        />
+      </div>
+      <div className="min-w-0">
+        <ProductInfo product={product} variantId={variantId} onVariantIdChange={handleVariantIdChange} />
+      </div>
     </div>
   );
 }

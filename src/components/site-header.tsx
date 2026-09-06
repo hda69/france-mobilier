@@ -77,7 +77,7 @@ export function SiteHeader() {
                 alt={store.storeName}
                 width={220}
                 height={163}
-                className={`w-auto object-contain transition-[height] duration-300 ${
+                className={`max-w-36 object-contain transition-[height] duration-300 ${
                   compact ? "h-9 md:h-10" : "h-11 md:h-12"
                 }`}
                 priority

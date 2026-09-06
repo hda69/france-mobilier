@@ -14,7 +14,7 @@ export function ProductCard({ product }: { product: Product }) {
             src={productHeroImage(product)}
             alt={product.name}
             fill
-            className="object-cover transition duration-500 group-hover:scale-[1.03]"
+            className="object-cover transition duration-500 md:group-hover:scale-[1.03]"
             sizes="(max-width: 768px) 100vw, 25vw"
           />
           {isOnSale(product) ? (

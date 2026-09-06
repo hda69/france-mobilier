@@ -134,7 +134,7 @@ export default async function ProductPage({ params }: Props) {
   };
 
   return (
-    <div className="bg-white pb-[calc(5.75rem+env(safe-area-inset-bottom))] md:pb-0">
+    <div className="min-w-0 max-w-full overflow-x-hidden bg-white pb-[calc(5.75rem+env(safe-area-inset-bottom))] md:pb-0">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
 

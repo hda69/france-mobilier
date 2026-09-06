@@ -28,8 +28,12 @@ export function ProductGallery({
   autoplayIndexes?: number[];
 }) {
   const startX = useRef<number | null>(null);
+  const startY = useRef<number | null>(null);
+  const frameRef = useRef<HTMLDivElement | null>(null);
   const thumbsRef = useRef<Array<HTMLButtonElement | null>>([]);
   const [paused, setPaused] = useState(false);
+  const [inView, setInView] = useState(true);
+  const [canHover, setCanHover] = useState(false);
   const current = images[index] ?? images[0];
   const hasMany = images.length > 1;
   const sequence = useMemo(
@@ -46,6 +50,25 @@ export function ProductGallery({
   );
 
   useEffect(() => {
+    const media = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const sync = () => setCanHover(media.matches);
+    sync();
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, []);
+
+  useEffect(() => {
+    const node = frameRef.current;
+    if (!node || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setInView(entry?.isIntersecting ?? true),
+      { threshold: 0.35 },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
     const thumb = thumbsRef.current[index];
     const row = thumb?.parentElement;
     if (!thumb || !row) return;
@@ -54,7 +77,7 @@ export function ProductGallery({
   }, [index]);
 
   useEffect(() => {
-    if (!hasMany || paused || sequence.length < 2) return;
+    if (!hasMany || paused || !inView || !canHover || sequence.length < 2) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const timer = window.setInterval(() => {
       const position = sequence.indexOf(index);
@@ -62,18 +85,21 @@ export function ProductGallery({
       onIndexChange(next);
     }, AUTOPLAY_MS);
     return () => window.clearInterval(timer);
-  }, [hasMany, index, onIndexChange, paused, sequence]);
+  }, [canHover, hasMany, index, inView, onIndexChange, paused, sequence]);
 
   function onPointerDown(event: PointerEvent<HTMLDivElement>) {
     startX.current = event.clientX;
+    startY.current = event.clientY;
   }
 
   function onPointerUp(event: PointerEvent<HTMLDivElement>) {
-    if (startX.current == null || !hasMany) return;
-    const delta = event.clientX - startX.current;
+    if (startX.current == null || startY.current == null || !hasMany) return;
+    const dx = event.clientX - startX.current;
+    const dy = event.clientY - startY.current;
     startX.current = null;
-    if (delta > 40) go(index - 1);
-    if (delta < -40) go(index + 1);
+    startY.current = null;
+    if (Math.abs(dx) < 40 || Math.abs(dy) >= Math.abs(dx)) return;
+    go(dx > 0 ? index - 1 : index + 1);
   }
 
   function onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
@@ -91,13 +117,22 @@ export function ProductGallery({
   if (!current) return null;
 
   return (
-    <div>
+    <div className="product-gallery w-full min-w-0 max-w-full">
       <div
-        className="group relative aspect-square overflow-hidden rounded-[var(--radius)] bg-white"
+        ref={frameRef}
+        className="product-gallery-frame group rounded-[var(--radius)] bg-white"
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
-        onPointerEnter={() => setPaused(true)}
-        onPointerLeave={() => setPaused(false)}
+        onPointerCancel={() => {
+          startX.current = null;
+          startY.current = null;
+        }}
+        onPointerEnter={() => {
+          if (canHover) setPaused(true);
+        }}
+        onPointerLeave={() => {
+          if (canHover) setPaused(false);
+        }}
         onFocus={() => setPaused(true)}
         onBlur={() => setPaused(false)}
         onKeyDown={onKeyDown}
@@ -107,16 +142,16 @@ export function ProductGallery({
         aria-label={hasMany ? `Photos de ${name}` : undefined}
       >
         <div
-          className="flex h-full transition-transform duration-500 ease-out motion-reduce:transition-none"
-          style={{ transform: `translateX(-${index * 100}%)` }}
+          className="product-gallery-track motion-reduce:!transition-none"
+          style={{ transform: `translate3d(-${index * 100}%, 0, 0)` }}
         >
           {images.map((src, imageIndex) => (
-            <div key={`${src}-${imageIndex}`} className="relative aspect-square min-w-full shrink-0 basis-full overflow-hidden">
+            <div key={`${src}-${imageIndex}`} className="product-gallery-slide">
               <Image
                 src={src}
                 alt={`${name} — photo ${imageIndex + 1}`}
                 fill
-                className="object-cover select-none transition-transform duration-500 md:group-hover:scale-[1.06]"
+                className={`object-cover select-none ${canHover ? "transition-transform duration-500 md:group-hover:scale-[1.06]" : ""}`}
                 priority={imageIndex === 0}
                 sizes="(max-width:768px) 100vw, 50vw"
                 draggable={false}
@@ -155,7 +190,7 @@ export function ProductGallery({
         ) : null}
       </div>
       {hasMany ? (
-        <div className="mt-3 flex gap-2 overflow-x-auto p-1.5">
+        <div className="mt-3 flex gap-2 overflow-x-auto overscroll-x-contain p-1.5">
           {images.map((src, imageIndex) => {
             const selected = imageIndex === index;
             return (
