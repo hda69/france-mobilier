@@ -12,7 +12,8 @@ import { ProductShippingReturns } from "@/components/product-shipping-returns";
 import { ProductSpecifications } from "@/components/product-specifications";
 import { store } from "@/config/store";
 import {
-  collectionSlugForCategory,
+  collectionSlugForProductPage,
+  findCollectionProducts,
   findProductBySlug,
   findRelatedProducts,
   getCollection,
@@ -56,9 +57,12 @@ export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
   const product = findProductBySlug(slug);
   if (!product) notFound();
-  const related = findRelatedProducts(product);
+  const collectionProducts = findCollectionProducts(product);
+  const related = findRelatedProducts(product).filter(
+    (item) => !collectionProducts.some((member) => member.id === item.id),
+  );
   const reviews = await listApprovedReviews(product.id);
-  const collectionSlug = collectionSlugForCategory(product.category);
+  const collectionSlug = collectionSlugForProductPage(product);
   const collection = getCollection(collectionSlug);
   const gallery = productGalleryImages(product);
   const hero = productHeroImage(product);
@@ -161,6 +165,9 @@ export default async function ProductPage({ params }: Props) {
       <ProductShippingReturns product={product} />
       <ProductFAQ product={product} />
       <ProductReviews productId={product.id} initialReviews={reviews} />
+      {collectionProducts.length > 0 ? (
+        <ProductRecommendations title="Complétez la collection" products={collectionProducts} />
+      ) : null}
       <ProductRecommendations products={related} />
     </div>
   );

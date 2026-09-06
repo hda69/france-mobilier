@@ -298,6 +298,11 @@ export const products: Product[] = [
       "Étagère à casiers",
     ],
     category: "rangement",
+    rooms: ["entree", "chambre"],
+    productType: "casiers",
+    material: "MDF",
+    smallSpaceFriendly: true,
+    featured: true,
     shortDescription:
       "Meuble bas à casiers ouverts, peu profond. Trois finitions, six longueurs, à glisser contre un mur.",
     description:
@@ -401,6 +406,10 @@ export const products: Product[] = [
       "Coiffeuse enfant en bois",
     ],
     category: "maison",
+    rooms: ["chambre"],
+    productType: "coiffeuse",
+    material: "Bois",
+    featured: true,
     shortDescription:
       "Petite coiffeuse en bois massif, à hauteur d’enfant : un tiroir, un miroir encadré. Seule, ou avec le tabouret assorti.",
     description:
@@ -508,6 +517,11 @@ export const products: Product[] = [
       "Banc d’entrée",
     ],
     category: "rangement",
+    rooms: ["entree"],
+    productType: "meuble-chaussures",
+    material: "Pin",
+    smallSpaceFriendly: true,
+    featured: true,
     shortDescription:
       "Meuble d’entrée et meuble à chaussures en pin massif : on s’y asseoit pour changer de paires, on les range derrière les portes coulissantes à lattes.",
     description:
@@ -604,6 +618,12 @@ export const products: Product[] = [
     slug: "table-a-manger-extensible",
     name: "Table à manger extensible",
     category: "cuisine",
+    rooms: ["salon"],
+    productType: "table-a-manger",
+    material: "Bois",
+    smallSpaceFriendly: true,
+    extensible: true,
+    featured: true,
     shortDescription:
       "Table ronde en bois, à allonger en ovale. Piétement central, deux finitions, deux formats.",
     description:
@@ -695,6 +715,11 @@ export const products: Product[] = [
     slug: "meuble-tv",
     name: "Meuble TV en bois",
     category: "maison",
+    rooms: ["salon"],
+    productType: "meuble-tv",
+    material: "Bois",
+    smallSpaceFriendly: true,
+    featured: true,
     shortDescription:
       "Meuble TV bas en bois, à poser au sol sous un écran. Quatre compartiments, trois longueurs, trois finitions.",
     description:
@@ -787,6 +812,11 @@ export const products: Product[] = [
     slug: "table-basse-metal",
     name: "Table basse en métal",
     category: "maison",
+    rooms: ["salon"],
+    productType: "table-basse",
+    material: "Métal",
+    smallSpaceFriendly: true,
+    featured: true,
     shortDescription:
       "Table basse cubique en métal, à poser au salon ou à côté d’un canapé. Structure ajourée, étagère ouverte, deux finitions.",
     description:
@@ -877,6 +907,11 @@ export const products: Product[] = [
     slug: "table-de-chevet",
     name: "Table de chevet en rotin",
     category: "maison",
+    rooms: ["chambre"],
+    productType: "table-de-chevet",
+    material: "Rotin",
+    smallSpaceFriendly: true,
+    featured: true,
     shortDescription:
       "Chevet compact en bois avec façade en rotin, pensé pour ajouter du rangement sans alourdir la chambre.",
     description:
@@ -962,6 +997,9 @@ export const products: Product[] = [
     slug: "bureau-assis-debout-electrique",
     name: "Bureau assis-debout électrique",
     category: "bureau",
+    rooms: ["bureau"],
+    productType: "bureau",
+    material: "Métal",
     shortDescription: "Bureau réglable en hauteur pour alterner position assise et debout.",
     description:
       "Un bureau électrique conçu pour adapter votre posture au fil de la journée. Structure stable, plateau spacieux et réglage fluide.",
@@ -1015,6 +1053,9 @@ export const products: Product[] = [
     slug: "meuble-chaussures-etroit",
     name: "Meuble à chaussures étroit",
     category: "rangement",
+    rooms: ["entree"],
+    productType: "meuble-chaussures",
+    smallSpaceFriendly: true,
     shortDescription: "Rangement vertical discret pour entrée ou couloir étroit.",
     description:
       "Un meuble compact pour organiser chaussures et accessoires sans encombrer l’entrée. Format étroit, finition sobre.",
@@ -1050,6 +1091,7 @@ export const products: Product[] = [
     supplierProductId: null,
     supplierVariantId: null,
     weight: 12,
+    measures: { widthCm: 60, depthCm: 24, heightCm: 110 },
     dimensions: "60 × 24 × 110 cm",
     shippingMinDays: null,
     shippingMaxDays: null,
@@ -1059,6 +1101,10 @@ export const products: Product[] = [
     slug: "etagere-salle-de-bain",
     name: "Étagère salle de bain",
     category: "salle-de-bain",
+    rooms: ["accessoires"],
+    productType: "etagere",
+    material: "Métal",
+    smallSpaceFriendly: true,
     shortDescription: "Étagère murale pour organiser produits et serviettes.",
     description:
       "Une étagère murale pensée pour les espaces humides. Rangement clair, profil mince.",
@@ -1103,6 +1149,9 @@ export const products: Product[] = [
     slug: "chariot-rangement-cuisine",
     name: "Chariot de rangement cuisine",
     category: "cuisine",
+    rooms: ["accessoires"],
+    productType: "chariot",
+    material: "Métal",
     shortDescription: "Chariot mobile pour gagner de l’espace en cuisine.",
     description:
       "Un chariot à roulettes pour ranger ustensiles, paniers et provisions. Mobile et stable.",
@@ -1138,6 +1187,7 @@ export const products: Product[] = [
     supplierProductId: null,
     supplierVariantId: null,
     weight: 7,
+    measures: { widthCm: 45, depthCm: 35, heightCm: 85 },
     dimensions: "45 × 35 × 85 cm",
     shippingMinDays: null,
     shippingMaxDays: null,
@@ -1147,6 +1197,9 @@ export const products: Product[] = [
     slug: "support-ecran-double",
     name: "Support écran double",
     category: "bureau",
+    rooms: ["bureau"],
+    productType: "support",
+    material: "Métal",
     shortDescription: "Bras articulé pour deux moniteurs, gain d’espace bureau.",
     description:
       "Support double moniteur pour libérer le plateau et améliorer l’ergonomie. Articulations fluides.",
@@ -1196,6 +1249,8 @@ export const products: Product[] = [
     slug: "meuble-litiere-chat",
     name: "Meuble litière chat",
     category: "animaux",
+    rooms: ["accessoires"],
+    productType: "meuble-litiere",
     shortDescription: "Meuble discret pour dissimuler la litière tout en restant accessible.",
     description:
       "Un meuble fermé qui intègre la litière sans dénaturer la pièce. Entrée latérale, ventilation et rangement.",
@@ -1231,6 +1286,7 @@ export const products: Product[] = [
     supplierProductId: null,
     supplierVariantId: null,
     weight: 16,
+    measures: { widthCm: 70, depthCm: 50, heightCm: 60 },
     dimensions: "70 × 50 × 60 cm",
     shippingMinDays: null,
     shippingMaxDays: null,
@@ -1240,6 +1296,10 @@ export const products: Product[] = [
     slug: "table-appoint-reglable",
     name: "Table d’appoint réglable",
     category: "maison",
+    rooms: ["salon", "chambre"],
+    productType: "table-appoint",
+    material: "Métal",
+    smallSpaceFriendly: true,
     shortDescription: "Table mobile à hauteur réglable pour salon ou chambre.",
     description:
       "Table d’appoint polyvalente pour ordinateur portable, petit-déjeuner ou lecture. Hauteur réglable, plateau stable.",
@@ -1274,6 +1334,7 @@ export const products: Product[] = [
     supplierProductId: null,
     supplierVariantId: null,
     weight: 6.5,
+    measures: { widthCm: 60, depthCm: 40 },
     dimensions: "60 × 40 × 65–95 cm",
     shippingMinDays: null,
     shippingMaxDays: null,
@@ -1283,6 +1344,11 @@ export const products: Product[] = [
     slug: "etagere-modulable",
     name: "Étagère modulable",
     category: "rangement",
+    rooms: ["salon", "entree"],
+    productType: "etagere",
+    material: "Bois",
+    smallSpaceFriendly: true,
+    modular: true,
     shortDescription: "Système d’étagères à composer selon l’espace disponible.",
     description:
       "Étagère modulable pour bibliothèque, bureau ou salon. Modules assemblables.",
@@ -1322,6 +1388,7 @@ export const products: Product[] = [
     supplierProductId: null,
     supplierVariantId: null,
     weight: 14,
+    measures: { widthCm: 40, depthCm: 30, heightCm: 40 },
     dimensions: "Configuration 4 modules",
     shippingMinDays: null,
     shippingMaxDays: null,
@@ -1331,6 +1398,9 @@ export const products: Product[] = [
     slug: "rangement-sous-evier",
     name: "Rangement sous évier",
     category: "cuisine",
+    rooms: ["accessoires"],
+    productType: "rangement",
+    smallSpaceFriendly: true,
     shortDescription: "Organiseur coulissant pour exploiter l’espace sous évier.",
     description:
       "Solution de rangement pour produits d’entretien et ustensiles sous évier. Format adaptable.",
@@ -1379,6 +1449,9 @@ export const products: Product[] = [
     slug: "organiseur-de-bureau",
     name: "Organiseur de bureau",
     category: "bureau",
+    rooms: ["bureau"],
+    productType: "organiseur",
+    material: "Bois",
     shortDescription: "Organiseur compact pour stylos, notes et petits accessoires.",
     description:
       "Un organiseur de bureau pour clarifier l’espace de travail. Compartiments pratiques, silhouette discrète.",

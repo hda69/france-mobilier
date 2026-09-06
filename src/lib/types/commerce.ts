@@ -8,6 +8,25 @@ export type ProductCategory =
   | "salle-de-bain"
   | "animaux";
 
+export type ProductRoom = "salon" | "chambre" | "entree" | "bureau" | "accessoires";
+
+export type ProductTypeSlug =
+  | "table-basse"
+  | "meuble-tv"
+  | "table-appoint"
+  | "table-a-manger"
+  | "table-de-chevet"
+  | "coiffeuse"
+  | "meuble-chaussures"
+  | "casiers"
+  | "etagere"
+  | "bureau"
+  | "support"
+  | "organiseur"
+  | "chariot"
+  | "rangement"
+  | "meuble-litiere";
+
 export type ProductImageIssue =
   | "chinese_text"
   | "supplier_logo"
@@ -69,6 +88,17 @@ export type Product = {
   /** Extra names for JSON-LD `alternateName` (search variants, not a second page). */
   alternateNames?: string[];
   category: ProductCategory;
+  /** Room merchandising. A product can belong to more than one room. */
+  rooms?: ProductRoom[];
+  productType?: ProductTypeSlug;
+  /** Customer-facing material. Only when known — never infer a wood species. */
+  material?: string;
+  smallSpaceFriendly?: boolean;
+  extensible?: boolean;
+  modular?: boolean;
+  featured?: boolean;
+  /** Named visual collection only when products truly match. */
+  collectionId?: string;
   shortDescription: string;
   description: string;
   price: number;

@@ -20,7 +20,7 @@ export default function NewArrivalsPage() {
       <p className="mt-3 text-muted">
         Les derniers ajouts au catalogue. Prix TTC. {SHIPPING_OFFERED_SENTENCE}
       </p>
-      <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}

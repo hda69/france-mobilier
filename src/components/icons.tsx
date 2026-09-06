@@ -145,6 +145,25 @@ export function IconEye({ className = base }: IconProps) {
   );
 }
 
+export function IconRuler({ className = base }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden>
+      <path d="M4 8.5h16v7H4v-7Z" strokeWidth="1.6" />
+      <path d="M8 8.5v3M12 8.5v4M16 8.5v3" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function IconSofa({ className = base }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden>
+      <path d="M4 14.5V11a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3.5" strokeWidth="1.6" />
+      <path d="M3 14.5h18v4H3v-4Z" strokeWidth="1.6" />
+      <path d="M7 9V7.5A1.5 1.5 0 0 1 8.5 6h7A1.5 1.5 0 0 1 17 7.5V9" strokeWidth="1.6" />
+    </svg>
+  );
+}
+
 export function IconEyeOff({ className = base }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden>

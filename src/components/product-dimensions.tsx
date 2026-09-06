@@ -1,12 +1,14 @@
 import { ProductDimensionsDiagram } from "@/components/product-dimensions-diagram";
 import { canDrawDiagram, getProductMeasures, measureEntries } from "@/lib/products/presentation";
+import { formatLph } from "@/lib/products/merchandising";
 import { uniqueVariantSizes } from "@/lib/products/repository";
 import type { Product } from "@/lib/types/commerce";
 
 export function ProductDimensions({ product }: { product: Product }) {
   const rows = measureEntries(product);
   const sizes = uniqueVariantSizes(product);
-  if (rows.length === 0 && !product.weight && sizes.length === 0) return null;
+  const lph = formatLph(product);
+  if (rows.length === 0 && !product.weight && sizes.length === 0 && !lph) return null;
   const measures = getProductMeasures(product);
   const showDiagram = canDrawDiagram(product);
 
@@ -17,6 +19,13 @@ export function ProductDimensions({ product }: { product: Product }) {
         <div className={`mt-8 grid gap-8 ${showDiagram ? "md:grid-cols-2 md:items-center" : ""}`}>
           {showDiagram ? <ProductDimensionsDiagram measures={measures} /> : null}
           <div className="space-y-6">
+            {lph ? (
+              <div>
+                <p className="text-sm text-muted">Dimensions</p>
+                <p className="mt-1 text-xl font-medium text-navy">{lph}</p>
+                <p className="mt-1 text-sm text-muted">Largeur × profondeur × hauteur</p>
+              </div>
+            ) : null}
             {sizes.length > 1 ? (
               <div>
                 <p className="text-sm text-muted">{product.formatsLabel ?? "Formats"}</p>

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { navigation, store } from "@/config/store";
+import { navigation, secondaryNavigation, store } from "@/config/store";
 import { useCart } from "@/components/cart-provider";
 import { IconBag, IconHeadset, IconReturn, IconSearch, IconTruck, IconUser } from "@/components/icons";
 import { authClient } from "@/lib/auth-client";
@@ -83,9 +83,9 @@ export function SiteHeader() {
                 priority
               />
             </Link>
-            <nav className="hidden items-center gap-7 text-[15px] text-navy lg:flex">
+            <nav className="hidden items-center gap-5 text-[14px] text-navy xl:flex xl:gap-6 xl:text-[15px]">
               {navigation.map((item) => (
-                <Link key={item.href} href={item.href} className="relative py-1 hover:opacity-70">
+                <Link key={item.href} href={item.href} className="relative whitespace-nowrap py-1 hover:opacity-70">
                   {item.label}
                 </Link>
               ))}
@@ -133,7 +133,7 @@ export function SiteHeader() {
               </Link>
               <button
                 type="button"
-                className="inline-flex h-11 w-11 items-center justify-center text-navy lg:hidden"
+                className="inline-flex h-11 w-11 items-center justify-center text-navy xl:hidden"
                 aria-expanded={open}
                 aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
                 onClick={() => setOpen((value) => !value)}
@@ -147,7 +147,7 @@ export function SiteHeader() {
             </div>
           </div>
           {open && (
-            <div className="border-t border-border bg-white lg:hidden">
+            <div className="border-t border-border bg-white xl:hidden">
               <div className="container-page space-y-4 py-4">
                 <form onSubmit={onSearch}>
                   <label className="sr-only" htmlFor="mobile-search">
@@ -175,17 +175,17 @@ export function SiteHeader() {
                       {item.label}
                     </Link>
                   ))}
-                  <Link
-                    href={session?.user ? (proApproved ? "/compte" : "/compte/entreprise") : "/pro"}
-                    className="rounded-lg px-3 py-3 font-medium hover:bg-cream"
-                    onClick={() => setOpen(false)}
-                  >
-                    {session?.user
-                      ? proApproved
-                        ? "Espace Pro"
-                        : "Compte professionnel"
-                      : "Demander un accès pro"}
-                  </Link>
+                  <p className="px-3 pt-3 text-xs uppercase tracking-[0.12em] text-muted">Plus</p>
+                  {secondaryNavigation.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="rounded-lg px-3 py-3 hover:bg-cream"
+                      onClick={() => setOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
                   <Link
                     href={session?.user ? "/compte" : "/connexion"}
                     className="rounded-lg px-3 py-3 hover:bg-cream sm:hidden"

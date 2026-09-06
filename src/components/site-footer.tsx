@@ -5,13 +5,14 @@ import { CookieManageButton } from "@/components/cookie-manage-button";
 
 const groups = [
   {
-    title: "Nos collections",
+    title: "Nos meubles",
     links: [
-      { href: "/nouveautes", label: "Nouveautés" },
-      { href: "/collections/rangement", label: "Rangement" },
+      { href: "/collections/salon", label: "Salon" },
+      { href: "/collections/chambre", label: "Chambre" },
+      { href: "/collections/entree-rangement", label: "Entrée & rangement" },
       { href: "/collections/bureau", label: "Bureau" },
-      { href: "/collections/maison", label: "Maison" },
-      { href: "/collections/animaux", label: "Animaux" },
+      { href: "/collections/petits-espaces", label: "Petits espaces" },
+      { href: "/collections/meubles", label: "Tous les meubles" },
     ],
   },
   {
@@ -19,10 +20,16 @@ const groups = [
     links: [
       { href: "/shipping", label: "Livraison" },
       { href: "/returns", label: "Retours" },
-      { href: "/compte", label: "Mes commandes" },
-      { href: "/pro", label: "France Mobilier Pro" },
       { href: "/contact", label: "Contact" },
       { href: "/faq", label: "FAQ" },
+      { href: "/guides", label: "Conseils" },
+    ],
+  },
+  {
+    title: "Professionnels",
+    links: [
+      { href: "/pro", label: "France Mobilier Pro" },
+      { href: "/compte/devis", label: "Demande de devis" },
     ],
   },
   {
@@ -39,7 +46,7 @@ const groups = [
 export function SiteFooter() {
   return (
     <footer className="mt-10 bg-navy text-white pb-[env(safe-area-inset-bottom)]">
-      <div className="container-page grid gap-8 py-10 md:grid-cols-4 md:gap-10 md:py-14">
+      <div className="container-page grid gap-8 py-10 sm:grid-cols-2 lg:grid-cols-5 lg:gap-10 lg:py-14">
         <div>
           <Link href="/" className="inline-flex rounded-md bg-white px-2 py-1.5">
             <Image
@@ -51,8 +58,8 @@ export function SiteFooter() {
             />
           </Link>
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/75">
-            Meubles et solutions de rangement pour un intérieur plus simple à vivre. Boutique éditée
-            à {store.companyCity}.
+            Le mobilier qui simplifie votre intérieur. Une sélection courte pour les logements
+            d’aujourd’hui.
           </p>
           <p className="mt-4 text-sm text-white/75">{store.supportEmail}</p>
         </div>
@@ -82,7 +89,7 @@ export function SiteFooter() {
             © {new Date().getFullYear()} {store.storeName}. Tous droits réservés.
           </p>
           <p>
-            {store.storeName} — {store.companyCity}
+            {store.companyName} — {store.companyCity}
           </p>
         </div>
       </div>

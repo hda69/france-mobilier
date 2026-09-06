@@ -6,7 +6,7 @@ import { SHIPPING_OFFERED_SENTENCE } from "@/lib/shipping-zone";
 
 export const metadata: Metadata = {
   title: "Notre histoire",
-  description: `L’histoire de ${store.storeName} : une boutique de mobilier et de rangement éditée à ${store.companyCity}.`,
+  description: `L’histoire de ${store.storeName} : une sélection de meubles pensés pour les logements d’aujourd’hui.`,
 };
 
 const chapters = [
@@ -47,8 +47,8 @@ export default function AboutPage() {
               moins d’espace perdu, plus de confort, des solutions faciles à intégrer.
             </p>
             <p>
-              La boutique est éditée à {store.companyCity}. On y trouve des essentiels pour la
-              maison, le rangement, le bureau, et la vie avec un animal.
+              La boutique est éditée à {store.companyCity}. On y trouve des meubles pour le salon,
+              la chambre, l’entrée et le bureau — une sélection courte, pas un catalogue sans fin.
             </p>
           </div>
         </div>
@@ -70,8 +70,8 @@ export default function AboutPage() {
           <p className="mt-4 leading-relaxed text-muted">
             Plutôt que de multiplier les collections pour le spectacle, nous avons choisi une ligne
             claire : du mobilier utile, des rangements qui libèrent de la place, des pièces que l’on
-            peut installer sans projet de rénovation. C’est cette exigence, tenue depuis{" "}
-            {store.companyCity}, qui guide encore chaque ajout au catalogue.
+            peut installer sans projet de rénovation. Cette exigence guide encore chaque ajout au
+            catalogue.
           </p>
         </div>
         <div className="container-page mt-12 grid gap-8 md:grid-cols-3">
@@ -101,9 +101,9 @@ export default function AboutPage() {
               Le même cap : des meubles qui méritent leur place.
             </h2>
             <p className="mt-5 leading-relaxed text-muted">
-              Le catalogue s’est élargi — maison, rangement, bureau, animaux — sans changer de
-              méthode. On regarde l’usage, les dimensions, la simplicité d’installation. On écarte
-              ce qui n’apporte qu’un effet de style.
+              Le catalogue s’est élargi — salon, chambre, entrée, bureau — sans changer de méthode.
+              On regarde l’usage, les dimensions, la simplicité d’installation. On écarte ce qui
+              n’apporte qu’un effet de style.
             </p>
             <p className="mt-4 leading-relaxed text-muted">
               {store.storeName} reste une boutique en ligne, éditée à {store.companyCity} par{" "}
@@ -111,8 +111,8 @@ export default function AboutPage() {
               jours lorsque le droit le prévoit, SAV du lundi au vendredi.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/collections/maison" className="btn btn-primary w-full sm:w-auto">
-                Découvrir nos meubles
+              <Link href="/collections/meubles" className="btn btn-primary w-full sm:w-auto">
+                Découvrir les meubles
               </Link>
               <Link href="/contact" className="btn btn-secondary w-full sm:w-auto">
                 Contact

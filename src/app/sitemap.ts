@@ -19,6 +19,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/returns",
     "/shipping",
     "/recherche",
+    "/guides",
+    "/guides/meuble-chaussures-entree-etroite",
+    "/guides/amenager-un-studio",
+    "/guides/profondeur-table-de-chevet",
   ].map((path) => ({
     url: `${base}${path || "/"}`,
     lastModified: new Date(),

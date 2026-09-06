@@ -27,7 +27,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(store.domain),
   title: {
-    default: `${store.storeName} — Maison & organisation`,
+    default: `${store.storeName} — Le mobilier qui simplifie votre intérieur`,
     template: `%s | ${store.storeName}`,
   },
   description: store.storeTagline,

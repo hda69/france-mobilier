@@ -26,7 +26,7 @@ const benefits = [
   },
   {
     title: "Conditions professionnelles",
-    text: "Des conditions tarifaires peuvent être proposées selon les produits et volumes commandés.",
+    text: "Des conditions adaptées peuvent être proposées selon les produits et volumes commandés.",
   },
 ];
 
