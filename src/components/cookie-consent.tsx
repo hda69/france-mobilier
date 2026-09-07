@@ -38,8 +38,8 @@ export function CookieConsent() {
       </div>
       <p className="mt-2 text-sm leading-relaxed text-muted">
         Nous utilisons des cookies et un stockage local nécessaires à la boutique : compte, panier,
-        accès aux commandes et paiement. Aucun cookie publicitaire ou de mesure d’audience n’est
-        déposé sans votre accord.
+        accès aux commandes et paiement. Si vous acceptez, Google Ads mesure aussi les campagnes
+        publicitaires. Aucun cookie publicitaire n’est déposé sans votre accord.
       </p>
       <p className="mt-2 text-sm leading-relaxed text-muted">
         Vous pouvez tout accepter, ou refuser les cookies non essentiels — le site reste utilisable.{" "}

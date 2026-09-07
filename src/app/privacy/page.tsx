@@ -33,8 +33,7 @@ export default function PrivacyPage() {
           Cookies
         </h2>
         <p>
-          Des cookies et un stockage local sont utilisés uniquement pour faire fonctionner la
-          boutique :
+          Des cookies et un stockage local sont utilisés pour faire fonctionner la boutique :
         </p>
         <ul className="list-disc space-y-1 pl-5">
           <li>compte et session de connexion ;</li>
@@ -43,9 +42,9 @@ export default function PrivacyPage() {
           <li>paiement, traité sur la page Stripe selon la politique de Stripe.</li>
         </ul>
         <p>
-          Ces traitements sont nécessaires au service. Aucun cookie publicitaire ou de mesure
-          d’audience n’est déposé sans votre accord. Vous pouvez modifier votre choix à tout
-          moment.
+          Si vous acceptez les cookies non essentiels, le tag Google Ads (AW-17892406919) mesure
+          les campagnes publicitaires. Sans accord, le tag reste en place mais les cookies
+          publicitaires restent refusés. Vous pouvez modifier votre choix à tout moment.
         </p>
         <p>
           <CookieManageButton className="btn btn-secondary">Modifier mes choix</CookieManageButton>

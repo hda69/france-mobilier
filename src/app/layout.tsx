@@ -2,9 +2,11 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Newsreader } from "next/font/google";
 import { CartProvider } from "@/components/cart-provider";
 import { CookieConsent } from "@/components/cookie-consent";
+import { GoogleConsentSync } from "@/components/google-consent-sync";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { store } from "@/config/store";
+import { GOOGLE_ADS_ID, gtagBootstrap } from "@/lib/ads/gtag";
 import { organizationJsonLd } from "@/lib/business/identity";
 import "./globals.css";
 
@@ -72,6 +74,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
 
   return (
     <html lang="fr">
+      <head>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}`} />
+        <script dangerouslySetInnerHTML={{ __html: gtagBootstrap }} />
+      </head>
       <body className={`${geistSans.variable} ${newsreader.variable} antialiased`}>
         <script
           type="application/ld+json"
@@ -86,6 +92,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <main className="min-h-[70vh]">{children}</main>
           <SiteFooter />
           <CookieConsent />
+          <GoogleConsentSync />
         </CartProvider>
       </body>
     </html>
