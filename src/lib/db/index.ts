@@ -278,6 +278,16 @@ async function migrateDatabase() {
     !shopOrderCols.has("company_name") ? "ALTER TABLE shop_order ADD COLUMN company_name TEXT" : null,
     !shopOrderCols.has("siren") ? "ALTER TABLE shop_order ADD COLUMN siren TEXT" : null,
     !shopOrderCols.has("account_type") ? "ALTER TABLE shop_order ADD COLUMN account_type TEXT" : null,
+    !shopOrderCols.has("handling_days") ? "ALTER TABLE shop_order ADD COLUMN handling_days INTEGER" : null,
+    !shopOrderCols.has("transit_days") ? "ALTER TABLE shop_order ADD COLUMN transit_days INTEGER" : null,
+    !shopOrderCols.has("prepared_at") ? "ALTER TABLE shop_order ADD COLUMN prepared_at INTEGER" : null,
+    !shopOrderCols.has("shipped_at") ? "ALTER TABLE shop_order ADD COLUMN shipped_at INTEGER" : null,
+    !shopOrderCols.has("prep_email_sent_at")
+      ? "ALTER TABLE shop_order ADD COLUMN prep_email_sent_at INTEGER"
+      : null,
+    !shopOrderCols.has("ship_email_sent_at")
+      ? "ALTER TABLE shop_order ADD COLUMN ship_email_sent_at INTEGER"
+      : null,
   ].filter((sql): sql is string => Boolean(sql));
   const proInfo = await client.execute("PRAGMA table_info(pro_access_request)");
   const proCols = new Set(proInfo.rows.map((row) => String(row.name)));

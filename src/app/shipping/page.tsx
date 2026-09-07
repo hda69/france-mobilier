@@ -43,7 +43,9 @@ export default function ShippingPage() {
         <section>
           <h2 className="text-xl font-semibold text-navy">Suivi</h2>
           <p className="mt-3">
-            Un numéro de suivi est communiqué par e-mail après l’expédition.
+            Un e-mail est envoyé à la fin de la préparation (selon le délai annoncé), puis à
+            l’expédition du colis. Un numéro de suivi n’est communiqué que lorsqu’il est disponible
+            auprès du transporteur.
           </p>
         </section>
       </div>

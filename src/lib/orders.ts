@@ -7,6 +7,12 @@ import { productHeroImage } from "@/lib/products/presentation";
 import { findProductById, findProductVariant, variantLineName } from "@/lib/products/repository";
 import { decryptSecret, encryptSecret, provisionCustomerAccount } from "@/lib/provision-account";
 import {
+  buildOrderFulfillment,
+  fulfillmentCustomerLabel,
+  shopDeliveryDays,
+  type OrderFulfillment,
+} from "@/lib/orders/fulfillment";
+import {
   eurosToCents,
   getSiteUrl,
   getStripe,
@@ -63,6 +69,8 @@ export type PublicOrder = {
   companyName: string | null;
   siren: string | null;
   accountType: string | null;
+  fulfillment: OrderFulfillment;
+  fulfillmentLabel: string;
   items: { name: string; quantity: number; unitPriceCents: number }[];
 };
 
@@ -114,6 +122,7 @@ export function orderAccessCookieOptions() {
 }
 
 function toPublic(order: OrderRow, items: ItemRow[]): PublicOrder {
+  const fulfillment = buildOrderFulfillment(order);
   return {
     id: order.id,
     reference: order.reference || order.id.slice(0, 8).toUpperCase(),
@@ -133,6 +142,8 @@ function toPublic(order: OrderRow, items: ItemRow[]): PublicOrder {
     companyName: order.companyName,
     siren: order.siren,
     accountType: order.accountType,
+    fulfillment,
+    fulfillmentLabel: fulfillmentCustomerLabel(fulfillment),
     items: items.map((item) => ({
       name: item.name,
       quantity: item.quantity,
@@ -339,12 +350,15 @@ export async function markOrderPaid(orderId: string, stripeSessionId: string) {
 
   if (order.status !== "paid") {
     const now = new Date();
+    const days = shopDeliveryDays();
     await db
       .update(shopOrder)
       .set({
         status: "paid",
         stripeSessionId,
         paidAt: now,
+        handlingDays: order.handlingDays ?? days.handlingBusinessDays,
+        transitDays: order.transitDays ?? days.transitBusinessDays,
       })
       .where(eq(shopOrder.id, orderId));
   } else if (stripeSessionId && !order.stripeSessionId) {

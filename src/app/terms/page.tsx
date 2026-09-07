@@ -72,9 +72,10 @@ export default function TermsPage() {
           <p className="mt-3">
             {SHIPPING_OFFERED_SENTENCE} Coût : {shipping.shippingCostEur.toFixed(2)} €. Préparation :
             1 semaine ({delivery.handlingMinBusinessDays} jours ouvrés). Acheminement :{" "}
-            {delivery.transitMinBusinessDays} jours ouvrés après expédition. Un suivi est communiqué
-            après l’expédition. Pour la Suisse, des droits ou taxes d’importation peuvent s’appliquer
-            à la réception.
+            {delivery.transitMinBusinessDays} jours ouvrés après expédition. Un e-mail est envoyé à
+            la fin de la préparation, puis à l’expédition. Un numéro de suivi n’est communiqué que
+            lorsqu’il est disponible. Pour la Suisse, des droits ou taxes d’importation peuvent
+            s’appliquer à la réception.
           </p>
         </section>
         <section>

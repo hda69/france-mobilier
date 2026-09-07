@@ -123,6 +123,7 @@ export default async function AdminPage() {
               <tr>
                 <th className="px-5 py-3 font-medium">Commande</th>
                 <th className="px-5 py-3 font-medium">Client</th>
+                <th className="px-5 py-3 font-medium">Suivi</th>
                 <th className="px-5 py-3 font-medium">Total</th>
               </tr>
             </thead>
@@ -146,6 +147,9 @@ export default async function AdminPage() {
                       </p>
                     ) : null}
                     {order.phone ? <p className="text-xs text-muted">{order.phone}</p> : null}
+                  </td>
+                  <td className="px-5 py-3 text-xs leading-relaxed text-muted">
+                    {order.fulfillmentLabel}
                   </td>
                   <td className="px-5 py-3 font-medium">
                     {(order.amountCents / 100).toLocaleString("fr-FR", {

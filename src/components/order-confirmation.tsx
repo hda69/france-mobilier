@@ -8,6 +8,7 @@ import { OrderSummary } from "@/components/order-summary";
 import { CopyTextButton } from "@/components/copy-text-button";
 import { formatPrice } from "@/lib/products/repository";
 import type { PublicOrder } from "@/lib/orders";
+import { buildOrderFulfillment, fulfillmentCustomerLabel } from "@/lib/orders/fulfillment";
 import { SHIPPING_OFFERED_SENTENCE } from "@/lib/shipping-zone";
 
 type CheckoutOrder = {
@@ -24,6 +25,8 @@ type CheckoutOrder = {
   confirmationSent: boolean;
   companyName?: string | null;
   siren?: string | null;
+  fulfillment?: PublicOrder["fulfillment"];
+  fulfillmentLabel?: string;
   items: { name: string; quantity: number; unitPriceCents: number }[];
 };
 
@@ -94,6 +97,12 @@ export function OrderConfirmation() {
         companyName: order.companyName || null,
         siren: order.siren || null,
         accountType: order.companyName ? "pro" : "personal",
+        fulfillment: order.fulfillment ?? buildOrderFulfillment({ paidAt: new Date(), createdAt: new Date() }),
+        fulfillmentLabel:
+          order.fulfillmentLabel ||
+          fulfillmentCustomerLabel(
+            order.fulfillment ?? buildOrderFulfillment({ paidAt: new Date(), createdAt: new Date() }),
+          ),
         items: order.items,
       }
     : null;
@@ -134,8 +143,9 @@ export function OrderConfirmation() {
         </div>
       ) : null}
       <p className="text-sm leading-relaxed text-muted">
-        {SHIPPING_OFFERED_SENTENCE} Un suivi sera communiqué après
-        l’expédition. Retrouvez vos commandes à tout moment dans{" "}
+        {SHIPPING_OFFERED_SENTENCE} Nous vous écrirons à la fin de la préparation, puis à
+        l’expédition. Un numéro de suivi n’est envoyé que lorsqu’il est disponible. Retrouvez vos
+        commandes à tout moment dans{" "}
         <Link href="/compte" className="text-navy underline-offset-2 hover:underline">
           Mon compte
         </Link>

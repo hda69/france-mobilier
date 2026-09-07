@@ -22,6 +22,7 @@ import {
   isCheckoutEnabled,
   stripeMode,
 } from "@/lib/payments/stripe";
+import { buildOrderFulfillment, fulfillmentCustomerLabel } from "@/lib/orders/fulfillment";
 import { normalizeZonePhone } from "@/lib/phone";
 import { getProAccessByUserId, isProApproved } from "@/lib/pro-access";
 import { b2bConfig } from "@/lib/b2b";
@@ -106,6 +107,8 @@ export async function GET(request: Request) {
               confirmationSent: Boolean(order.confirmationSentAt),
               companyName: order.companyName,
               siren: order.siren,
+              fulfillment: buildOrderFulfillment(order),
+              fulfillmentLabel: fulfillmentCustomerLabel(buildOrderFulfillment(order)),
               items: order.items.map((item) => ({
                 name: item.name,
                 quantity: item.quantity,

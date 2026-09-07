@@ -184,6 +184,12 @@ export const shopOrder = sqliteTable("shop_order", {
   companyName: text("company_name"),
   siren: text("siren"),
   accountType: text("account_type"),
+  handlingDays: integer("handling_days"),
+  transitDays: integer("transit_days"),
+  preparedAt: integer("prepared_at", { mode: "timestamp_ms" }),
+  shippedAt: integer("shipped_at", { mode: "timestamp_ms" }),
+  prepEmailSentAt: integer("prep_email_sent_at", { mode: "timestamp_ms" }),
+  shipEmailSentAt: integer("ship_email_sent_at", { mode: "timestamp_ms" }),
   createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
   paidAt: integer("paid_at", { mode: "timestamp_ms" }),
 });

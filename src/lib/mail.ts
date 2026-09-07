@@ -202,7 +202,7 @@ export function buildOrderPaidEmail(order: OrderPaidEmail) {
           "",
         ]
       : []),
-    `${SHIPPING_OFFERED_SENTENCE} Un suivi sera envoyé après l’expédition.`,
+    `${SHIPPING_OFFERED_SENTENCE} Nous vous écrirons à la fin de la préparation, puis à l’expédition du colis.`,
     `SAV : ${store.supportEmail}`,
   ].join("\n");
 
@@ -258,7 +258,7 @@ export function buildOrderPaidEmail(order: OrderPaidEmail) {
         : ""
     }
     ${accountBlock}
-    <p style="margin:22px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.55;color:${MUTED}">${escapeHtml(SHIPPING_OFFERED_SENTENCE)} Un suivi sera envoyé après l’expédition.</p>
+    <p style="margin:22px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.55;color:${MUTED}">${escapeHtml(SHIPPING_OFFERED_SENTENCE)} Nous vous écrirons à la fin de la préparation, puis à l’expédition du colis.</p>
   `;
 
   return {
@@ -411,4 +411,100 @@ export async function sendPasswordResetEmail(input: { email: string; url: string
     `,
   });
   return sendMail({ to: input.email, subject, text, html });
+}
+
+export type OrderLifecycleEmail = {
+  email: string;
+  name: string;
+  reference: string;
+  viewUrl: string;
+  testMode: boolean;
+  handlingBusinessDays: number;
+  transitBusinessDays: number;
+};
+
+function lifecycleKindSubject(order: OrderLifecycleEmail, kind: "prepared" | "shipped") {
+  const title = kind === "prepared" ? "Préparation terminée" : "Colis expédié";
+  return order.testMode
+    ? `${title} (test) ${order.reference} — ${store.storeName}`
+    : `${title} — ${order.reference} — ${store.storeName}`;
+}
+
+export async function sendOrderPreparedEmail(order: OrderLifecycleEmail) {
+  const subject = lifecycleKindSubject(order, "prepared");
+  const intro = order.testMode
+    ? "E-mail de test : la période de préparation affichée sur le site est écoulée."
+    : "La préparation de votre commande est terminée.";
+  const next =
+    "Votre colis va être remis au transporteur. Vous recevrez un second e-mail à l’expédition. " +
+    `L’acheminement est ensuite estimé à ${order.transitBusinessDays} jours ouvrés.`;
+  const text = [
+    `Bonjour ${order.name},`,
+    "",
+    intro,
+    `Référence : ${order.reference}`,
+    next,
+    `Voir la commande : ${order.viewUrl}`,
+    "",
+    `SAV : ${store.supportEmail}`,
+  ].join("\n");
+  const html = layoutCustomerEmail({
+    preheader: `Préparation terminée. Référence ${order.reference}.`,
+    title: subject,
+    body: `
+    ${
+      order.testMode
+        ? `<p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:${NAVY};background:${CREAM};border:1px solid ${BORDER};border-radius:8px;padding:10px 14px">E-mail de test — aucun envoi réel n’est confirmé.</p>`
+        : ""
+    }
+    <p style="margin:0 0 8px;font-family:Georgia,'Times New Roman',serif;font-size:22px;line-height:1.3;color:${NAVY}">Préparation terminée</p>
+    <p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#222">Bonjour ${escapeHtml(order.name)},<br>${escapeHtml(intro)}</p>
+    <p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#222">
+      <strong>Référence ${escapeHtml(order.reference)}</strong><br>
+      Préparation : ${order.handlingBusinessDays} jours ouvrés.
+    </p>
+    <p style="margin:0 0 22px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#222">${escapeHtml(next)}</p>
+    <p style="margin:0">${emailButton(order.viewUrl, "Voir la commande")}</p>
+    `,
+  });
+  return sendMail({ to: order.email, subject, text, html });
+}
+
+export async function sendOrderShippedEmail(order: OrderLifecycleEmail) {
+  const subject = lifecycleKindSubject(order, "shipped");
+  const intro = order.testMode
+    ? "E-mail de test : selon le délai annoncé, le colis est considéré comme expédié."
+    : "Votre colis a été expédié.";
+  const next =
+    `L’acheminement est estimé à ${order.transitBusinessDays} jours ouvrés. ` +
+    "Aucun numéro de suivi n’est encore disponible : nous vous l’enverrons dès que le transporteur le communique.";
+  const text = [
+    `Bonjour ${order.name},`,
+    "",
+    intro,
+    `Référence : ${order.reference}`,
+    next,
+    `Voir la commande : ${order.viewUrl}`,
+    "",
+    `SAV : ${store.supportEmail}`,
+  ].join("\n");
+  const html = layoutCustomerEmail({
+    preheader: `Colis expédié. Référence ${order.reference}.`,
+    title: subject,
+    body: `
+    ${
+      order.testMode
+        ? `<p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:${NAVY};background:${CREAM};border:1px solid ${BORDER};border-radius:8px;padding:10px 14px">E-mail de test — aucun numéro de suivi n’est inventé.</p>`
+        : ""
+    }
+    <p style="margin:0 0 8px;font-family:Georgia,'Times New Roman',serif;font-size:22px;line-height:1.3;color:${NAVY}">Colis expédié</p>
+    <p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#222">Bonjour ${escapeHtml(order.name)},<br>${escapeHtml(intro)}</p>
+    <p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#222">
+      <strong>Référence ${escapeHtml(order.reference)}</strong>
+    </p>
+    <p style="margin:0 0 22px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#222">${escapeHtml(next)}</p>
+    <p style="margin:0">${emailButton(order.viewUrl, "Voir la commande")}</p>
+    `,
+  });
+  return sendMail({ to: order.email, subject, text, html });
 }

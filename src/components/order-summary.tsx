@@ -46,6 +46,9 @@ export function OrderSummary({
         <span>Total TTC</span>
         <span>{formatPrice(order.amountCents / 100)}</span>
       </p>
+      {order.fulfillmentLabel ? (
+        <p className="mt-3 text-sm leading-relaxed text-navy">{order.fulfillmentLabel}.</p>
+      ) : null}
       <p className="mt-3 text-sm leading-relaxed text-muted">
         {order.companyName && order.siren ? (
           <>
