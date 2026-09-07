@@ -43,7 +43,7 @@ export default function PrivacyPage() {
         </ul>
         <p>
           Si vous acceptez les cookies non essentiels, le tag Google Ads (AW-17892406919) mesure
-          les campagnes publicitaires. Sans accord, le tag reste en place mais les cookies
+          les campagnes et l’achat confirmé. Sans accord, le tag reste en place mais les cookies
           publicitaires restent refusés. Vous pouvez modifier votre choix à tout moment.
         </p>
         <p>

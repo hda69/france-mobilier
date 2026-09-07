@@ -612,6 +612,17 @@ export async function getOrderAccessSecrets(orderId: string) {
   return { id: withAccess.id, viewToken: withAccess.viewToken || "" };
 }
 
+export async function isFirstPaidOrderForEmail(email: string) {
+  await ensureDatabase();
+  const normalized = email.trim().toLowerCase();
+  if (!normalized) return false;
+  const rows = await db
+    .select({ id: shopOrder.id })
+    .from(shopOrder)
+    .where(and(eq(shopOrder.email, normalized), eq(shopOrder.status, "paid")));
+  return rows.length <= 1;
+}
+
 export async function listRecentPaidOrders(limit = 40) {
   await ensureDatabase();
   const rows = await db

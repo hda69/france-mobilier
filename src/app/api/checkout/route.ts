@@ -10,6 +10,7 @@ import {
   getAccountInvitePassword,
   getOrderAccessSecrets,
   getOrderById,
+  isFirstPaidOrderForEmail,
   markOrderPaid,
   mergeOrderAccessCookie,
   ORDER_ACCESS_COOKIE,
@@ -83,10 +84,13 @@ export async function GET(request: Request) {
     const order = orderId ? await getOrderById(orderId) : null;
     const secrets = orderId ? await getOrderAccessSecrets(orderId) : null;
     const accountPassword = orderId && paid ? await getAccountInvitePassword(orderId) : null;
+    const newCustomer =
+      paid && order?.email ? await isFirstPaidOrderForEmail(order.email) : false;
     const response = NextResponse.json({
       enabled: true,
       mode: stripeMode(),
       paid,
+      newCustomer,
       email: session.customer_details?.email || session.customer_email,
       amountCents: session.amount_total,
       mailEnabled: isMailConfigured(),

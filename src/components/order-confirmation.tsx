@@ -7,6 +7,7 @@ import { useCart } from "@/components/cart-provider";
 import { OrderSummary } from "@/components/order-summary";
 import { CopyTextButton } from "@/components/copy-text-button";
 import { formatPrice } from "@/lib/products/repository";
+import { trackPurchaseConversion } from "@/lib/ads/gtag";
 import type { PublicOrder } from "@/lib/orders";
 import { buildOrderFulfillment, fulfillmentCustomerLabel } from "@/lib/orders/fulfillment";
 import { SHIPPING_OFFERED_SENTENCE } from "@/lib/shipping-zone";
@@ -57,6 +58,20 @@ export function OrderConfirmation() {
           setConfirmationSent(Boolean(data.order?.confirmationSent));
           setAccountPassword(typeof data.accountPassword === "string" ? data.accountPassword : null);
           clear();
+          const transactionId = String(data.order?.reference || data.order?.id || "").trim();
+          const paidCents =
+            typeof data.order?.amountCents === "number"
+              ? data.order.amountCents
+              : typeof data.amountCents === "number"
+                ? data.amountCents
+                : null;
+          if (data.mode !== "test" && transactionId && paidCents != null) {
+            trackPurchaseConversion({
+              transactionId,
+              valueEur: paidCents / 100,
+              newCustomer: Boolean(data.newCustomer),
+            });
+          }
         } else setState("error");
       })
       .catch(() => setState("error"));
