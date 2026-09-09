@@ -37,7 +37,7 @@ export function ProductCard({ product }: { product: Product }) {
             </div>
           ) : null}
         </div>
-        <div className="space-y-1 pt-3">
+        <div className="space-y-1 px-4 pb-1 pt-3 md:px-5 md:pt-3.5">
           <h3 className="text-sm font-medium leading-snug break-words text-navy md:text-base">{product.name}</h3>
           {meta ? <p className="text-xs text-muted md:text-sm">{meta}</p> : null}
           <ProductPrice product={product} />
