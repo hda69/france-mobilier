@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -19,6 +19,8 @@ export function SiteHeader() {
   const proApproved = useProApproved();
   const [open, setOpen] = useState(false);
   const [compact, setCompact] = useState(false);
+  const [panelTop, setPanelTop] = useState(0);
+  const headerRef = useRef<HTMLElement>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -31,6 +33,41 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    const updatePanelTop = () => {
+      const header = headerRef.current;
+      if (header) setPanelTop(Math.round(header.getBoundingClientRect().bottom));
+    };
+    updatePanelTop();
+    window.addEventListener("resize", updatePanelTop);
+    return () => window.removeEventListener("resize", updatePanelTop);
+  }, [compact, open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const html = document.documentElement;
+    const { overflow: htmlOverflow } = html.style;
+    const { overflow: bodyOverflow } = document.body.style;
+    html.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    const onTouchMove = (event: TouchEvent) => {
+      const panel = document.querySelector(".mobile-nav-panel");
+      if (panel && event.target instanceof Node && panel.contains(event.target)) return;
+      event.preventDefault();
+    };
+    document.addEventListener("touchmove", onTouchMove, { passive: false });
+    return () => {
+      html.style.overflow = htmlOverflow;
+      document.body.style.overflow = bodyOverflow;
+      window.removeEventListener("keydown", onKey);
+      document.removeEventListener("touchmove", onTouchMove);
+    };
+  }, [open]);
+
   function onSearch(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const q = String(new FormData(event.currentTarget).get("q") || "").trim();
@@ -41,7 +78,10 @@ export function SiteHeader() {
   return (
     <>
       <div className="h-[calc(6.125rem+env(safe-area-inset-top))] md:h-[calc(7.25rem+env(safe-area-inset-top))]" aria-hidden />
-      <header className="fixed inset-x-0 top-0 z-40 bg-white/95 pt-[env(safe-area-inset-top)] backdrop-blur-md">
+      <header
+        ref={headerRef}
+        className="fixed inset-x-0 top-0 z-40 bg-white/95 pt-[env(safe-area-inset-top)] backdrop-blur-md"
+      >
         <p className="border-b border-border bg-navy text-center text-[11px] tracking-[0.04em] text-white/90 md:text-xs">
           <span className="container-page flex h-8 items-center justify-center gap-x-3 overflow-hidden whitespace-nowrap">
             <Link href="/shipping" className="inline-flex items-center gap-1.5 hover:text-white">
@@ -180,74 +220,80 @@ export function SiteHeader() {
               </button>
             </div>
           </div>
-          {open && (
-            <div className="border-t border-border bg-white xl:hidden">
-              <div className="container-page space-y-4 py-4">
-                <form onSubmit={onSearch}>
-                  <label className="sr-only" htmlFor="mobile-search">
-                    Rechercher
-                  </label>
-                  <div className="relative">
-                    <IconSearch className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
-                    <input
-                      id="mobile-search"
-                      name="q"
-                      type="search"
-                      placeholder="Rechercher un produit…"
-                      className="input input-with-icon"
-                    />
-                  </div>
-                </form>
-                <nav className="grid gap-1 text-navy">
-                  {navigationGroups.map((item) => (
-                    <div key={item.href}>
-                      <Link
-                        href={item.href}
-                        className="block rounded-lg px-3 py-3 hover:bg-cream"
-                        onClick={() => setOpen(false)}
-                      >
-                        {item.label}
-                      </Link>
-                      {"children" in item && item.children?.length ? (
-                        <div className="mb-1 ml-3 border-l border-border pl-3">
-                          {item.children.map((child) => (
-                            <Link
-                              key={child.href}
-                              href={child.href}
-                              className="block rounded-lg px-3 py-2 text-sm text-muted hover:bg-cream hover:text-navy"
-                              onClick={() => setOpen(false)}
-                            >
-                              {child.label}
-                            </Link>
-                          ))}
-                        </div>
-                      ) : null}
-                    </div>
-                  ))}
-                  <p className="px-3 pt-3 text-xs uppercase tracking-[0.12em] text-muted">Plus</p>
-                  {secondaryNavigation.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className="rounded-lg px-3 py-3 hover:bg-cream"
-                      onClick={() => setOpen(false)}
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-                  <Link
-                    href={session?.user ? "/compte" : "/connexion"}
-                    className="rounded-lg px-3 py-3 hover:bg-cream sm:hidden"
-                    onClick={() => setOpen(false)}
-                  >
-                    {session?.user ? "Compte" : "Connexion"}
-                  </Link>
-                </nav>
-              </div>
-            </div>
-          )}
         </div>
       </header>
+      {open ? (
+        <div
+          className="mobile-nav-panel fixed inset-x-0 bottom-0 z-40 border-t border-border bg-white xl:hidden"
+          style={{ top: panelTop || "6.125rem" }}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menu"
+        >
+          <div className="container-page space-y-4 py-4 pb-[calc(1.25rem+env(safe-area-inset-bottom))]">
+            <form onSubmit={onSearch}>
+              <label className="sr-only" htmlFor="mobile-search">
+                Rechercher
+              </label>
+              <div className="relative">
+                <IconSearch className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+                <input
+                  id="mobile-search"
+                  name="q"
+                  type="search"
+                  placeholder="Rechercher un produit…"
+                  className="input input-with-icon"
+                />
+              </div>
+            </form>
+            <nav className="grid gap-1 text-navy">
+              {navigationGroups.map((item) => (
+                <div key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="block rounded-lg px-3 py-3 hover:bg-cream"
+                    onClick={() => setOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                  {"children" in item && item.children?.length ? (
+                    <div className="mb-1 ml-3 border-l border-border pl-3">
+                      {item.children.map((child) => (
+                        <Link
+                          key={child.href}
+                          href={child.href}
+                          className="block rounded-lg px-3 py-2 text-sm text-muted hover:bg-cream hover:text-navy"
+                          onClick={() => setOpen(false)}
+                        >
+                          {child.label}
+                        </Link>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              ))}
+              <p className="px-3 pt-3 text-xs uppercase tracking-[0.12em] text-muted">Plus</p>
+              {secondaryNavigation.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="rounded-lg px-3 py-3 hover:bg-cream"
+                  onClick={() => setOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <Link
+                href={session?.user ? "/compte" : "/connexion"}
+                className="rounded-lg px-3 py-3 hover:bg-cream sm:hidden"
+                onClick={() => setOpen(false)}
+              >
+                {session?.user ? "Compte" : "Connexion"}
+              </Link>
+            </nav>
+          </div>
+        </div>
+      ) : null}
     </>
   );
 }

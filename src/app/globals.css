@@ -358,6 +358,13 @@ textarea.input {
   }
 }
 
+.mobile-nav-panel {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+}
+
 .cookie-banner {
   position: fixed;
   z-index: 50;
