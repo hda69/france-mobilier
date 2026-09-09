@@ -50,19 +50,46 @@ export default function CartPage() {
                   </Link>
                   <p className="text-sm text-muted">{formatPrice(item.price)}</p>
                   <div className="flex flex-wrap items-center gap-3">
-                    <label className="flex items-center gap-2 text-sm text-muted">
-                      Qté
-                      <input
-                        type="number"
-                        min={1}
-                        inputMode="numeric"
-                        value={item.quantity}
-                        onChange={(e) =>
-                          setQuantity(item.productId, Number(e.target.value), item.variantId)
-                        }
-                        className="input w-16 min-h-11 px-2 py-2 text-center"
-                      />
-                    </label>
+                    <div className="flex items-center gap-2 text-sm text-muted">
+                      <span>Qté</span>
+                      <div className="flex items-center overflow-hidden rounded-lg border border-border">
+                        <button
+                          type="button"
+                          className="flex h-11 w-11 items-center justify-center text-lg disabled:opacity-40"
+                          aria-label="Diminuer la quantité"
+                          disabled={item.quantity <= 1}
+                          onClick={() =>
+                            setQuantity(item.productId, item.quantity - 1, item.variantId)
+                          }
+                        >
+                          −
+                        </button>
+                        <input
+                          type="text"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          aria-label="Quantité"
+                          value={item.quantity}
+                          onChange={(e) => {
+                            const digits = e.target.value.replace(/\D/g, "");
+                            if (!digits) return;
+                            setQuantity(item.productId, Number(digits), item.variantId);
+                          }}
+                          className="h-11 w-12 border-x border-border bg-transparent text-center text-foreground outline-none"
+                        />
+                        <button
+                          type="button"
+                          className="flex h-11 w-11 items-center justify-center text-lg disabled:opacity-40"
+                          aria-label="Augmenter la quantité"
+                          disabled={item.quantity >= 20}
+                          onClick={() =>
+                            setQuantity(item.productId, item.quantity + 1, item.variantId)
+                          }
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
                     <button
                       type="button"
                       className="min-h-11 px-1 text-sm text-muted underline"

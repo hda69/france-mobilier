@@ -90,13 +90,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const setQuantity = useCallback((productId: string, quantity: number, variantId?: string | null) => {
+    const next = Math.floor(quantity);
+    if (!Number.isFinite(next) || next < 1) return;
+    const clamped = Math.min(20, next);
     const key = cartLineKey(productId, variantId);
     setItems((current) =>
-      current
-        .map((row) =>
-          cartLineKey(row.productId, row.variantId) === key ? { ...row, quantity } : row,
-        )
-        .filter((row) => row.quantity > 0),
+      current.map((row) =>
+        cartLineKey(row.productId, row.variantId) === key ? { ...row, quantity: clamped } : row,
+      ),
     );
   }, []);
 
