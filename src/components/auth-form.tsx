@@ -1,10 +1,21 @@
 "use client";
 
-import { FormEvent, Suspense, useState } from "react";
+import { FormEvent, Suspense, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { PasswordInput } from "@/components/password-input";
+
+const EMAIL_DOMAINS = [
+  "gmail.com",
+  "orange.fr",
+  "hotmail.fr",
+  "outlook.fr",
+  "yahoo.fr",
+  "free.fr",
+  "sfr.fr",
+  "icloud.com",
+] as const;
 
 type Mode = "login" | "register";
 
@@ -41,6 +52,20 @@ function AuthFormFields({ mode }: { mode: Mode }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const emailRef = useRef<HTMLInputElement>(null);
+
+  function applyEmailDomain(domain: string) {
+    const local = email.split("@")[0].trim();
+    const next = local ? `${local}@${domain}` : `@${domain}`;
+    setEmail(next);
+    requestAnimationFrame(() => {
+      const input = emailRef.current;
+      if (!input) return;
+      input.focus();
+      const caret = local ? next.length : 0;
+      input.setSelectionRange(caret, caret);
+    });
+  }
 
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
@@ -99,6 +124,7 @@ function AuthFormFields({ mode }: { mode: Mode }) {
       <label className="block text-sm">
         <span className="mb-1 block text-muted">E-mail</span>
         <input
+          ref={emailRef}
           required
           type="email"
           autoComplete="email"
@@ -107,6 +133,28 @@ function AuthFormFields({ mode }: { mode: Mode }) {
           className="input"
         />
       </label>
+      {mode === "register" ? (
+        <div className="-mt-2 flex flex-wrap gap-1.5" role="group" aria-label="Domaines e-mail courants">
+          {EMAIL_DOMAINS.map((domain) => {
+            const selected = email.toLowerCase().endsWith(`@${domain}`);
+            return (
+              <button
+                key={domain}
+                type="button"
+                onClick={() => applyEmailDomain(domain)}
+                aria-pressed={selected}
+                className={`rounded-full border px-2.5 py-1 text-xs ${
+                  selected
+                    ? "border-navy bg-cream text-navy"
+                    : "border-border text-muted hover:border-navy hover:text-navy"
+                }`}
+              >
+                @{domain}
+              </button>
+            );
+          })}
+        </div>
+      ) : null}
       <label className="block text-sm">
         <span className="mb-1 block text-muted">Mot de passe</span>
         <PasswordInput
