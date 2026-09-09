@@ -20,7 +20,7 @@ function currentFromPath(pathname: string) {
   return "apercu";
 }
 
-export function AccountNav() {
+export function AccountNav({ isAdmin = false }: { isAdmin?: boolean }) {
   const pathname = usePathname() || "/compte";
   const current = currentFromPath(pathname);
   const { data: session, isPending } = authClient.useSession();
@@ -28,9 +28,12 @@ export function AccountNav() {
 
   if (!session?.user && !isPending) return null;
 
-  const links = proApproved
-    ? allLinks
-    : allLinks.filter((link) => link.key === "apercu" || link.key === "entreprise");
+  const links = [
+    ...(proApproved
+      ? allLinks
+      : allLinks.filter((link) => link.key === "apercu" || link.key === "entreprise")),
+    ...(isAdmin ? [{ href: "/admin/activite", label: "Activité boutique", key: "admin" as const }] : []),
+  ];
 
   return (
     <nav className="flex flex-nowrap gap-2 overflow-x-auto pb-0.5" aria-label="Mon espace">
