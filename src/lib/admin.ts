@@ -18,9 +18,21 @@ export function isAdminEmail(email?: string | null) {
   return listAdminEmails().includes(email.trim().toLowerCase());
 }
 
+/** Funnel stats (paniers, vues, paiements) — reserved to the store owner. */
+export function isActivityAdminEmail(email?: string | null) {
+  return email?.trim().toLowerCase() === "hugo.rusu@gmail.com";
+}
+
 export async function getAdminSession() {
   await prepareAuth();
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user || !isAdminEmail(session.user.email)) return null;
+  return session;
+}
+
+export async function getActivityAdminSession() {
+  await prepareAuth();
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session?.user || !isActivityAdminEmail(session.user.email)) return null;
   return session;
 }

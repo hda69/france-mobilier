@@ -2,14 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import type { ActivityEvent } from "@/lib/activity";
-
-type Summary = {
-  addToCart: number;
-  purchases: number;
-  revenueCents: number;
-  windowHours: number;
-};
+import type { ActivityEvent, ActivitySummary } from "@/lib/activity";
 
 function formatWhen(value: string | Date) {
   const date = value instanceof Date ? value : new Date(value);
@@ -20,14 +13,53 @@ function formatWhen(value: string | Date) {
   }).format(date);
 }
 
+function formatDay(value: string | Date | null) {
+  if (!value) return null;
+  const date = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(date.getTime())) return null;
+  return new Intl.DateTimeFormat("fr-FR", {
+    dateStyle: "long",
+    timeZone: "Europe/Paris",
+  }).format(date);
+}
+
 function formatMoney(cents: number | null) {
   if (cents == null) return "—";
   return new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }).format(cents / 100);
 }
 
+function actionLabel(type: ActivityEvent["type"]) {
+  if (type === "purchase") return "Achat";
+  if (type === "begin_checkout") return "Paiement";
+  if (type === "product_view") return "Vue";
+  return "Panier";
+}
+
+function StatCard({
+  label,
+  total,
+  last24h,
+  money = false,
+}: {
+  label: string;
+  total: number;
+  last24h: number;
+  money?: boolean;
+}) {
+  return (
+    <div className="rounded-2xl border border-border bg-card p-5">
+      <p className="text-sm text-muted">{label}</p>
+      <p className="mt-1 text-3xl font-semibold">{money ? formatMoney(total) : total}</p>
+      <p className="mt-1 text-xs text-muted">
+        dont {money ? formatMoney(last24h) : last24h} sur 24 h
+      </p>
+    </div>
+  );
+}
+
 export function AdminActivityLive() {
   const [events, setEvents] = useState<ActivityEvent[]>([]);
-  const [summary, setSummary] = useState<Summary | null>(null);
+  const [summary, setSummary] = useState<ActivitySummary | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [updatedAt, setUpdatedAt] = useState<Date | null>(null);
 
@@ -55,23 +87,45 @@ export function AdminActivityLive() {
     };
   }, []);
 
+  const since = formatDay(summary?.trackedSince ?? null);
+
   return (
     <div className="space-y-6">
       {summary ? (
-        <div className="grid gap-4 sm:grid-cols-3">
-          <div className="rounded-2xl border border-border bg-card p-5">
-            <p className="text-sm text-muted">Ajouts au panier · 24 h</p>
-            <p className="mt-1 text-3xl font-semibold">{summary.addToCart}</p>
+        <>
+          <p className="text-sm text-muted">
+            Totaux depuis {since ?? "le début du suivi"} — pas seulement les dernières 24 heures.
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <StatCard label="Vues produit" total={summary.productViews} last24h={summary.last24h.productViews} />
+            <StatCard label="Ajouts au panier" total={summary.addToCart} last24h={summary.last24h.addToCart} />
+            <StatCard
+              label="Débuts de paiement"
+              total={summary.beginCheckout}
+              last24h={summary.last24h.beginCheckout}
+            />
+            <StatCard label="Achats payés" total={summary.purchases} last24h={summary.last24h.purchases} />
+            <StatCard
+              label="CA payé"
+              total={summary.revenueCents}
+              last24h={summary.last24h.revenueCents}
+              money
+            />
           </div>
-          <div className="rounded-2xl border border-border bg-card p-5">
-            <p className="text-sm text-muted">Achats · 24 h</p>
-            <p className="mt-1 text-3xl font-semibold">{summary.purchases}</p>
-          </div>
-          <div className="rounded-2xl border border-border bg-card p-5">
-            <p className="text-sm text-muted">CA payé · 24 h</p>
-            <p className="mt-1 text-3xl font-semibold">{formatMoney(summary.revenueCents)}</p>
-          </div>
-        </div>
+          {summary.topViewed.length > 0 ? (
+            <div className="overflow-hidden rounded-2xl border border-border bg-card">
+              <p className="border-b border-border px-4 py-3 text-sm font-medium">Produits les plus vus</p>
+              <ul className="divide-y divide-border text-sm">
+                {summary.topViewed.map((row) => (
+                  <li key={`${row.productId}-${row.productName}`} className="flex justify-between gap-4 px-4 py-3">
+                    <span>{row.productName}</span>
+                    <span className="shrink-0 font-medium">{row.views}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+        </>
       ) : null}
 
       <p className="text-xs text-muted">
@@ -95,7 +149,7 @@ export function AdminActivityLive() {
             {events.length === 0 ? (
               <tr>
                 <td colSpan={4} className="px-4 py-6 text-muted">
-                  Aucune activité pour le moment. Les ajouts au panier et les paiements apparaissent ici.
+                  Aucune activité pour le moment. Les paniers, débuts de paiement et achats apparaissent ici.
                 </td>
               </tr>
             ) : (
@@ -104,9 +158,7 @@ export function AdminActivityLive() {
                   <td className="whitespace-nowrap px-4 py-3 text-xs text-muted">
                     {formatWhen(event.createdAt)}
                   </td>
-                  <td className="px-4 py-3 font-medium">
-                    {event.type === "purchase" ? "Achat" : "Panier"}
-                  </td>
+                  <td className="px-4 py-3 font-medium">{actionLabel(event.type)}</td>
                   <td className="px-4 py-3">
                     <p>{event.productName || "—"}</p>
                     <p className="text-xs text-muted">
@@ -117,7 +169,7 @@ export function AdminActivityLive() {
                       ) : event.quantity ? (
                         `× ${event.quantity}`
                       ) : null}
-                      {event.email ? ` · ${event.email}` : " · visiteur"}
+                      {event.email ? ` · ${event.email}` : event.type === "purchase" ? "" : " · visiteur"}
                     </p>
                   </td>
                   <td className="px-4 py-3 font-medium">{formatMoney(event.amountCents)}</td>

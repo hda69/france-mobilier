@@ -276,6 +276,7 @@ async function migrateDatabase() {
         created_at INTEGER NOT NULL
       )`,
       `CREATE INDEX IF NOT EXISTS idx_shop_activity_created ON shop_activity(created_at)`,
+      `CREATE INDEX IF NOT EXISTS idx_shop_activity_type ON shop_activity(type)`,
     ],
     "write",
   ));

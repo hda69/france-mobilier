@@ -76,3 +76,27 @@ export function trackAddToCart(input: {
     ],
   });
 }
+
+export function trackViewItem(input: { productId: string; productName: string; priceEur: number }) {
+  if (typeof window === "undefined" || typeof window.gtag !== "function") return;
+  window.gtag("event", "view_item", {
+    currency: "EUR",
+    value: Math.round(input.priceEur * 100) / 100,
+    items: [
+      {
+        item_id: input.productId,
+        item_name: input.productName,
+        price: Math.round(input.priceEur * 100) / 100,
+      },
+    ],
+  });
+}
+
+export function trackBeginCheckout(input: { valueEur: number; itemCount: number }) {
+  if (typeof window === "undefined" || typeof window.gtag !== "function") return;
+  window.gtag("event", "begin_checkout", {
+    currency: "EUR",
+    value: Math.round(input.valueEur * 100) / 100,
+    items: [{ quantity: input.itemCount }],
+  });
+}

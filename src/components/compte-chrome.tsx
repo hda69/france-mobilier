@@ -13,13 +13,10 @@ export function CompteChrome({ children, isAdmin = false }: { children: ReactNod
     <div className="container-page space-y-8 py-14">
       <AccountNav isAdmin={isAdmin} />
       {isAdmin && onDashboard ? (
-        <Link
-          href="/admin/activite"
-          className="block rounded-2xl border border-navy/20 bg-white p-5 transition hover:border-navy"
-        >
+        <Link href="/admin/activite" className="block rounded-2xl border border-navy/20 bg-white p-5 transition hover:border-navy">
           <p className="text-sm font-medium text-navy">Activité boutique</p>
           <p className="mt-1 text-sm text-muted">
-            Ajouts au panier et achats, en temps réel.
+            Vues produit, ajouts au panier et débuts de paiement, depuis le début.
           </p>
         </Link>
       ) : null}

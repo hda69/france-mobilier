@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { AdminReviews } from "@/components/admin-reviews";
 import { collections } from "@/config/store";
-import { getAdminSession, listAdminEmails } from "@/lib/admin";
+import { getActivityAdminSession, getAdminSession, listAdminEmails } from "@/lib/admin";
 import { countContactMessages } from "@/lib/contact";
 import { listProducts } from "@/lib/products/repository";
 import { getIntegrationStatuses } from "@/lib/providers/manual/provider";
@@ -20,6 +20,7 @@ export default async function AdminPage() {
   const products = listProducts();
   const statuses = getIntegrationStatuses();
   const admin = await getAdminSession();
+  const activityAdmin = await getActivityAdminSession();
   const [alertCount, contactCount, proCount, pendingReviews, alertsByProduct, reviews, recentOrders] =
     await Promise.all([
       countStockAlerts(),
@@ -68,14 +69,16 @@ export default async function AdminPage() {
           <p className="text-sm text-muted">Dernières commandes</p>
           <p className="mt-1 text-3xl font-semibold">{recentOrders.length}</p>
         </div>
-        <Link
-          href="/admin/activite"
-          className="rounded-2xl border border-border bg-card p-5 transition hover:border-navy"
-        >
-          <p className="text-sm text-muted">Paniers et achats</p>
-          <p className="mt-1 text-lg font-semibold text-navy">Activité en direct</p>
-          <p className="mt-1 text-xs text-muted">Suivi temps réel des ajouts au panier et des paiements</p>
-        </Link>
+        {activityAdmin ? (
+          <Link
+            href="/admin/activite"
+            className="rounded-2xl border border-border bg-card p-5 transition hover:border-navy"
+          >
+            <p className="text-sm text-muted">Depuis le début</p>
+            <p className="mt-1 text-lg font-semibold text-navy">Activité boutique</p>
+            <p className="mt-1 text-xs text-muted">Vues, paniers, débuts de paiement et achats</p>
+          </Link>
+        ) : null}
       </div>
 
       <div className="mt-8 overflow-hidden rounded-2xl border border-border bg-card">
@@ -173,10 +176,14 @@ export default async function AdminPage() {
       ) : null}
 
       <p className="mt-6 text-sm">
-        <Link href="/admin/activite" className="text-navy underline-offset-2 hover:underline">
-          Activité en direct (paniers et achats)
-        </Link>
-        {" · "}
+        {activityAdmin ? (
+          <>
+            <Link href="/admin/activite" className="text-navy underline-offset-2 hover:underline">
+              Activité boutique
+            </Link>
+            {" · "}
+          </>
+        ) : null}
         <Link href="/admin/professionnels" className="text-navy underline-offset-2 hover:underline">
           Professionnels
         </Link>

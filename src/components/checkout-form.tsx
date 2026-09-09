@@ -1,10 +1,12 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useCart } from "@/components/cart-provider";
 import { authClient } from "@/lib/auth-client";
 import { formatPrice } from "@/lib/products/repository";
+import { reportShopActivity } from "@/lib/activity-client";
+import { trackBeginCheckout } from "@/lib/ads/gtag";
 import {
   SHIPPING_COUNTRIES,
   SHIPPING_OFFERED_SENTENCE,
@@ -19,6 +21,7 @@ export function CheckoutForm() {
   const [loading, setLoading] = useState(false);
   const [country, setCountry] = useState<ShippingCountryCode>("FR");
   const [pro, setPro] = useState<{ companyName: string; siren: string } | null>(null);
+  const beginCheckoutSent = useRef(false);
   const hints = useMemo(() => shippingFieldHints(country), [country]);
 
   useEffect(() => {
@@ -38,6 +41,27 @@ export function CheckoutForm() {
       })
       .catch(() => {});
   }, [session?.user]);
+
+  useEffect(() => {
+    if (!ready || itemCount === 0 || beginCheckoutSent.current) return;
+    try {
+      if (sessionStorage.getItem("fm-begin-checkout")) return;
+      sessionStorage.setItem("fm-begin-checkout", "1");
+    } catch {
+      /* private mode */
+    }
+    beginCheckoutSent.current = true;
+    reportShopActivity({
+      type: "begin_checkout",
+      productName: items
+        .map((item) => `${item.name} × ${item.quantity}`)
+        .join(", ")
+        .slice(0, 240),
+      quantity: itemCount,
+      priceEur: subtotal,
+    });
+    trackBeginCheckout({ valueEur: subtotal, itemCount });
+  }, [ready, itemCount, items, subtotal]);
 
   if (!ready) {
     return <div className="min-h-48" />;

@@ -8,6 +8,7 @@ import { ProductHighlights } from "@/components/product-highlights";
 import { ProductMedia } from "@/components/product-media";
 import { ProductRecommendations } from "@/components/product-recommendations";
 import { ProductReviews } from "@/components/product-reviews";
+import { ProductViewTracker } from "@/components/product-view-tracker";
 import { ProductShippingReturns } from "@/components/product-shipping-returns";
 import { ProductSpecifications } from "@/components/product-specifications";
 import { store } from "@/config/store";
@@ -147,6 +148,11 @@ export default async function ProductPage({ params, searchParams }: Props) {
 
   return (
     <div className="min-w-0 max-w-full overflow-x-hidden bg-white pb-[calc(5.75rem+env(safe-area-inset-bottom))] md:pb-0">
+      <ProductViewTracker
+        productId={product.id}
+        productName={product.name}
+        priceEur={getPublicPrice(product).amount}
+      />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
 

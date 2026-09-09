@@ -1,9 +1,9 @@
-import { and, desc, eq, gte } from "drizzle-orm";
+import { and, count, desc, eq, gte, inArray, min, sum } from "drizzle-orm";
 import { db, ensureDatabase } from "@/lib/db";
 import { shopActivity } from "@/lib/db/schema";
 import { eurosToCents } from "@/lib/payments/stripe";
 
-export type ActivityType = "add_to_cart" | "purchase";
+export type ActivityType = "product_view" | "add_to_cart" | "begin_checkout" | "purchase";
 
 export type ActivityEvent = {
   id: string;
@@ -20,10 +20,33 @@ export type ActivityEvent = {
   createdAt: Date;
 };
 
+export type ActivityCounts = {
+  productViews: number;
+  addToCart: number;
+  beginCheckout: number;
+  purchases: number;
+  revenueCents: number;
+};
+
+export type ActivitySummary = ActivityCounts & {
+  last24h: ActivityCounts;
+  trackedSince: Date | null;
+  topViewed: { productId: string | null; productName: string; views: number }[];
+};
+
+const FEED_TYPES: ActivityType[] = ["add_to_cart", "begin_checkout", "purchase"];
+
+function parseType(value: string): ActivityType {
+  if (value === "purchase") return "purchase";
+  if (value === "begin_checkout") return "begin_checkout";
+  if (value === "product_view") return "product_view";
+  return "add_to_cart";
+}
+
 function toEvent(row: typeof shopActivity.$inferSelect): ActivityEvent {
   return {
     id: row.id,
-    type: row.type === "purchase" ? "purchase" : "add_to_cart",
+    type: parseType(row.type),
     productId: row.productId,
     productName: row.productName,
     quantity: row.quantity,
@@ -35,6 +58,50 @@ function toEvent(row: typeof shopActivity.$inferSelect): ActivityEvent {
     variantId: row.variantId,
     createdAt: row.createdAt,
   };
+}
+
+function emptyCounts(): ActivityCounts {
+  return { productViews: 0, addToCart: 0, beginCheckout: 0, purchases: 0, revenueCents: 0 };
+}
+
+function foldCounts(
+  rows: { type: string; n: number }[],
+  revenueCents: number,
+): ActivityCounts {
+  const counts = emptyCounts();
+  counts.revenueCents = revenueCents;
+  for (const row of rows) {
+    const n = Number(row.n) || 0;
+    if (row.type === "product_view") counts.productViews += n;
+    else if (row.type === "add_to_cart") counts.addToCart += n;
+    else if (row.type === "begin_checkout") counts.beginCheckout += n;
+    else if (row.type === "purchase") counts.purchases += n;
+  }
+  return counts;
+}
+
+async function countByType(since?: Date) {
+  const rows = since
+    ? await db
+        .select({ type: shopActivity.type, n: count() })
+        .from(shopActivity)
+        .where(gte(shopActivity.createdAt, since))
+        .groupBy(shopActivity.type)
+    : await db.select({ type: shopActivity.type, n: count() }).from(shopActivity).groupBy(shopActivity.type);
+  return rows.map((row) => ({ type: row.type, n: Number(row.n) || 0 }));
+}
+
+async function revenueSince(since?: Date) {
+  const rows = since
+    ? await db
+        .select({ total: sum(shopActivity.amountCents) })
+        .from(shopActivity)
+        .where(and(eq(shopActivity.type, "purchase"), gte(shopActivity.createdAt, since)))
+    : await db
+        .select({ total: sum(shopActivity.amountCents) })
+        .from(shopActivity)
+        .where(eq(shopActivity.type, "purchase"));
+  return Number(rows[0]?.total ?? 0) || 0;
 }
 
 export async function recordAddToCart(input: {
@@ -59,6 +126,52 @@ export async function recordAddToCart(input: {
     orderId: null,
     orderReference: null,
     variantId: input.variantId?.trim() || null,
+    createdAt: new Date(),
+  });
+}
+
+export async function recordProductView(input: {
+  productId: string;
+  productName: string;
+  priceEur?: number;
+}) {
+  await ensureDatabase();
+  await db.insert(shopActivity).values({
+    id: crypto.randomUUID(),
+    type: "product_view",
+    productId: input.productId.slice(0, 80),
+    productName: input.productName.trim().slice(0, 180) || "Produit",
+    quantity: 1,
+    amountCents: input.priceEur != null ? eurosToCents(input.priceEur) : null,
+    currency: "eur",
+    email: null,
+    orderId: null,
+    orderReference: null,
+    variantId: null,
+    createdAt: new Date(),
+  });
+}
+
+export async function recordBeginCheckout(input: {
+  productName: string;
+  quantity: number;
+  priceEur: number;
+  email?: string | null;
+}) {
+  await ensureDatabase();
+  const quantity = Math.max(1, Math.min(200, Math.floor(input.quantity) || 1));
+  await db.insert(shopActivity).values({
+    id: crypto.randomUUID(),
+    type: "begin_checkout",
+    productId: null,
+    productName: input.productName.trim().slice(0, 240) || "Panier",
+    quantity,
+    amountCents: eurosToCents(input.priceEur),
+    currency: "eur",
+    email: input.email?.trim().toLowerCase() || null,
+    orderId: null,
+    orderReference: null,
+    variantId: null,
     createdAt: new Date(),
   });
 }
@@ -98,25 +211,43 @@ export async function listRecentActivity(limit = 80): Promise<ActivityEvent[]> {
   const rows = await db
     .select()
     .from(shopActivity)
+    .where(inArray(shopActivity.type, FEED_TYPES))
     .orderBy(desc(shopActivity.createdAt))
     .limit(Math.min(200, Math.max(1, limit)));
   return rows.map(toEvent);
 }
 
-export async function activitySummary() {
+export async function activitySummary(): Promise<ActivitySummary> {
   await ensureDatabase();
-  const since = new Date(Date.now() - 24 * 60 * 60 * 1000);
-  const rows = await db.select().from(shopActivity).where(gte(shopActivity.createdAt, since));
-  let addToCart = 0;
-  let purchases = 0;
-  let revenueCents = 0;
-  for (const row of rows) {
-    if (row.type === "purchase") {
-      purchases += 1;
-      revenueCents += row.amountCents ?? 0;
-    } else {
-      addToCart += 1;
-    }
-  }
-  return { addToCart, purchases, revenueCents, windowHours: 24 };
+  const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  const [allRows, dayRows, allRevenue, dayRevenue, firstRows, topRows] = await Promise.all([
+    countByType(),
+    countByType(dayAgo),
+    revenueSince(),
+    revenueSince(dayAgo),
+    db.select({ first: min(shopActivity.createdAt) }).from(shopActivity),
+    db
+      .select({
+        productId: shopActivity.productId,
+        productName: shopActivity.productName,
+        views: count(),
+      })
+      .from(shopActivity)
+      .where(eq(shopActivity.type, "product_view"))
+      .groupBy(shopActivity.productId, shopActivity.productName)
+      .orderBy(desc(count()))
+      .limit(8),
+  ]);
+
+  const first = firstRows[0]?.first ?? null;
+  return {
+    ...foldCounts(allRows, allRevenue),
+    last24h: foldCounts(dayRows, dayRevenue),
+    trackedSince: first instanceof Date ? first : first ? new Date(first) : null,
+    topViewed: topRows.map((row) => ({
+      productId: row.productId,
+      productName: row.productName || "Produit",
+      views: Number(row.views) || 0,
+    })),
+  };
 }
