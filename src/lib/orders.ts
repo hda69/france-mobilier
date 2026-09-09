@@ -388,6 +388,19 @@ export async function markOrderPaid(orderId: string, stripeSessionId: string) {
     console.error("[orders] invoice generation failed", error);
   }
   await sendOrderConfirmationIfNeeded(orderId, temporaryPassword);
+  try {
+    const { recordPurchase } = await import("@/lib/activity");
+    const items = await db.select().from(shopOrderItem).where(eq(shopOrderItem.orderId, orderId));
+    await recordPurchase({
+      orderId,
+      orderReference: paid.reference || paid.id.slice(0, 8).toUpperCase(),
+      email: paid.email,
+      amountCents: paid.amountCents,
+      productName: items.map((item) => `${item.name} × ${item.quantity}`).join(", ") || "Commande",
+    });
+  } catch (error) {
+    console.error("[orders] activity purchase failed", error);
+  }
   const updated = await db.select().from(shopOrder).where(eq(shopOrder.id, orderId)).limit(1);
   return updated[0] ?? order;
 }

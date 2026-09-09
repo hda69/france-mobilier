@@ -4,7 +4,7 @@ import type { Product } from "@/lib/types/commerce";
 import { ProductPrice, isOnSale } from "@/components/product-price";
 import { productHeroImage } from "@/lib/products/presentation";
 import { availabilityLabel } from "@/lib/products/repository";
-import { cardDeliveryLabel, isLowDepth, isSellable, productCardMeta } from "@/lib/products/merchandising";
+import { cardDeliveryLines, isLowDepth, isSellable, productCardMeta } from "@/lib/products/merchandising";
 
 export function ProductCard({ product }: { product: Product }) {
   const badges: string[] = [];
@@ -14,12 +14,12 @@ export function ProductCard({ product }: { product: Product }) {
     badges.push(availabilityLabel(product.availabilityStatus));
   }
   const meta = productCardMeta(product);
-  const delivery = cardDeliveryLabel(product);
+  const deliveryLines = cardDeliveryLines(product);
 
   return (
-    <article className="group flex flex-col bg-white">
-      <Link href={`/products/${product.slug}`} className="block">
-        <div className="relative aspect-square overflow-hidden rounded-[var(--radius)] bg-cream">
+    <article className="group flex h-full min-w-0 flex-col rounded-[var(--radius)] bg-white">
+      <Link href={`/products/${product.slug}`} className="flex h-full min-w-0 flex-col">
+        <div className="relative aspect-square overflow-hidden rounded-t-[var(--radius)] bg-cream">
           <Image
             src={productHeroImage(product)}
             alt={product.name}
@@ -37,12 +37,24 @@ export function ProductCard({ product }: { product: Product }) {
             </div>
           ) : null}
         </div>
-        <div className="space-y-1 px-4 pb-1 pt-3 md:px-5 md:pt-3.5">
-          <h3 className="text-sm font-medium leading-snug break-words text-navy md:text-base">{product.name}</h3>
-          {meta ? <p className="text-xs text-muted md:text-sm">{meta}</p> : null}
+        <div className="flex min-w-0 flex-1 flex-col gap-2 px-8 py-5 md:py-6">
+          <h3 className="text-pretty text-sm font-medium leading-snug break-words text-navy md:text-base">
+            {product.name}
+          </h3>
+          {meta ? (
+            <p className="text-pretty text-xs leading-relaxed break-words text-muted md:text-sm">{meta}</p>
+          ) : null}
           <ProductPrice product={product} />
-          <p className="text-xs text-muted">Livraison offerte</p>
-          {delivery ? <p className="text-xs text-muted">{delivery}</p> : null}
+          <p className="text-xs leading-relaxed text-muted">Livraison offerte</p>
+          {deliveryLines.length > 0 ? (
+            <div className="space-y-0.5">
+              {deliveryLines.map((line) => (
+                <p key={line} className="text-pretty text-xs leading-relaxed break-words text-muted">
+                  {line}
+                </p>
+              ))}
+            </div>
+          ) : null}
         </div>
       </Link>
     </article>

@@ -230,3 +230,18 @@ export const proInvoice = sqliteTable("pro_invoice", {
   issuedAt: integer("issued_at", { mode: "timestamp_ms" }).notNull(),
   createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
 });
+
+export const shopActivity = sqliteTable("shop_activity", {
+  id: text("id").primaryKey(),
+  type: text("type").notNull(),
+  productId: text("product_id"),
+  productName: text("product_name"),
+  quantity: integer("quantity"),
+  amountCents: integer("amount_cents"),
+  currency: text("currency").notNull().default("eur"),
+  email: text("email"),
+  orderId: text("order_id"),
+  orderReference: text("order_reference"),
+  variantId: text("variant_id"),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
+});

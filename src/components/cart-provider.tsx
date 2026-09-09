@@ -12,6 +12,7 @@ import {
 } from "react";
 import type { CartItem } from "@/lib/types/commerce";
 import { cartLineKey } from "@/lib/products/repository";
+import { trackAddToCart } from "@/lib/ads/gtag";
 
 type CartContextValue = {
   items: CartItem[];
@@ -65,6 +66,26 @@ export function CartProvider({ children }: { children: ReactNode }) {
         );
       }
       return [...current, { ...item, quantity }];
+    });
+    void fetch("/api/activity", {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        productId: item.productId,
+        productName: item.name,
+        quantity,
+        priceEur: item.price,
+        variantId: item.variantId ?? null,
+      }),
+    }).catch(() => {
+      /* tracking must not block the cart */
+    });
+    trackAddToCart({
+      productId: item.productId,
+      productName: item.name,
+      priceEur: item.price,
+      quantity,
     });
   }, []);
 

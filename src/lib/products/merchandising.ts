@@ -1,5 +1,5 @@
 import { catalogFlags } from "@/lib/catalog/flags";
-import { deliveryCustomerLabel } from "@/lib/merchant/delivery";
+import { deliveryCustomerLabel, getDeliveryEstimate } from "@/lib/merchant/delivery";
 import { getProductMeasures } from "@/lib/products/presentation";
 import type { Product, ProductRoom, ProductTypeSlug } from "@/lib/types/commerce";
 
@@ -98,11 +98,19 @@ export function productCardMeta(product: Product): string | null {
   return parts.length ? parts.join(" · ") : null;
 }
 
-export function cardDeliveryLabel(product: Product): string | null {
-  if (!isSellable(product)) return null;
+export function cardDeliveryLines(product: Product): string[] {
+  if (!isSellable(product)) return [];
+  const estimate = getDeliveryEstimate(product);
+  const lines: string[] = [];
+  if (product.madeToOrder) lines.push("Fabriqué à la commande");
+  if (estimate.structured && estimate.handlingMinBusinessDays != null && estimate.transitMinBusinessDays != null) {
+    lines.push(`Préparation ${estimate.handlingMinBusinessDays} jours ouvrés`);
+    lines.push(`Acheminement ${estimate.transitMinBusinessDays} jours ouvrés`);
+    return lines;
+  }
   const delay = deliveryCustomerLabel(product);
-  if (product.madeToOrder && delay) return `Fabriqué à la commande — ${delay}`;
-  return delay;
+  if (delay) lines.push(delay);
+  return lines;
 }
 
 export function sortSellableFirst(products: Product[]) {

@@ -31,7 +31,7 @@ export function ProductPrice({
   const percentClass = "text-sm font-semibold text-[var(--sale-fluo)]";
 
   return (
-    <p className={`flex flex-wrap items-baseline ${size === "pdp" ? "gap-3" : "gap-2"}`}>
+    <p className={`flex min-w-0 flex-wrap items-baseline ${size === "pdp" ? "gap-3" : "gap-2"}`}>
       <span className={priceClass}>{formatPrice(amount)}</span>
       {sale && publicPrice.compareAt != null ? (
         <span className={compareClass}>{formatPrice(publicPrice.compareAt)}</span>

@@ -261,6 +261,21 @@ async function migrateDatabase() {
         detail TEXT,
         created_at INTEGER NOT NULL
       )`,
+      `CREATE TABLE IF NOT EXISTS shop_activity (
+        id TEXT PRIMARY KEY NOT NULL,
+        type TEXT NOT NULL,
+        product_id TEXT,
+        product_name TEXT,
+        quantity INTEGER,
+        amount_cents INTEGER,
+        currency TEXT NOT NULL DEFAULT 'eur',
+        email TEXT,
+        order_id TEXT,
+        order_reference TEXT,
+        variant_id TEXT,
+        created_at INTEGER NOT NULL
+      )`,
+      `CREATE INDEX IF NOT EXISTS idx_shop_activity_created ON shop_activity(created_at)`,
     ],
     "write",
   ));
@@ -347,6 +362,13 @@ async function migrateDatabase() {
   await client.execute(
     "UPDATE pro_access_request SET status = 'approved', approved_at = COALESCE(approved_at, created_at) WHERE status = 'eligible'",
   );
+  try {
+    await client.execute(
+      "CREATE UNIQUE INDEX IF NOT EXISTS idx_shop_activity_purchase_order ON shop_activity(order_id) WHERE type = 'purchase' AND order_id IS NOT NULL",
+    );
+  } catch (error) {
+    console.error("[db] shop_activity unique index skipped", error);
+  }
   migrated = true;
 }
 

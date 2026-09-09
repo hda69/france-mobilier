@@ -132,7 +132,7 @@ export default function HomePage() {
                   sizes="(max-width: 768px) 100vw, 25vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-navy/75 via-navy/20 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-5 text-white">
+                <div className="absolute inset-x-0 bottom-0 px-6 py-5 text-white">
                   <h3 className="display text-2xl">{item.title}</h3>
                   <p className="mt-1 text-sm text-white/85">{item.text}</p>
                   <p className="mt-3 text-sm text-white/90">Voir la sélection →</p>

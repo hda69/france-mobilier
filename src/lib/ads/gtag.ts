@@ -55,3 +55,24 @@ export function trackPurchaseConversion(input: {
     ...(typeof input.newCustomer === "boolean" ? { new_customer: input.newCustomer } : {}),
   });
 }
+
+export function trackAddToCart(input: {
+  productId: string;
+  productName: string;
+  priceEur: number;
+  quantity: number;
+}) {
+  if (typeof window === "undefined" || typeof window.gtag !== "function") return;
+  window.gtag("event", "add_to_cart", {
+    currency: "EUR",
+    value: Math.round(input.priceEur * input.quantity * 100) / 100,
+    items: [
+      {
+        item_id: input.productId,
+        item_name: input.productName,
+        quantity: input.quantity,
+        price: Math.round(input.priceEur * 100) / 100,
+      },
+    ],
+  });
+}
