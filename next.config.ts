@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
     return [
       { source: "/collections/maison", destination: "/collections/meubles", permanent: true },
       { source: "/collections/rangement", destination: "/collections/entree-rangement", permanent: true },
+      { source: "/returns", destination: "/retours", permanent: true },
     ];
   },
   images: {

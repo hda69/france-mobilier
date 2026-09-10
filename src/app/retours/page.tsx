@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Retours et remboursements",
   description:
     "Droit de rétractation, retours, produits défectueux et remboursements chez France Mobilier.",
+  alternates: { canonical: "/retours" },
 };
 
 export default function ReturnsPage() {

@@ -91,7 +91,7 @@ export default function TermsPage() {
             Droit de rétractation de {returns.returnWindowDays} jours à compter de la réception,
             lorsque le droit français de la consommation s’applique. La procédure, les cas
             d’exclusion légale et le remboursement sont décrits sur la page{" "}
-            <Link href="/returns" className="text-navy underline-offset-4 hover:underline">
+            <Link href="/retours" className="text-navy underline-offset-4 hover:underline">
               Retours et remboursements
             </Link>
             .

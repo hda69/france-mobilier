@@ -20,7 +20,7 @@ const groups = [
     title: "Aide",
     links: [
       { href: "/shipping", label: "Livraison" },
-      { href: "/returns", label: "Retours et remboursements" },
+      { href: "/retours", label: "Retours et remboursements" },
       { href: "/contact", label: "Contact" },
       { href: "/faq", label: "FAQ" },
       { href: "/guides", label: "Conseils" },

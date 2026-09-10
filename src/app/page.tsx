@@ -294,7 +294,7 @@ export default function HomePage() {
               <Link href="/shipping" className="text-navy underline-offset-4 hover:underline">
                 Livraison
               </Link>
-              <Link href="/returns" className="text-navy underline-offset-4 hover:underline">
+              <Link href="/retours" className="text-navy underline-offset-4 hover:underline">
                 Retours
               </Link>
             </div>

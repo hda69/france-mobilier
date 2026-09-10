@@ -235,7 +235,7 @@ export function CheckoutForm() {
             Livraison
           </Link>
           {" · "}
-          <Link href="/returns" className="underline-offset-4 hover:underline">
+          <Link href="/retours" className="underline-offset-4 hover:underline">
             Retours et remboursements
           </Link>
           {" · "}

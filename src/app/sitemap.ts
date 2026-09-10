@@ -16,7 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/legal",
     "/privacy",
     "/terms",
-    "/returns",
+    "/retours",
     "/shipping",
     "/guides",
     "/guides/meuble-chaussures-entree-etroite",

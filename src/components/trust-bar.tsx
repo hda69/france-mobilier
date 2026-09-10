@@ -13,7 +13,7 @@ const items = [
   {
     title: "Retours 14 jours",
     text: "Droit de rétractation après réception.",
-    href: "/returns",
+    href: "/retours",
   },
   {
     title: "Contact",
