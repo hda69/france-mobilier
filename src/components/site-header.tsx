@@ -188,7 +188,7 @@ export function SiteHeader() {
               </Link>
               <Link
                 href={session?.user ? "/compte" : "/connexion"}
-                className="hidden h-11 w-11 items-center justify-center text-navy hover:opacity-70 sm:inline-flex"
+                className="inline-flex h-11 w-11 items-center justify-center text-navy hover:opacity-70"
                 aria-label={session?.user ? "Compte" : "Connexion"}
               >
                 <IconUser />
