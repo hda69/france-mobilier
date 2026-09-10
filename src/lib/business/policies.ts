@@ -1,5 +1,5 @@
 import { formatStreetPostalCity, getBusinessIdentity } from "@/lib/business/identity";
-import { SHIPPING_COUNTRIES, SHIPPING_ZONE_LABEL } from "@/lib/shipping-zone";
+import { SHIPPING_COUNTRIES, SHIPPING_COUNTRY_CODES, SHIPPING_ZONE_LABEL } from "@/lib/shipping-zone";
 
 export type ReturnShippingPayer = "customer" | "seller";
 
@@ -41,7 +41,7 @@ export function getShippingPolicy() {
     freeShipping: true,
     shippingCostEur: 0,
     trackingAfterShipment: true,
-    merchantTargetCountries: ["FR"] as const,
+    merchantTargetCountries: SHIPPING_COUNTRY_CODES,
     excludesOverseasFrance: true,
   };
 }

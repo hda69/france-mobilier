@@ -92,7 +92,7 @@ export function buildGoogleMerchantFeedXml() {
     `<channel>`,
     `<title>${escapeXml(identity.storeName)}</title>`,
     `<link>${escapeXml(identity.url)}</link>`,
-    `<description>${escapeXml("Catalogue France — produits achetable et merchant-ready")}</description>`,
+    `<description>${escapeXml("Catalogue — produits achetables et merchant-ready")}</description>`,
     ...items.map(offerXml),
     `</channel>`,
     `</rss>`,

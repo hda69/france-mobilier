@@ -104,7 +104,7 @@ export function shippingChecks(): MerchantCheck[] {
       "MERCHANT_COUNTRIES",
       "PASS",
       "Cible Merchant",
-      `Premier lancement : ${shipping.merchantTargetCountries.join(", ")} uniquement`,
+      `Frais 0 € et délais pour ${shipping.merchantTargetCountries.join(", ")}`,
     ),
     check(
       "HANDLING_TRANSIT_SPLIT",
