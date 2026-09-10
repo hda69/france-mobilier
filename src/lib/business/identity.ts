@@ -65,10 +65,14 @@ export function getBusinessIdentity(): BusinessIdentity {
   };
 }
 
-export function formatPublicAddress(identity = getBusinessIdentity()) {
-  return [identity.streetAddress, [identity.postalCode, identity.city].filter(Boolean).join(" "), identity.country]
+export function formatStreetPostalCity(identity = getBusinessIdentity()) {
+  return [identity.streetAddress, [identity.postalCode, identity.city].filter(Boolean).join(" ")]
     .filter(Boolean)
     .join(", ");
+}
+
+export function formatPublicAddress(identity = getBusinessIdentity()) {
+  return [formatStreetPostalCity(identity), identity.country].filter(Boolean).join(", ");
 }
 
 export function organizationJsonLd(identity = getBusinessIdentity()) {

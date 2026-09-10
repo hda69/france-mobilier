@@ -59,8 +59,12 @@ export default function ReturnsPage() {
           <p className="mt-3">
             L’adresse de retour n’est pas laissée au hasard : elle vous est communiquée après
             contact, car elle peut dépendre du produit.
-            {policy.returnAddress ? ` Adresse de référence : ${policy.returnAddress}.` : ""}
           </p>
+          {policy.returnAddress ? (
+            <p className="mt-3 font-medium text-navy">
+              Adresse de référence : {policy.returnAddress}.
+            </p>
+          ) : null}
         </section>
 
         {returnCost ? (

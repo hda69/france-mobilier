@@ -20,8 +20,7 @@ export const store = {
   companyName: "DPSP",
   companyLegalForm: "Entrepreneur individuel",
   companyTradeName: "DPSP",
-  /** Rue non diffusible INSEE (statut P) — ville confirmée : Lyon 4e. */
-  companyAddress: "",
+  companyAddress: "75B Rue Chazière",
   companyCity: "Lyon",
   companyPostalCode: "69004",
   companyCountry: "France",

@@ -1,4 +1,4 @@
-import { getBusinessIdentity } from "@/lib/business/identity";
+import { formatStreetPostalCity, getBusinessIdentity } from "@/lib/business/identity";
 import { SHIPPING_COUNTRIES, SHIPPING_ZONE_LABEL } from "@/lib/shipping-zone";
 
 export type ReturnShippingPayer = "customer" | "seller";
@@ -17,7 +17,7 @@ function returnShippingPayer(): ReturnShippingPayer | null {
 /** Legal and already-published commercial rules only. Missing fields stay null. */
 export function getReturnPolicy() {
   const identity = getBusinessIdentity();
-  const address = envValue("RETURN_ADDRESS") || identity.streetAddress;
+  const address = envValue("RETURN_ADDRESS") || formatStreetPostalCity(identity);
   return {
     returnWindowDays: 14,
     buyerRemorseAccepted: true,
