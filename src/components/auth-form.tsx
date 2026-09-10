@@ -128,33 +128,32 @@ function AuthFormFields({ mode }: { mode: Mode }) {
           required
           type="email"
           autoComplete="email"
+          inputMode="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="input"
         />
       </label>
-      {mode === "register" ? (
-        <div className="-mt-2 flex flex-wrap gap-1.5" role="group" aria-label="Domaines e-mail courants">
-          {EMAIL_DOMAINS.map((domain) => {
-            const selected = email.toLowerCase().endsWith(`@${domain}`);
-            return (
-              <button
-                key={domain}
-                type="button"
-                onClick={() => applyEmailDomain(domain)}
-                aria-pressed={selected}
-                className={`rounded-full border px-2.5 py-1 text-xs ${
-                  selected
-                    ? "border-navy bg-cream text-navy"
-                    : "border-border text-muted hover:border-navy hover:text-navy"
-                }`}
-              >
-                @{domain}
-              </button>
-            );
-          })}
-        </div>
-      ) : null}
+      <div className="-mt-1 flex flex-wrap gap-2" role="group" aria-label="Domaines e-mail courants">
+        {EMAIL_DOMAINS.map((domain) => {
+          const selected = email.toLowerCase().endsWith(`@${domain}`);
+          return (
+            <button
+              key={domain}
+              type="button"
+              onClick={() => applyEmailDomain(domain)}
+              aria-pressed={selected}
+              className={`min-h-10 rounded-full border px-3 py-1.5 text-sm ${
+                selected
+                  ? "border-navy bg-navy text-white"
+                  : "border-navy/25 bg-cream text-navy"
+              }`}
+            >
+              @{domain}
+            </button>
+          );
+        })}
+      </div>
       <label className="block text-sm">
         <span className="mb-1 block text-muted">Mot de passe</span>
         <PasswordInput
